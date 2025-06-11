@@ -144,13 +144,28 @@ class WWDCDownloader:
             
             # Map sessions to topics
             for session in sessions:
-                self._topic_mapping[session['id']] = session.get('topic', topic)
+                # Don't use "all" as a fallback topic
+                if topic.lower() == "all":
+                    self._topic_mapping[session['id']] = session.get('topic', 'general')
+                else:
+                    self._topic_mapping[session['id']] = session.get('topic', topic)
             
             # Download sessions
             tasks = []
             for session in sessions:
                 # For "all", use the session's actual topic, not "all"
-                session_topic = session.get('topic') if topic.lower() == "all" else session.get('topic', topic)
+                if topic.lower() == "all":
+                    # When downloading all, use the session's topic (should never be None)
+                    session_topic = session.get('topic')
+                    if not session_topic:
+                        console.print(f"[red]Warning: Session {session['id']} has no topic![/red]")
+                        session_topic = "unknown"
+                else:
+                    # For specific topics, use what we have or fall back to the requested topic
+                    session_topic = session.get('topic', topic)
+                    
+                if self.verbose:
+                    console.print(f"[yellow]Session {session['id']} topic: {session.get('topic')} -> using: {session_topic}[/yellow]")
                 task = self._download_single_session(
                     session['id'], 
                     session_topic,
@@ -189,10 +204,13 @@ class WWDCDownloader:
                     self._topic_mapping[session_id] = topic
                 
                 # Determine output directory based on topic
-                if topic and topic != "general":
+                if topic and topic != "general" and topic != "all":
                     session_dir = self.output_dir / self.year / self._sanitize_filename(topic)
                 else:
                     session_dir = self.output_dir / self.year / "general"
+                    
+                if self.verbose:
+                    console.print(f"[cyan]Session {session_id} -> directory: {session_dir}[/cyan]")
                     
                 session_dir.mkdir(parents=True, exist_ok=True)
                     
