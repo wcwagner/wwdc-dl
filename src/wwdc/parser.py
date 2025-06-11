@@ -120,40 +120,26 @@ class WWDCParser:
         return sessions
         
     async def get_all_sessions_async(self, session: aiohttp.ClientSession) -> List[Dict]:
-        """Get all sessions for the year."""
+        """Get all sessions for the year with topic information."""
         all_sessions = []
+        seen_sessions = set()
         
-        # Get sessions from the main videos page
-        videos_url = f"{self.BASE_URL}/videos/wwdc{self.year}/"
+        # Build session-to-topic mapping first
+        topic_mapping = await self.build_session_topic_mapping_async(session)
         
-        try:
-            async with session.get(videos_url) as response:
-                if response.status != 200:
-                    return all_sessions
-                    
-                html = await response.text()
-                soup = BeautifulSoup(html, 'lxml')
-                
-                # Find all session links
-                for link in soup.find_all('a', href=True):
-                    href = link['href']
-                    # Match pattern like /videos/play/wwdc2025/247/
-                    match = re.match(rf'/videos/play/wwdc{self.year}/(\d+)/', href)
-                    if match:
-                        session_id = match.group(1)
-                        title = link.get_text(strip=True)
-                        
-                        # Skip if it's just the session number
-                        if title and title != session_id:
-                            all_sessions.append({
-                                'id': session_id,
-                                'title': title,
-                                'url': urljoin(self.BASE_URL, href)
-                            })
-                            
-        except Exception as e:
-            print(f"Error fetching all sessions: {e}")
-            
+        # Get all topics
+        topics = await self._get_topics_async()
+        
+        # Collect all sessions from each topic page
+        for topic in topics:
+            topic_sessions = await self._get_sessions_for_topic_async(topic, session)
+            for sess in topic_sessions:
+                if sess.get('year') == self.year and sess['id'] not in seen_sessions:
+                    seen_sessions.add(sess['id'])
+                    # Ensure topic is set
+                    sess['topic'] = topic
+                    all_sessions.append(sess)
+        
         return all_sessions
         
     async def get_sessions_for_topic_async(self, topic: str, session: aiohttp.ClientSession) -> List[Dict]:
@@ -288,40 +274,56 @@ class WWDCParser:
         """Extract chapter markers."""
         chapters = []
         
-        details_section = soup.find("li", {"data-supplement-id": "details"})
-        if not details_section:
-            return chapters
-            
-        chapter_list = details_section.find("ul", class_="chapter-list")
-        if chapter_list:
-            for chapter in chapter_list.find_all("li", class_="chapter-item"):
-                timestamp = chapter.get("data-start-time", "")
-                chapter_text = chapter.get_text(strip=True)
-                if " - " in chapter_text:
-                    time_str, name = chapter_text.split(" - ", 1)
-                    chapters.append({
-                        "time": time_str.strip(),
-                        "timestamp": timestamp,
-                        "name": name.strip(),
-                    })
+        # Find all links with time parameter
+        for link in soup.find_all("a", href=True):
+            href = link.get("href", "")
+            if "?time=" in href:
+                # Extract parent li to get full text
+                parent_li = link.find_parent("li")
+                if parent_li:
+                    li_text = parent_li.get_text(strip=True)
+                    # Match pattern like "0:00 - Introduction" or "3:17 - Single-threaded code"
+                    match = re.match(r'(\d+:\d+)\s*-\s*(.+)', li_text)
+                    if match:
+                        time_str = match.group(1)
+                        chapter_name = match.group(2)
+                        
+                        # Extract timestamp from URL
+                        time_match = re.search(r'\?time=(\d+)', href)
+                        timestamp = time_match.group(1) if time_match else ""
+                        
+                        chapters.append({
+                            "time": time_str,
+                            "timestamp": timestamp,
+                            "name": chapter_name,
+                        })
                     
         return chapters
         
     def _extract_resources(self, soup: BeautifulSoup) -> List[Dict]:
         """Extract resource links."""
         resources = []
+        seen_urls = set()
         
-        details_section = soup.find("li", {"data-supplement-id": "details"})
-        if not details_section:
-            return resources
+        # Find all links that look like documentation or resources
+        for link in soup.find_all("a", href=True):
+            href = link.get("href", "")
+            text = link.get_text(strip=True)
             
-        resources_section = details_section.find("ul", class_="links small")
-        if resources_section:
-            for link in resources_section.find_all("a"):
-                href = link.get("href", "")
-                text = link.get_text(strip=True)
-                if href and text:
-                    url = href if href.startswith("http") else urljoin(self.BASE_URL, href)
+            # Skip video download links and empty text
+            if not text or "Video" in text or ".mp4" in href:
+                continue
+                
+            # Look for documentation, guides, or other resources
+            if any(keyword in href.lower() or keyword in text.lower() for keyword in [
+                'docs.swift.org', 'swift.org/migration', 'developer.apple.com/documentation',
+                'guide', 'documentation', 'reference'
+            ]):
+                url = href if href.startswith("http") else urljoin(self.BASE_URL, href)
+                
+                # Avoid duplicates
+                if url not in seen_urls and text:
+                    seen_urls.add(url)
                     resources.append({
                         "title": text,
                         "url": url

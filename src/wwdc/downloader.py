@@ -149,9 +149,11 @@ class WWDCDownloader:
             # Download sessions
             tasks = []
             for session in sessions:
+                # For "all", use the session's actual topic, not "all"
+                session_topic = session.get('topic') if topic.lower() == "all" else session.get('topic', topic)
                 task = self._download_single_session(
                     session['id'], 
-                    session.get('topic', topic),
+                    session_topic,
                     text_only, 
                     force
                 )
@@ -245,6 +247,12 @@ class WWDCDownloader:
         if not full_content:
             console.print(f"[red]Failed to parse content for session {session_id}[/red]")
             return
+            
+        # Update metadata cache with chapters and resources
+        if session_id in self._metadata_cache:
+            self._metadata_cache[session_id]['chapters'] = full_content.get('chapters', [])
+            self._metadata_cache[session_id]['resources'] = full_content.get('resources', [])
+            self._metadata_cache[session_id]['description'] = full_content.get('description', '')
             
         # Format content as markdown
         markdown_content = self._format_content_markdown(metadata, full_content)

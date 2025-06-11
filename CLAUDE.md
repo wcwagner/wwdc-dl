@@ -254,13 +254,15 @@ wwdc/
 2. **Improved filename sanitization** ✓ - Removes apostrophes and special characters, keeps filenames short and clean
 3. **Dynamic topic mapping** ✓ - Automatically builds session-to-topic mappings by scraping Apple's topic pages
 4. **Better metadata caching** ✓ - Caches both session metadata and topic mappings for faster subsequent runs
+5. **Fixed directory structure** ✓ - Sessions downloaded with `-t all` now go to their proper topic directories, not an "all" directory
+6. **Enhanced content extraction** ✓ - Now properly extracts chapters with timestamps and resource links (documentation)
+7. **Enriched metadata** ✓ - metadata.json now includes chapters, resources, and descriptions for each session
 
 ### Remaining Improvements
 
-1. **Fix code extraction** - Current parser misses some code blocks
-2. **Implement incremental logic** - Check existing files before downloading
-3. **Add progress for topics** - Show overall progress when downloading topics
-4. **Better error handling** - Retry failed downloads, handle missing content
+1. **Implement incremental logic** - Check existing files before downloading
+2. **Add progress for topics** - Show overall progress when downloading topics
+3. **Better error handling** - Retry failed downloads, handle missing content
 
 ### Development
 
