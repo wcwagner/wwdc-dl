@@ -1,0 +1,13 @@
+{
+  "247": {
+    "id": "247",
+    "title": "What\u2019s new in Xcode",
+    "url": "https://developer.apple.com/videos/play/wwdc2025/247/",
+    "video_urls": {
+      "hd": "https://devstreaming-cdn.apple.com/videos/wwdc/2025/247/5/5455d9cc-d071-4119-84e7-db8eadeaaeb0/downloads/wwdc2025-247_hd.mp4",
+      "sd": "https://devstreaming-cdn.apple.com/videos/wwdc/2025/247/5/5455d9cc-d071-4119-84e7-db8eadeaaeb0/downloads/wwdc2025-247_sd.mp4",
+      "hls": "https://devstreaming-cdn.apple.com/videos/wwdc/2025/247/5/5455d9cc-d071-4119-84e7-db8eadeaaeb0/cmaf.m3u8",
+      "title": "What\u2019s new in Xcode"
+    }
+  }
+}
