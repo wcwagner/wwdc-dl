@@ -33,40 +33,90 @@ class WWDCParser:
         if self._topics_cache:
             return self._topics_cache
             
-        # For now, return predefined topics
-        # TODO: Parse from WWDC main page
+        # Official Apple Developer video topic slugs
         topics = [
-            "developer-tools",
-            "swiftui",
-            "swift",
-            "app-frameworks",
-            "machine-learning",
-            "accessibility",
+            "accessibility-inclusion",
+            "app-services",
+            "app-store-distribution-marketing",
             "audio-video",
-            "business",
+            "business-education",
             "design",
-            "distribution",
-            "games",
+            "developer-tools",
+            "essentials",
+            "graphics-games",
             "health-fitness",
+            "machine-learning-ai",
             "maps-location",
+            "photos-camera",
             "privacy-security",
             "safari-web",
-            "system-frameworks",
+            "spatial-computing",
+            "swift",
+            "swiftui-ui-frameworks",
+            "system-services",
         ]
         
         self._topics_cache = topics
-        return topics
+        return self._topics_cache
         
-    async def _get_sessions_for_topic_async(self, topic: str) -> List[Dict]:
-        """Get sessions for a specific topic."""
-        if topic in self._sessions_cache:
-            return self._sessions_cache[topic]
+    async def _get_sessions_for_topic_async(self, topic: str, session: aiohttp.ClientSession = None) -> List[Dict]:
+        """Get sessions for a specific topic from Apple's topic page."""
+        cache_key = f"{topic}_{self.year}"
+        if cache_key in self._sessions_cache:
+            return self._sessions_cache[cache_key]
             
-        # TODO: Implement actual parsing from topic pages
-        # For now, return empty list
         sessions = []
+        topic_url = f"{self.BASE_URL}/videos/{topic}/"
         
-        self._sessions_cache[topic] = sessions
+        try:
+            # Use provided session or create a temporary one
+            if session:
+                response = await session.get(topic_url)
+            else:
+                async with aiohttp.ClientSession() as temp_session:
+                    response = await temp_session.get(topic_url)
+                    
+            if response.status != 200:
+                return sessions
+                
+            html = await response.text()
+            soup = BeautifulSoup(html, 'lxml')
+            
+            # Find all video links on the topic page
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                # Match WWDC video links for any year
+                match = re.match(r'/videos/play/wwdc(\d{4})/(\d+)/', href)
+                if match:
+                    year = match.group(1)
+                    session_id = match.group(2)
+                    
+                    # Get the title from the link text or nearby elements
+                    title = ""
+                    # Try to find title in the link's parent structure
+                    parent = link.parent
+                    while parent and not title:
+                        h4 = parent.find('h4')
+                        if h4:
+                            title = h4.get_text(strip=True)
+                            break
+                        parent = parent.parent
+                    
+                    if not title:
+                        title = link.get_text(strip=True)
+                    
+                    sessions.append({
+                        'id': session_id,
+                        'year': year,
+                        'title': title,
+                        'url': urljoin(self.BASE_URL, href),
+                        'topic': topic
+                    })
+                    
+        except Exception as e:
+            print(f"Error fetching sessions for topic {topic}: {e}")
+            
+        self._sessions_cache[cache_key] = sessions
         return sessions
         
     async def get_all_sessions_async(self, session: aiohttp.ClientSession) -> List[Dict]:
@@ -107,11 +157,10 @@ class WWDCParser:
         return all_sessions
         
     async def get_sessions_for_topic_async(self, topic: str, session: aiohttp.ClientSession) -> List[Dict]:
-        """Get sessions for a specific topic."""
-        # For now, get all sessions and filter by topic
-        # TODO: Implement proper topic-based filtering
-        all_sessions = await self.get_all_sessions_async(session)
-        return all_sessions
+        """Get sessions for a specific topic and filter by current year."""
+        all_sessions = await self._get_sessions_for_topic_async(topic, session)
+        # Filter to only return sessions from the current year
+        return [s for s in all_sessions if s.get('year') == self.year]
         
     async def get_session_metadata_async(self, session_id: str, session: aiohttp.ClientSession) -> Optional[Dict]:
         """Get metadata for a specific session."""
@@ -143,12 +192,16 @@ class WWDCParser:
                             " - Apple Developer"
                         ]:
                             title = title.replace(suffix, "")
+                
+                # Get topic from Apple's topic pages
+                topic = await self.get_topic_for_session_async(session_id, session)
                             
                 return {
                     'id': session_id,
                     'title': title.strip(),
                     'url': url,
-                    'video_urls': video_urls
+                    'video_urls': video_urls,
+                    'topic': topic
                 }
                 
         except Exception as e:
@@ -360,3 +413,41 @@ class WWDCParser:
                     })
                     
         return transcript
+    
+    async def get_topic_for_session_async(self, session_id: str, session: aiohttp.ClientSession) -> Optional[str]:
+        """Get the topic for a specific session by checking all topic pages."""
+        # Check cache first
+        if session_id in self._sessions_cache:
+            return self._sessions_cache[session_id].get('topic')
+            
+        # Get all topics
+        topics = await self._get_topics_async()
+        
+        # Check each topic page to find this session
+        for topic in topics:
+            sessions = await self._get_sessions_for_topic_async(topic, session)
+            for session_info in sessions:
+                if session_info.get('id') == session_id and session_info.get('year') == self.year:
+                    # Cache the result
+                    self._sessions_cache[session_id] = {'topic': topic}
+                    return topic
+                    
+        return None
+    
+    async def build_session_topic_mapping_async(self, session: aiohttp.ClientSession) -> Dict[str, str]:
+        """Build a complete mapping of session IDs to topics for the current year."""
+        mapping = {}
+        topics = await self._get_topics_async()
+        
+        print(f"Building session-to-topic mapping for WWDC {self.year}...")
+        
+        for topic in topics:
+            sessions = await self._get_sessions_for_topic_async(topic, session)
+            for session_info in sessions:
+                if session_info.get('year') == self.year:
+                    session_id = session_info.get('id')
+                    if session_id:
+                        mapping[session_id] = topic
+                        
+        print(f"Found {len(mapping)} sessions across {len(topics)} topics")
+        return mapping

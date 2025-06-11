@@ -27,14 +27,6 @@ console = Console()
 
 class WWDCDownloader:
     """Handles downloading WWDC content with concurrent support."""
-    # FIXME: What the fuck? No hardcoding the session!! Use the topics in e..g, https://developer.apple.com/videos/all-videos/?collection=wwdc25
-    # Known session to topic mappings for WWDC 2025
-    KNOWN_TOPICS = {
-        "247": "developer-tools",  # What's new in Xcode
-        "248": "developer-tools",  # Swift Assist
-        "280": "swiftui",  # Code-along: Cook up a rich text experience
-        # Add more as we discover them
-    }
     
     def __init__(self, year: int, output_dir: Path, verbose: bool = False):
         self.year = str(year)
@@ -44,7 +36,7 @@ class WWDCDownloader:
         self.session: Optional[aiohttp.ClientSession] = None
         self.semaphore = asyncio.Semaphore(5)  # Limit concurrent downloads
         self._metadata_cache: Dict[str, dict] = {}
-        self._topic_mapping: Dict[str, str] = self.KNOWN_TOPICS.copy()  # session_id -> topic
+        self._topic_mapping: Dict[str, str] = {}  # session_id -> topic, populated dynamically
         
     async def __aenter__(self):
         timeout = aiohttp.ClientTimeout(total=1800, connect=30, sock_read=300)
@@ -67,6 +59,12 @@ class WWDCDownloader:
             },
         )
         await self._load_metadata_cache()
+        
+        # Build topic mapping if not cached
+        if not self._topic_mapping and self.verbose:
+            console.print("[yellow]Building session-to-topic mapping...[/yellow]")
+            self._topic_mapping = await self.parser.build_session_topic_mapping_async(self.session)
+            
         return self
         
     async def __aexit__(self, exc_type, exc_val, exc_tb):
@@ -80,7 +78,9 @@ class WWDCDownloader:
             try:
                 async with aiofiles.open(cache_file, "r") as f:
                     content = await f.read()
-                    self._metadata_cache = json.loads(content)
+                    data = json.loads(content)
+                    self._metadata_cache = data.get('sessions', {})
+                    self._topic_mapping = data.get('topic_mapping', {})
             except Exception:
                 pass
                 
@@ -89,8 +89,13 @@ class WWDCDownloader:
         cache_file = self.output_dir / self.year / "metadata.json"
         cache_file.parent.mkdir(parents=True, exist_ok=True)
         
+        data = {
+            'sessions': self._metadata_cache,
+            'topic_mapping': self._topic_mapping
+        }
+        
         async with aiofiles.open(cache_file, "w") as f:
-            await f.write(json.dumps(self._metadata_cache, indent=2))
+            await f.write(json.dumps(data, indent=2))
     
     def download_sessions(self, session_ids: List[str], text_only: bool = False, force: bool = False):
         """Download multiple sessions."""
@@ -105,9 +110,8 @@ class WWDCDownloader:
         async with self:
             tasks = []
             for session_id in session_ids:
-                # Use known topic mapping if available
-                topic = self._topic_mapping.get(session_id)
-                task = self._download_single_session(session_id, topic, text_only, force)
+                # Topic will be determined from metadata during download
+                task = self._download_single_session(session_id, None, text_only, force)
                 tasks.append(task)
                 
             with Progress(
@@ -170,19 +174,25 @@ class WWDCDownloader:
         """Download a single session with all its content."""
         async with self.semaphore:
             try:
-                # Determine output directory
-                if topic:
-                    session_dir = self.output_dir / self.year / self._sanitize_filename(topic)
-                else:
-                    session_dir = self.output_dir / self.year
-                    
-                session_dir.mkdir(parents=True, exist_ok=True)
-                
-                # Get session metadata
+                # Get session metadata first to determine topic
                 metadata = await self._get_session_metadata(session_id)
                 if not metadata:
                     console.print(f"[red]Failed to get metadata for session {session_id}[/red]")
                     return
+                
+                # Use topic from metadata if not provided
+                if not topic and 'topic' in metadata:
+                    topic = metadata['topic']
+                    # Update our mapping cache
+                    self._topic_mapping[session_id] = topic
+                
+                # Determine output directory based on topic
+                if topic and topic != "general":
+                    session_dir = self.output_dir / self.year / self._sanitize_filename(topic)
+                else:
+                    session_dir = self.output_dir / self.year / "general"
+                    
+                session_dir.mkdir(parents=True, exist_ok=True)
                     
                 # Create session-specific directory
                 session_title = metadata.get('title', f'session-{session_id}')
@@ -394,14 +404,15 @@ class WWDCDownloader:
         # Convert to lowercase
         filename = filename.lower()
         
-        # Replace any apostrophe-like characters with hyphen
-        filename = re.sub(r"[''`''‛\"″‟''ʻʼ]", "-", filename)
+        # Remove apostrophes and quotes entirely (don't replace with hyphen)
+        filename = re.sub(r"[''`''‛\"″‟''ʻʼ']", "", filename)
         
-        # Replace spaces with hyphens
-        filename = filename.replace(" ", "-")
+        # Replace spaces and remaining punctuation with hyphens
+        filename = re.sub(r'[\s\-–—_]+', '-', filename)  # spaces, hyphens, dashes, underscores
+        filename = re.sub(r'[,:;!?]+', '-', filename)    # punctuation marks
         
-        # Remove or replace other invalid characters
-        filename = re.sub(r'[<>:"/\\|?*()]+', '', filename)
+        # Remove other invalid filesystem characters
+        filename = re.sub(r'[<>:"/\\|?*()[\]{}]+', '', filename)
         
         # Replace multiple hyphens with single hyphen
         filename = re.sub(r'-+', '-', filename)
@@ -409,8 +420,14 @@ class WWDCDownloader:
         # Remove leading/trailing hyphens and dots
         filename = filename.strip('-. ')
         
-        # Limit length
-        if len(filename) > 200:
-            filename = filename[:200]
+        # Keep filenames reasonably short while preserving key info
+        if len(filename) > 100:  # Reduced from 200 for better usability
+            # Try to cut at a word boundary
+            truncated = filename[:100]
+            last_hyphen = truncated.rfind('-')
+            if last_hyphen > 80:  # If there's a reasonable break point
+                filename = truncated[:last_hyphen]
+            else:
+                filename = truncated
             
         return filename

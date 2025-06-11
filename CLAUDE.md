@@ -21,6 +21,29 @@ pip install -e .
 
 ## Usage
 
+### Available Topics
+
+The tool supports all official Apple Developer video topics:
+- `accessibility-inclusion` - Accessibility & Inclusion
+- `app-services` - App Services
+- `app-store-distribution-marketing` - App Store, Distribution & Marketing
+- `audio-video` - Audio & Video
+- `business-education` - Business & Education
+- `design` - Design
+- `developer-tools` - Developer Tools (Xcode, Swift Assist, etc.)
+- `essentials` - Essentials
+- `graphics-games` - Graphics & Games
+- `health-fitness` - Health & Fitness
+- `machine-learning-ai` - Machine Learning & AI
+- `maps-location` - Maps & Location
+- `photos-camera` - Photos & Camera
+- `privacy-security` - Privacy & Security
+- `safari-web` - Safari & Web
+- `spatial-computing` - Spatial Computing
+- `swift` - Swift
+- `swiftui-ui-frameworks` - SwiftUI & UI Frameworks
+- `system-services` - System Services
+
 ### Basic Commands
 
 ```bash
@@ -86,18 +109,21 @@ export-llm:
 ## Directory Structure
 
 ```
-wwdc-content/                    # Default output directory
+wwdc-content/                            # Default output directory
 └── 2025/
     ├── developer-tools/
     │   ├── 247-whats-new-xcode/
-    │   │   ├── video.mp4        # SD quality video
-    │   │   ├── content.md       # Transcript, code, metadata
-    │   │   └── summary.md       # AI-generated summary
+    │   │   ├── video.mp4                # SD quality video
+    │   │   ├── content.md               # Transcript, code, metadata
+    │   │   └── summary.md               # AI-generated summary
     │   └── 248-swift-assist/
     │       └── ...
-    ├── swiftui/
-    │   └── ...
-    └── metadata.json            # Cache of session information
+    ├── swiftui-ui-frameworks/
+    │   └── 280-code-along-cook-up/
+    │       └── ...
+    ├── machine-learning-ai/
+    ├── accessibility-inclusion/
+    └── metadata.json                    # Cache with sessions and topic mappings
 ```
 
 ## Content Files
@@ -222,13 +248,19 @@ wwdc/
 # Format for optimal LLM consumption
 ```
 
-### Key Improvements Needed
+### Key Improvements Completed
+
+1. **Fixed topic detection** ✓ - Now uses Apple's official `/videos/[topic]/` endpoints to get accurate topic mappings
+2. **Improved filename sanitization** ✓ - Removes apostrophes and special characters, keeps filenames short and clean
+3. **Dynamic topic mapping** ✓ - Automatically builds session-to-topic mappings by scraping Apple's topic pages
+4. **Better metadata caching** ✓ - Caches both session metadata and topic mappings for faster subsequent runs
+
+### Remaining Improvements
 
 1. **Fix code extraction** - Current parser misses some code blocks
-2. **Add topic detection** - Parse WWDC topic pages to get session lists
-3. **Implement incremental logic** - Check existing files before downloading
-4. **Add progress for topics** - Show overall progress when downloading topics
-5. **Better error handling** - Retry failed downloads, handle missing content
+2. **Implement incremental logic** - Check existing files before downloading
+3. **Add progress for topics** - Show overall progress when downloading topics
+4. **Better error handling** - Retry failed downloads, handle missing content
 
 ### Development
 
