@@ -1,0 +1,1066 @@
+
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+	<meta charset="utf-8" />
+<meta name="Author" content="Apple Inc." />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="icon" href="/favicon.ico" />
+<link rel="mask-icon" href="/apple-logo.svg" color="#333333">
+
+<link rel="stylesheet" href="/assets/styles/global.dist.css?13222540152" type="text/css" />
+<link rel="stylesheet" href="/assets/styles/dark-mode.css?06182556073" type="text/css" media="(prefers-color-scheme: dark)" data-color-scheme="dark" />
+<link rel="stylesheet" href="/assets/styles/localization.css?02002524063" type="text/css" />
+
+<script src="/assets/scripts/lib/jquery/jquery-3.6.0.min.js?17182448067"></script>
+<script src="/assets/scripts/settings.js?17182448067"></script>
+<script src="/assets/scripts/language-locales.js?17182448067"></script>
+<script src="/assets/scripts/DeveloperBreadcrumbs.js?05182434080"></script>
+<script src="/assets/metrics/scripts/analytics-module.js?47192517158"></script>
+
+<script async src="/assets/scripts/retinate.js?30152505148"></script>
+<script src="/assets/scripts/global-logout.js?17182448067"></script>
+<script async crossorigin src="https://sfss.cdn-apple.com/2.0.0-beta.2/sf-symbol.js?26002517162"></script>
+
+
+
+
+	<link rel="stylesheet" href="https://www.apple.com/wss/fonts?families=SF+Pro,v3|SF+Pro+Icons,v3">
+<link rel="stylesheet" href="https://www.apple.com/wss/fonts?family=SF+Mono&v=2" type="text/css" />
+<link rel="stylesheet" href="https://www.apple.com/wss/fonts?family=Apple+Icons&v=1" type="text/css" />
+
+	<title>Code-along: Cook up a rich text experience in SwiftUI with AttributedString - WWDC25 - Videos - Apple Developer</title>
+	<meta name="omni_page" content="Code-along: Cook up a rich text experience in SwiftUI with AttributedString - WWDC25 - Videos" />
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link type="text/css" rel="stylesheet" href="/videos/styles/videos.css?3">
+	<link type="text/css" rel="stylesheet" href="/videos/styles/video-overlay.css?3">
+	<meta name="description" content="Learn how to build a rich text experience with SwiftUI's TextEditor API and AttributedString. Discover how you can enable rich text...">
+
+	<meta property="og:url" content="https://developer.apple.com/videos/play/wwdc2025/280/" />
+	<meta property="og:title" content="Code-along: Cook up a rich text experience in SwiftUI with AttributedString - WWDC25 - Videos - Apple Developer" />
+	<meta property="og:description" content="Learn how to build a rich text experience with SwiftUI's TextEditor API and AttributedString. Discover how you can enable rich text..." />
+	<meta property="og:site_name" content="Apple Developer" />
+	<meta property="og:type" content="website" />
+	<meta property="og:video" content="https://devstreaming-cdn.apple.com/videos/wwdc/2025/280/5/3596f3d4-e661-4414-a6ba-79128adcc8e6/cmaf.m3u8" /> 
+	<meta property="og:video_secure_url" content="https://devstreaming-cdn.apple.com/videos/wwdc/2025/280/5/3596f3d4-e661-4414-a6ba-79128adcc8e6/cmaf.m3u8" /> 
+	<meta property="og:video:type" content="vnd.apple.mpegURL" /> 
+	<meta property="og:video:width" content="1280" />
+	<meta property="og:video:height" content="720" />
+		<meta property="og:image" content="https://devimages-cdn.apple.com/wwdc-services/images/3055294D-836B-4513-B7B0-0BC5666246B0/9982/9982_wide_250x141_2x.jpg" />
+		<meta property="og:locale" content="en_US" />
+	<meta itemprop="datePublished" content="2025-06-09">
+	<meta itemprop="uploadDate" content="2025-06-09">	
+
+	<link rel="alternate" href="https://developer.apple.com/videos/play/wwdc2025/280/" hreflang="en">
+	<link rel="alternate" href="https://developer.apple.com/kr/videos/play/wwdc2025/280/" hreflang="ko-KR">
+	<link rel="alternate" href="https://developer.apple.com/cn/videos/play/wwdc2025/280/" hreflang="zh-CN">
+    <link rel="alternate" href="https://developer.apple.com/jp/videos/play/wwdc2025/280/" hreflang="ja-JP">
+    <link rel="canonical" href="https://developer.apple.com/videos/play/wwdc2025/280/" />
+
+</head>
+<body class="view-play ">
+	
+	<script>
+	// Execute immediately to avoid UI flash
+	(function () {
+		const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+		const body = document.body;
+
+		// If theme-dark or theme-light is already applied, do nothing and lock it
+		if (body.classList.contains("theme-dark") || body.classList.contains("theme-light")) {
+
+			// Set the data-color-scheme attribute based on the existing theme
+			body.setAttribute('data-color-scheme', body.classList.contains("theme-dark") ? "dark" : "light");
+
+			// Prevent future modifications
+			window.__disableColorScheme = true;
+
+			// Hide the color picker immediately
+			const style = document.createElement('style');
+			style.textContent = '.color-scheme-toggle { display: none !important; }';
+			document.head.appendChild(style);
+
+			return;
+		}
+
+		// Otherwise, set theme normally based on user settings or system preference
+		if (window.Settings && window.Settings.preferredColorScheme) {
+			const colorTheme = (window.Settings.preferredColorScheme === 'auto') && !prefersDark ? 'light'
+				: (window.Settings.preferredColorScheme === 'light') ? 'light' : 'dark';
+			body.setAttribute('data-color-scheme', colorTheme);
+			colorTheme === "dark" ? body.classList.add("theme-dark") : body.classList.add("theme-light");
+		} else {
+			const colorTheme = prefersDark ? 'dark' : 'light';
+			body.setAttribute('data-color-scheme', colorTheme);
+			prefersDark ? body.classList.add("theme-dark") : body.classList.add("theme-light");
+		}
+	})();
+</script>
+<link rel="stylesheet" href="/assets/styles/globalnav.css?02002524063" type="text/css" />
+
+<link rel="stylesheet" href="/assets/styles/suggest-lang.css?27202513134" type="text/css" />
+<div id="suggest-lang" class="ribbon hide" lang="en">
+	<div class="ribbon-content-wrapper">
+		<div class="ribbon-content row">
+			<div class="column large-12 large-centered">
+				<p><a href="#" id="suggest-link" class="ribbon-link more">View in English</a></p>
+				<button id="suggest-closer" class="icon icon-after icon-reset" aria-label="Dismiss language suggestion" tabindex="0"></button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="/assets/scripts/suggest-lang.js?17182448067"></script>
+<aside id="ac-gn-segmentbar" class="ac-gn-segmentbar" lang="en-US" dir="ltr">
+</aside>
+<input type="checkbox" id="ac-gn-menustate" class="ac-gn-menustate" />
+<nav id="ac-globalnav" class="no-js" role="navigation" aria-label="Global" data-hires="false" data-analytics-region="global nav" lang="en-US" dir="ltr"
+    data-www-domain="www.apple.com"
+    data-store-locale="us"
+    data-store-root-path="/us"
+    data-store-api="/[storefront]/shop/bag/status"
+    data-search-locale="en_US"
+    data-search-suggestions-api="/search-services/suggestions/"
+    data-search-defaultlinks-api="/search-services/suggestions/defaultlinks/"
+    data-search-suggestions-enabled="false">
+	<div class="ac-gn-content">
+		<ul class="ac-gn-header">
+			<li class="ac-gn-item ac-gn-menuicon">
+				<label class="ac-gn-menuicon-label" for="ac-gn-menustate" aria-hidden="true">
+					<span class="ac-gn-menuicon-bread ac-gn-menuicon-bread-top">
+						<span class="ac-gn-menuicon-bread-crust ac-gn-menuicon-bread-crust-top"></span>
+					</span>
+					<span class="ac-gn-menuicon-bread ac-gn-menuicon-bread-bottom">
+						<span class="ac-gn-menuicon-bread-crust ac-gn-menuicon-bread-crust-bottom"></span>
+					</span>
+				</label>
+				<a href="#ac-gn-menustate" role="button" class="ac-gn-menuanchor ac-gn-menuanchor-open" id="ac-gn-menuanchor-open">
+					<span class="ac-gn-menuanchor-label">Global Nav Open Menu</span>
+				</a>
+				<a href="#" role="button" class="ac-gn-menuanchor ac-gn-menuanchor-close" id="ac-gn-menuanchor-close">
+					<span class="ac-gn-menuanchor-label">Global Nav Close Menu</span>
+				</a>
+			</li>
+			<li class="ac-gn-item ac-gn-apple">
+				<a class="ac-gn-link ac-gn-link-apple-developer" href="/" data-analytics-title="appledeveloper home" id="ac-gn-firstfocus-small">
+					<span class="ac-gn-link-text">Apple Developer</span>
+				</a>
+			</li>
+		</ul>
+		<div class="ac-gn-search-placeholder-container" role="search">
+			<div class="ac-gn-search ac-gn-search-small">
+				<a id="ac-gn-link-search-small" class="ac-gn-link" href="/search/" data-analytics-title="search" data-analytics-click="search" data-analytics-intrapage-link aria-label="Search">
+					<div class="ac-gn-search-placeholder-bar">
+						<div class="ac-gn-search-placeholder-input">
+							<div class="ac-gn-search-placeholder-input-text" aria-hidden="true">
+								<div class="ac-gn-link-search ac-gn-search-placeholder-input-icon"></div>
+								<span class="ac-gn-search-placeholder">Search</span>
+							</div>
+						</div>
+						<div class="ac-gn-searchview-close ac-gn-searchview-close-small ac-gn-search-placeholder-searchview-close">
+							<span class="ac-gn-searchview-close-cancel" aria-hidden="true">Cancel</span>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<ul class="ac-gn-list">
+			<li class="ac-gn-item ac-gn-apple">
+				<a class="ac-gn-link ac-gn-link-apple-developer" href="/" data-analytics-title="appledeveloper home" id="ac-gn-firstfocus">
+					<span class="ac-gn-link-text">Apple Developer</span>
+					</a>
+			</li>
+			<li class="ac-gn-item ac-gn-item-menu ac-gn-news">
+				<a class="ac-gn-link ac-gn-link-news" href="/news/" data-analytics-title="news">
+					<span class="ac-gn-link-text">News</span>
+					</a>
+			</li>
+			<li class="ac-gn-item ac-gn-item-menu ac-gn-discover">
+				<a class="ac-gn-link ac-gn-link-discover" href="/discover/" data-analytics-title="discover">
+					<span class="ac-gn-link-text">Discover</span>
+					</a>
+			</li>
+			<li class="ac-gn-item ac-gn-item-menu ac-gn-design">
+				<a class="ac-gn-link ac-gn-link-design" href="/design/" data-analytics-title="design">
+					<span class="ac-gn-link-text">Design</span>
+					</a>
+			</li>
+			<li class="ac-gn-item ac-gn-item-menu ac-gn-develop">
+				<a class="ac-gn-link ac-gn-link-develop" href="/develop/" data-analytics-title="develop">
+					<span class="ac-gn-link-text">Develop</span>
+					</a>
+			</li>
+			<li class="ac-gn-item ac-gn-item-menu ac-gn-distribute">
+				<a class="ac-gn-link ac-gn-link-distribute" href="/distribute/" data-analytics-title="distribute">
+					<span class="ac-gn-link-text">Distribute</span>
+					</a>
+			</li>
+			<li class="ac-gn-item ac-gn-item-menu ac-gn-dsupport">
+				<a class="ac-gn-link ac-gn-link-dsupport" href="/support/" data-analytics-title="dsupport">
+					<span class="ac-gn-link-text">Support</span>
+					</a>
+			</li>
+			<li class="ac-gn-item ac-gn-item-menu ac-gn-account">
+				<a class="ac-gn-link ac-gn-link-account" href="/account/" data-analytics-title="account">
+					<span class="ac-gn-link-text">Account</span>
+					</a>
+			</li>
+			<li class="ac-gn-item ac-gn-item-menu ac-gn-search" role="search">
+				<a id="ac-gn-link-search" class="ac-gn-link ac-gn-link-search" href="/search/" data-analytics-title="search" data-analytics-click="search" data-analytics-intrapage-link aria-label="Search"></a>
+			</li>
+		</ul>
+		<aside id="ac-gn-searchview" class="ac-gn-searchview" role="search" data-analytics-region="search">
+			<div class="ac-gn-searchview-content">
+				<div class="ac-gn-searchview-bar">
+					<div class="ac-gn-searchview-bar-wrapper">
+						<form id="ac-gn-searchform" class="ac-gn-searchform" action="/search/" method="get">
+							<div class="ac-gn-searchform-wrapper">
+								<input id="ac-gn-searchform-input" class="ac-gn-searchform-input" type="text" name="q" aria-label="Search" placeholder="Search" autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-owns="quicklinks suggestions" />
+								<button id="ac-gn-searchform-submit" class="ac-gn-searchform-submit" type="submit" disabled aria-label="Submit Search"></button>
+								<button id="ac-gn-searchform-reset" class="ac-gn-searchform-reset" type="reset" disabled aria-label="Clear Search">
+										<span class="ac-gn-searchform-reset-background"></span>
+									</button>
+							</div>
+						</form>
+						<button id="ac-gn-searchview-close-small" class="ac-gn-searchview-close ac-gn-searchview-close-small" aria-label="Cancel Search">
+								<span class="ac-gn-searchview-close-cancel" aria-hidden="true">
+									Cancel
+								</span>
+							</button>
+					</div>
+				</div>
+				<aside id="ac-gn-searchresults" class="ac-gn-searchresults hidden" data-string-quicklinks="Quick Links" data-string-suggestions="Suggested Searches" data-string-noresults="">
+                    <section class="ac-gn-searchresults-section ac-gn-searchresults-section-defaultlinks">
+                        <div class="ac-gn-searchresults-section-wrapper">
+							<div class="search-group-checkbox hidden"><input id="group-input" type="checkbox" name="group-filter" checked>Only search within “<span id="group-search-label"></span>”</div>
+                            <h3 class="ac-gn-searchresults-header ac-gn-searchresults-animated">Quick Links</h3>
+                            <ul class="ac-gn-searchresults-list" id="defaultlinks" role="listbox">
+                            </ul>
+                            <span role="status" class="ac-gn-searchresults-count" aria-live="polite">5 Quick Links</span>
+                        </div>
+                    </section>
+                </aside>
+			</div>
+			<button id="ac-gn-searchview-close" class="ac-gn-searchview-close" aria-label="Cancel Search">
+					<span class="ac-gn-searchview-close-wrapper">
+						<span class="ac-gn-searchview-close-left"></span>
+						<span class="ac-gn-searchview-close-right"></span>
+					</span>
+				</button>
+		</aside>
+			</div>
+</nav>
+<div class="ac-gn-blur"></div>
+<div id="ac-gn-curtain" class="ac-gn-curtain"></div>
+<div id="ac-gn-placeholder" class="ac-nav-placeholder"></div>
+<script src="/assets/scripts/ac-globalnav.built.js?17182448067"></script>
+<link rel="stylesheet" href="/assets/styles/search.css?02002524063">
+<script src="/assets/scripts/search.js?17182448067"></script>
+
+	<!-- metrics -->
+<script>
+    /* RSID: */
+    var s_account="awdappledeveloper"
+</script>	
+<script src="/assets/metrics/scripts/analytics.js?072620243"></script>
+<script>
+    s.pageName= AC && AC.Tracking && AC.Tracking.pageName();
+    s.channel="www.en.developer"
+    s.channel="www.videos.developer";
+
+    
+    /************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+    var s_code=s.t();if(s_code)document.write(s_code)
+</script>
+<!-- /metrics -->
+
+	<link rel="stylesheet" property="stylesheet" href="/assets/styles/localnav.css" type="text/css" />
+<input type="checkbox" id="localnav-menustate" class="localnav-menustate"/>
+<nav id="localnav" class="localnav localnav-scrim" data-sticky role="navigation">
+	<div class="localnav-wrapper">
+		<div class="localnav-background"></div>
+		<div class="localnav-content">
+			<h2 class="localnav-title">
+				<a href="/videos/">Videos</a>
+			</h2>
+
+			<div class="localnav-menu">
+				<a href="#localnav-menustate" class="localnav-menucta-anchor localnav-menucta-anchor-open" id="localnav-menustate-open">
+					<span class="localnav-menucta-anchor-label">Open Menu</span>
+				</a>
+				<a href="#" class="localnav-menucta-anchor localnav-menucta-anchor-close" id="localnav-menustate-close">
+					<span class="localnav-menucta-anchor-label">Close Menu</span>
+				</a>
+				<div class="localnav-menu-tray">
+					<ul class="localnav-menu-items">
+						<li class="localnav-menu-item">
+							<a href="/videos/" class="localnav-menu-link">Collections</a>
+						</li>
+						<li class="localnav-menu-item">
+							<a href="/videos/topics/" class="localnav-menu-link">Topics</a>
+						</li>
+						<li class="localnav-menu-item">
+							<a href="/videos/all-videos/" class="localnav-menu-link">All Videos</a>
+						</li>
+						<li class="localnav-menu-item">
+							<a href="/videos/about/" class="localnav-menu-link">About</a>
+						</li>
+					</ul>
+				</div>
+				<div class="localnav-actions localnav-actions-center">
+					<div class="localnav-action localnav-action-menucta" aria-hidden="true">
+						<label for="localnav-menustate" class="localnav-menucta">
+							<span class="localnav-menucta-chevron"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</nav>
+<label id="localnav-curtain" for="localnav-menustate"></label>
+<script src="/assets/scripts/ac-localnav.built.js"></script>
+<script type="text/javascript" src="/assets/scripts/localnav.js"></script>
+	<main id="main" class="main " role="main">
+
+		<section>
+
+			<div class="section-content">
+
+				<section class="row">
+					<section class="column large-12 small-12  padding-top-small large-centered no-padding-bottom">
+						<!-- back link -->
+						<p class="back-link smaller">
+														<a class="icon icon-before icon-chevronleft" href="/videos/wwdc2025/">Back to WWDC25</a>
+													</p>
+					</section>
+				</section>
+
+				<!-- video player -->
+				<section class="video-wrapper row">
+					<section class="column large-12 small-12  padding-top-small padding-bottom-small large-centered">
+												<div class="developer-video-player">
+							<div id="video-status-overlay" class="developer-video-overlay" style="display: none">
+								<div class="video-status-content">
+									<div id="video-status-text"></div>
+									<img class="video-status-icon" id="icon-backward" src="/assets/elements/icons/symbols/gobackward5.svg" style="display: none" />
+									<img class="video-status-icon" id="icon-forward" src="/assets/elements/icons/symbols/goforward5.svg" style="display: none" />
+								</div>
+							</div>
+							<video id="video" class="video large-centered" controls="" src="https://devstreaming-cdn.apple.com/videos/wwdc/2025/280/5/3596f3d4-e661-4414-a6ba-79128adcc8e6/cmaf.m3u8" data-id="wwdc2025-280" data-locale="en"></video>
+						</div>
+						<div class="no-video-banner hidden">
+							<div class="no-video-copy">
+								<p>Streaming is available in most browsers,<br> and in the Developer app.</p>
+							</div>
+							</span>
+						</div>
+
+											</section>
+				</section>
+
+			</section>
+
+		</section>
+
+		<section class="bg-light padding-top-small padding-bottom">
+
+			<div class="section-content">
+		
+			<!-- tab menu -->
+			<section class="tab-menu row divider-bottom">
+
+				<section class="column large-11 small-12  padding-top-small padding-bottom-small large-centered">
+										 
+																																																												<ul class="tabs">
+						
+						<li class="tab" data-supplement-id="details" data-language-code="en" data-video-id="wwdc2025-280"><a href="#"><span class="smaller">About</span></a></li>
+						
+						
+												<li class="tab" data-supplement-id="transcript" data-language-code="en" data-video-id="wwdc2025-280"><a href="#"><span class="smaller">Transcript</span></a></li>
+																		<li class="tab" data-supplement-id="sample-code" data-language-code="en" data-video-id="wwdc2025-280"><a href="#"><span class="smaller">Code</span></a></li>
+						
+					</ul>
+				</section>
+
+			</section>
+
+			<!-- supplements -->
+			<section class="row">
+
+				<section class="column large-11 small-12  large-centered no-padding-top no-padding-bottom">
+
+					<ul class="supplements hidden">
+
+						<!-- details -->
+						<li class="supplement details " data-supplement-id="details">
+							
+							<div class="badge-available-on-wrapper">
+														<h1>Code-along: Cook up a rich text experience in SwiftUI with AttributedString</h1>
+							</div>
+
+							<p>Learn how to build a rich text experience with SwiftUI's TextEditor API and AttributedString. Discover how you can enable rich text editing, build custom controls that manipulate the contents of your editor, and customize the formatting options available. Explore advanced capabilities of AttributedString that help you craft the best text editing experiences.</p>
+
+															
+								<h2>Chapters</h2>
+								<ul class="no-bullet chapter-list">
+																	<li class="chapter-item" data-start-time="0">0:00 - <a class="jump-to-time" href="/videos/play/wwdc2025/280/?time=0" data-start-time="0" data-chapter-end-time="75" data-chapter-lenght="75" data-chapter-index="1">Introduction</a></li>
+																	<li class="chapter-item" data-start-time="75">1:15 - <a class="jump-to-time" href="/videos/play/wwdc2025/280/?time=75" data-start-time="75" data-chapter-end-time="336" data-chapter-lenght="261" data-chapter-index="2">TextEditor and AttributedString</a></li>
+																	<li class="chapter-item" data-start-time="336">5:36 - <a class="jump-to-time" href="/videos/play/wwdc2025/280/?time=336" data-start-time="336" data-chapter-end-time="1322" data-chapter-lenght="986" data-chapter-index="3">Build custom controls</a></li>
+																	<li class="chapter-item" data-start-time="1322">22:02 - <a class="jump-to-time" href="/videos/play/wwdc2025/280/?time=1322" data-start-time="1322" data-chapter-end-time="2048" data-chapter-lenght="726" data-chapter-index="4">Define your text format</a></li>
+																	<li class="chapter-item" data-start-time="2048">34:08 - <a class="jump-to-time" href="/videos/play/wwdc2025/280/?time=2048" data-start-time="2048" data-chapter-end-time="2110" data-chapter-lenght="62" data-chapter-index="5">Next steps</a></li>
+																</ul>
+							
+														<h2>Resources</h2>
+
+							<ul class="links small">
+																																					<li class="document"><a href="https://developer.apple.com/documentation/SwiftUI/AttributedTextFormatting" target="_blank">AttributedTextFormatting</a></li>
+																																							<li class="document"><a href="https://developer.apple.com/documentation/SwiftUI/AttributedTextSelection" target="_blank">AttributedTextSelection</a></li>
+																																							<li class="download"><a href="https://developer.apple.com/documentation/SwiftUI/building-rich-swiftui-text-experiences" target="_blank">Building rich SwiftUI text experiences</a></li>
+																																							<li class="document"><a href="https://developer.apple.com/documentation/Swift/Character" target="_blank">Character</a></li>
+																											
+																	<li class="download">
+										<ul class="options">
+																						<li><a href="https://devstreaming-cdn.apple.com/videos/wwdc/2025/280/5/3596f3d4-e661-4414-a6ba-79128adcc8e6/downloads/wwdc2025-280_hd.mp4?dl=1">HD Video</a></li>
+																																	<li><a href="https://devstreaming-cdn.apple.com/videos/wwdc/2025/280/5/3596f3d4-e661-4414-a6ba-79128adcc8e6/downloads/wwdc2025-280_sd.mp4?dl=1">SD Video</a></li>
+																					</ul>
+									</li>
+																
+															</ul>
+							
+														<div class="divider-top margin-top-small padding-bottom-small"></div>
+							<h2>Related Videos</h2>
+														<h4>WWDC25</h4>
+								<ul class="links small">
+																			<li class="video">
+											<a href="/videos/play/wwdc2025/222">Enhance your app’s multilingual experience</a>
+										</li>
+																	</ul>
+														<h4>WWDC22</h4>
+								<ul class="links small">
+																			<li class="video">
+											<a href="/videos/play/wwdc2022/10107">Get it right (to left)</a>
+										</li>
+																	</ul>
+														<h4>WWDC21</h4>
+								<ul class="links small">
+																			<li class="video">
+											<a href="/videos/play/wwdc2021/10109">What's new in Foundation</a>
+										</li>
+																	</ul>
+														
+						</li>
+
+						<!-- transcript -->
+						<li class="supplement transcript" data-supplement-id="transcript" data-shortcut-base-url="/videos/play/wwdc2025/280/">
+							<div class="grid grid-gutterless margin-bottom-small">
+								<div class="grid-item large-span-11 medium-span-11 small-span-11">
+									<div class="form-textbox form-textbox-with-lefticon form-textbox-with-righticon">
+										<input type="text" id="transcript-search-box" class="transcript-search searchbar form-textbox-input" aria-labelledby="textbox-label"  />
+										<span class="form-textbox-label" id="textbox-label" aria-hidden="true">Search this video…</span>
+										<div class="form-textbox-lefticon form-icons-focusable">
+											<span class="form-icons form-icons-search15"></span>
+										</div>
+									</div>
+								</div>
+								<div class="grid-item large-span-1 medium-span-1 small-span-1">									
+									<div style="font-size:34px" id="get-transcript">
+										<sf-symbol name="arrow.down.document" weight="light" scale="small" mode="hierarchical"></sf-symbol>
+									</div>
+
+								</div>
+							</div>
+
+							<section id="transcript-content">
+								<p><span class="sentence"><span data-start="7.0">Hi, I'm Max, an Engineer on the SwiftUI team, </span></span><span class="sentence"><span data-start="10.0">and I’m Jeremy, an engineer on the Swift standard libraries team! </span></span><span class="sentence"><span data-start="14.0">We’re both delighted to share </span></span><span class="sentence"><span data-start="16.0">how you can build rich text-editing experiences </span></span><span class="sentence"><span data-start="19.0">using the power of SwiftUI </span></span><span class="sentence"><span data-start="21.0">and AttributedString. </span></span><span class="sentence"><span data-start="23.0">Together with Jeremy’s help, </span></span><span class="sentence"><span data-start="24.0">I’ll cover all the important aspects of rich text experiences in SwiftUI: </span></span><span class="sentence"><span data-start="29.0">first, I’ll discuss upgrading TextEditor </span></span><span class="sentence"><span data-start="32.0">to support rich text using AttributedString. </span></span><span class="sentence"><span data-start="36.0">Then, I’ll build custom controls, enhancing my editor with unique features. </span></span><span class="sentence"><span data-start="41.0">And finally, I’ll create my own text formatting definition </span></span><span class="sentence"><span data-start="44.0">so my editor - and its contents - always look great! </span></span><span class="sentence"><span data-start="49.0">Now, while I may be an engineer by day, I am also… </span></span><span class="sentence"><span data-start="55.0">a home cook on a mission to make the perfect croissant! </span></span><span class="sentence"><span data-start="59.0">So recently, I’ve been cooking up a little recipe editor </span></span><span class="sentence"><span data-start="62.0">to keep track of all my attempts! </span></span><span class="sentence"><span data-start="66.0">It has a list of recipes to the left, </span></span><span class="sentence"><span data-start="69.0">a TextEditor for editing the recipe text in the middle, </span></span><span class="sentence"><span data-start="72.0">and a list of ingredients in the inspector to the right. </span></span><span class="sentence"><span data-start="75.0">I’d love to make the most important parts of my recipe text stand out </span></span><span class="sentence"><span data-start="79.0">so I can easily catch them at a glance while cooking. </span></span><span class="sentence"><span data-start="82.0">Today I’ll make that possible by upgrading this editor to support rich text! </span></span><span class="sentence"><span data-start="88.0">Here is the editor view, implemented using SwiftUI’s TextEditor API. </span></span><span class="sentence"><span data-start="94.0">As indicated by the type of my text state, </span></span><span class="sentence"><span data-start="97.0">String, it currently only supports plaintext. </span></span><span class="sentence"><span data-start="101.0">I can just change String into AttributedString, </span></span><span class="sentence"><span data-start="107.0">dramatically increasing the view’s capabilities.</p><p></span></span><span class="sentence"><span data-start="111.0">Now that I have support for rich text, </span></span><span class="sentence"><span data-start="114.0">I can use the system UI for toggling boldness </span></span><span class="sentence"><span data-start="118.0">and applying all kinds of other formatting, </span></span><span class="sentence"><span data-start="121.0">such as increasing the font size.</p><p></span></span><span class="sentence"><span data-start="125.0">I can now also insert Genmoji from the keyboard, </span></span><span class="sentence"><span data-start="134.0">and thanks to the semantic nature of SwiftUI’s Font and Color attributes, </span></span><span class="sentence"><span data-start="139.0">the new TextEditor can support Dark Mode and Dynamic Type as well! </span></span><span class="sentence"><span data-start="146.0">In fact, TextEditor supports boldness, italics, </span></span><span class="sentence"><span data-start="149.0">underline, strikethrough, custom fonts </span></span><span class="sentence"><span data-start="151.0">point size, foreground and background colors, </span></span><span class="sentence"><span data-start="153.0">kerning, tracking, baseline offset, Genmoji, and… </span></span><span class="sentence"><span data-start="156.0">important aspects of paragraph styling! </span></span><span class="sentence"><span data-start="159.0">Line height, text alignment, and base writing direction are available </span></span><span class="sentence"><span data-start="163.0">as separate independent AttributedString attributes for SwiftUI as well.</p><p></span></span><span class="sentence"><span data-start="169.0">All these attributes are consistent with SwiftUI’s non-editable Text, </span></span><span class="sentence"><span data-start="174.0">so you can just take the content of a TextEditor, </span></span><span class="sentence"><span data-start="177.0">and display it with Text later! </span></span><span class="sentence"><span data-start="180.0">Just like with Text, TextEditor substitutes the default value </span></span><span class="sentence"><span data-start="184.0">calculated from the environment </span></span><span class="sentence"><span data-start="186.0">for any AttributedStringKeys with a value of nil. </span></span><span class="sentence"><span data-start="190.0">Jeremy, I got to be honest here… </span></span><span class="sentence"><span data-start="192.0">I've managed my way through working with AttributedStrings so far, </span></span><span class="sentence"><span data-start="195.0">but I could really use a refresher </span></span><span class="sentence"><span data-start="197.0">to make sure all my knowledge is super solid </span></span><span class="sentence"><span data-start="200.0">before I get into building controls. </span></span><span class="sentence"><span data-start="202.0">Also, I really gotta make that croissant dough for later, </span></span><span class="sentence"><span data-start="206.0">so would you mind sharing a refresher while I do that? </span></span><span class="sentence"><span data-start="209.0">Sure thing Max! </span></span><span class="sentence"><span data-start="210.0">While you get started on preparing the croissant dough, </span></span><span class="sentence"><span data-start="212.0">I’ll take a moment to discuss some AttributedString basics </span></span><span class="sentence"><span data-start="215.0">that will come in handy when working with rich text editors. </span></span><span class="sentence"><span data-start="219.0">In short, AttributedStrings contain a sequence of characters </span></span><span class="sentence"><span data-start="222.0">and a sequence of attribute runs. </span></span><span class="sentence"><span data-start="225.0">For example, this AttributedString stores the text, “Hello! </span></span><span class="sentence"><span data-start="228.0">Who’s ready to get cooking?” </span></span><span class="sentence"><span data-start="230.0">It also has three attribute runs: </span></span><span class="sentence"><span data-start="233.0">a starting run with just a font, </span></span><span class="sentence"><span data-start="236.0">a run with an additional foreground color applied, </span></span><span class="sentence"><span data-start="239.0">and a final run with just the font attribute. </span></span><span class="sentence"><span data-start="243.0">The AttributedString type fits right in </span></span><span class="sentence"><span data-start="245.0">alongside other Swift types you use throughout your apps. </span></span><span class="sentence"><span data-start="248.0">It’s a value type, and just like String from the standard library, </span></span><span class="sentence"><span data-start="252.0">it stores its contents using the UTF-8 encoding. </span></span><span class="sentence"><span data-start="256.0">AttributedString also provides conformances to many common Swift protocols </span></span><span class="sentence"><span data-start="261.0">such as Equatable, Hashable, Codable, and Sendable. </span></span><span class="sentence"><span data-start="266.0">The Apple SDKs ship with a variety of pre-defined attributes - </span></span><span class="sentence"><span data-start="271.0">like those Max shared earlier - grouped into attribute scopes. </span></span><span class="sentence"><span data-start="275.0">AttributedString also supports custom attributes that you define in your app </span></span><span class="sentence"><span data-start="280.0">for styling personalized to your UI.</p><p></span></span><span class="sentence"><span data-start="284.0">I’ll create my AttributedString from earlier using a few lines of code. </span></span><span class="sentence"><span data-start="288.0">First, I create an AttributedString with the start of my text. </span></span><span class="sentence"><span data-start="293.0">Next, I create the string “cooking,” set its foreground color to orange, </span></span><span class="sentence"><span data-start="297.0">and append it to the text. </span></span><span class="sentence"><span data-start="299.0">Then, I complete the sentence with the ending question mark. </span></span><span class="sentence"><span data-start="303.0">Lastly I set the entire text’s font to the largeTitle font. </span></span><span class="sentence"><span data-start="307.0">Now, I’m ready to display it in my UI on my device! </span></span><span class="sentence"><span data-start="312.0">For more on the basics of creating AttributedStrings, </span></span><span class="sentence"><span data-start="315.0">as well as creating and using your own custom attributes and attribute scopes, </span></span><span class="sentence"><span data-start="319.0">check out the What’s new in Foundation session from WWDC 2021.</p><p></span></span><span class="sentence"><span data-start="326.0">Max, it looks like you’re done making the dough! </span></span><span class="sentence"><span data-start="328.0">Are you ready to dive into the details of using AttributedString in your recipe app? </span></span><span class="sentence"><span data-start="332.0">For sure, Jeremy, that sounds like just what I… </span></span><span class="sentence"><span data-start="335.0">kneaded. </span></span><span class="sentence"><span data-start="336.0">I’ve really been wanting to offer better controls </span></span><span class="sentence"><span data-start="339.0">connecting my text editor to the rest of my app. </span></span><span class="sentence"><span data-start="343.0">I want to build a button that allows me </span></span><span class="sentence"><span data-start="345.0">to add ingredients to the list in the inspector to the right, </span></span><span class="sentence"><span data-start="348.0">but without having to type out the name of the ingredient manually again. </span></span><span class="sentence"><span data-start="353.0">For example, I just want to be able to select the word “butter” </span></span><span class="sentence"><span data-start="356.0">that is already in my recipe, </span></span><span class="sentence"><span data-start="359.0">and mark it as an ingredient with a single press of a button.</p><p></span></span><span class="sentence"><span data-start="363.0">My inspector already defines a preference key </span></span><span class="sentence"><span data-start="366.0">that I can use in my editor to suggest a new ingredient for the list.</p><p></span></span><span class="sentence"><span data-start="374.0">The value I pass to the preference view modifier </span></span><span class="sentence"><span data-start="377.0">will bubble up the view hierarchy </span></span><span class="sentence"><span data-start="379.0">and can be read via the name “NewIngredientPreferenceKey” </span></span><span class="sentence"><span data-start="382.0">by any view that uses my recipe editor.</p><p></span></span><span class="sentence"><span data-start="386.0">Let me define a computed property for this value below my view body.</p><p></span></span><span class="sentence"><span data-start="394.0">All I need to provide for the suggestion is the name, </span></span><span class="sentence"><span data-start="397.0">as an AttributedString. </span></span><span class="sentence"><span data-start="400.0">Of course, I don’t just want to suggest the entire text that is in my editor. </span></span><span class="sentence"><span data-start="405.0">Instead, I want to suggest the text that is currently selected, </span></span><span class="sentence"><span data-start="409.0">like I showed with "butter." </span></span><span class="sentence"><span data-start="411.0">TextEditor communicates what is selected via the optional selection argument.</p><p></span></span><span class="sentence"><span data-start="422.0">Let me bind that to a local state of type AttributedTextSelection.</p><p></span></span><span class="sentence"><span data-start="429.0">Ok, now that I have all the context I need available in my view, </span></span><span class="sentence"><span data-start="433.0">let me head back to the property computing the ingredient suggestion.</p><p></span></span><span class="sentence"><span data-start="446.0">Now, I need to get the text that is selected.</p><p></span></span><span class="sentence"><span data-start="453.0">Let me try subscripting text with the result </span></span><span class="sentence"><span data-start="456.0">of this indices function on selection.</p><p></span></span><span class="sentence"><span data-start="463.0">Hmm, that doesn’t seem to be the right type.</p><p></span></span><span class="sentence"><span data-start="468.0">It returns AttributedTextSelection.Indices. </span></span><span class="sentence"><span data-start="473.0">Let me look that up.</p><p></span></span><span class="sentence"><span data-start="479.0">Oh, that’s interesting, </span></span><span class="sentence"><span data-start="481.0">I just have one selection, but the Indices type’s second case, </span></span><span class="sentence"><span data-start="485.0">is represented by a set of ranges.</p><p></span></span><span class="sentence"><span data-start="490.0">Jeremy can you explain why that is </span></span><span class="sentence"><span data-start="492.0">while while I get to folding my croissant dough? </span></span><span class="sentence"><span data-start="494.0">Ha, that’s funny. </span></span><span class="sentence"><span data-start="495.0">I’m also folding - under the anticipation of these tasty croissants. </span></span><span class="sentence"><span data-start="500.0">But no worries Max, </span></span><span class="sentence"><span data-start="501.0">I’ll explain why this API doesn’t use the Range type you expected. </span></span><span class="sentence"><span data-start="506.0">To explain why this API uses a RangeSet </span></span><span class="sentence"><span data-start="509.0">and not a single Range, I’ll dive into AttributedString selections. </span></span><span class="sentence"><span data-start="514.0">I’ll discuss how multiple ranges can form selections </span></span><span class="sentence"><span data-start="517.0">and demonstrate how to use RangeSets in your code. </span></span><span class="sentence"><span data-start="521.0">You’ve likely used a single range in AttributedString APIs </span></span><span class="sentence"><span data-start="524.0">or other collection APIs before. </span></span><span class="sentence"><span data-start="526.0">A single range allows you to slice a portion of an AttributedString </span></span><span class="sentence"><span data-start="530.0">and perform an action over that single chunk. </span></span><span class="sentence"><span data-start="533.0">For example, AttributedString provides APIs </span></span><span class="sentence"><span data-start="537.0">that allow you to quickly apply an attribute </span></span><span class="sentence"><span data-start="539.0">to a portion of text all at once. </span></span><span class="sentence"><span data-start="541.0">I’ve used the .range(of:) API to find the range of the text “cooking” </span></span><span class="sentence"><span data-start="545.0">in my AttributedString. </span></span><span class="sentence"><span data-start="547.0">Next I use the subscript operator to slice the AttributedString </span></span><span class="sentence"><span data-start="551.0">with that range to make the entire word “cooking” orange. </span></span><span class="sentence"><span data-start="556.0">However, an AttributedString sliced with just one range </span></span><span class="sentence"><span data-start="559.0">isn’t enough to represent selections in a text editor </span></span><span class="sentence"><span data-start="562.0">that works for all languages. </span></span><span class="sentence"><span data-start="564.0">For example, I might use this recipe app to store my recipe for Sufganiyot </span></span><span class="sentence"><span data-start="569.0">that I plan to cook during the holidays which includes some Hebrew text. </span></span><span class="sentence"><span data-start="574.0">My recipe says to, “Put the Sufganiyot in the pan,” </span></span><span class="sentence"><span data-start="577.0">which uses English text for the instructions </span></span><span class="sentence"><span data-start="579.0">and Hebrew text for the traditional name of the food. </span></span><span class="sentence"><span data-start="583.0">In the text editor, I’ll select a portion of the word “Sufganiyot” </span></span><span class="sentence"><span data-start="587.0">and the word “in” with just one selection. </span></span><span class="sentence"><span data-start="590.0">However, this is actually multiple ranges in the AttributedString! </span></span><span class="sentence"><span data-start="595.0">Since English is a left-to-right language, the editor lays out the sentence visually </span></span><span class="sentence"><span data-start="599.0">from the left side to the right side. </span></span><span class="sentence"><span data-start="602.0">However, the Hebrew portion, Sufganiyot, is laid out in the opposite direction </span></span><span class="sentence"><span data-start="606.0">since Hebrew is a right-to-left language. </span></span><span class="sentence"><span data-start="610.0">While the bidirectional nature of this text </span></span><span class="sentence"><span data-start="612.0">affects the visual layout on the screen, </span></span><span class="sentence"><span data-start="614.0">the AttributedString still stores all text in a consistent ordering. </span></span><span class="sentence"><span data-start="619.0">This ordering breaks apart my selection into two ranges: </span></span><span class="sentence"><span data-start="623.0">the start of the word “Sufganiyot” </span></span><span class="sentence"><span data-start="625.0">and the word “in,” excluding the end of the Hebrew text. </span></span><span class="sentence"><span data-start="629.0">This is why the SwiftUI text selection type uses multiple ranges </span></span><span class="sentence"><span data-start="633.0">rather than a single range.</p><p></span></span><span class="sentence"><span data-start="636.0">To learn more about localizing your app for bidirectional text, </span></span><span class="sentence"><span data-start="640.0">check out the Get it right (to left) session from WWDC 2022 </span></span><span class="sentence"><span data-start="645.0">and this year’s Enhance your app’s multilingual experience session.</p><p></span></span><span class="sentence"><span data-start="650.0">To support these types of selections, </span></span><span class="sentence"><span data-start="653.0">AttributedString supports slicing with a RangeSet, </span></span><span class="sentence"><span data-start="655.0">the type Max noticed earlier in the selection API. </span></span><span class="sentence"><span data-start="659.0">Just like you can slice an AttributedString with a singular range, </span></span><span class="sentence"><span data-start="662.0">you can also slice it with a RangeSet to produce a discontiguous substring. </span></span><span class="sentence"><span data-start="667.0">In this case I’ve created a RangeSet using the .indices(where:) function </span></span><span class="sentence"><span data-start="671.0">on the character view to find all uppercase characters in my text. </span></span><span class="sentence"><span data-start="675.0">Setting the foreground color to blue on this slice </span></span><span class="sentence"><span data-start="678.0">will make all uppercase characters blue, </span></span><span class="sentence"><span data-start="680.0">leaving the other characters unmodified. </span></span><span class="sentence"><span data-start="683.0">SwiftUI also provides an equivalent subscript that slices an AttributedString </span></span><span class="sentence"><span data-start="687.0">with a selection directly. </span></span><span class="sentence"><span data-start="690.0">Hey Max, if you finished folding that beautiful croissant dough, </span></span><span class="sentence"><span data-start="693.0">I think using the subscript API </span></span><span class="sentence"><span data-start="695.0">that accepts a selection might resolve the build error in your code! </span></span><span class="sentence"><span data-start="698.0">Let me give that a try! </span></span><span class="sentence"><span data-start="700.0">I can just subscript text with the selection directly, </span></span><span class="sentence"><span data-start="706.0">and then transform the discontiguous AttributedSubstring </span></span><span class="sentence"><span data-start="709.0">into a new AttributedString.</p><p></span></span><span class="sentence"><span data-start="712.0">That’s awesome! </span></span><span class="sentence"><span data-start="714.0">Now, when I run this on device, and select the word “butter," </span></span><span class="sentence"><span data-start="718.0">SwiftUI automatically calls my property </span></span><span class="sentence"><span data-start="721.0">newIngredientSuggestion to compute the new value, </span></span><span class="sentence"><span data-start="724.0">which bubbles up to the rest of my app. </span></span><span class="sentence"><span data-start="727.0">My inspector then automatically adds the suggestion </span></span><span class="sentence"><span data-start="730.0">at the bottom of the ingredient list. </span></span><span class="sentence"><span data-start="733.0">From there, I can commit it to the ingredient list with a single tap! </span></span><span class="sentence"><span data-start="738.0">Features like that can elevate an editor, to a beautiful experience! </span></span><span class="sentence"><span data-start="744.0">I’m really happy with this addition, </span></span><span class="sentence"><span data-start="746.0">but with everything Jeremy has shown me so far, I think I can go even further! </span></span><span class="sentence"><span data-start="752.0">I want to better visualize the ingredients in the text itself! </span></span><span class="sentence"><span data-start="757.0">The first thing I need for that is a custom attribute </span></span><span class="sentence"><span data-start="760.0">that marks a range of text as an ingredient. </span></span><span class="sentence"><span data-start="763.0">Let me define this in a new file.</p><p></span></span><span class="sentence"><span data-start="770.0">This attribute’s Value will be the ID of the ingredient it refers to. </span></span><span class="sentence"><span data-start="776.0">Now, I’ll head back to the property </span></span><span class="sentence"><span data-start="778.0">computing the IngredientSuggestion in the RecipeEditor file.</p><p></span></span><span class="sentence"><span data-start="783.0">IngredientSuggestion allows me to provide a closure as a second argument.</p><p></span></span><span class="sentence"><span data-start="791.0">This closure gets called when I press the plus button </span></span><span class="sentence"><span data-start="794.0">and the ingredient is added to the list. </span></span><span class="sentence"><span data-start="797.0">I will use that closure to mutate the editor text, </span></span><span class="sentence"><span data-start="800.0">marking up occurrences of the name with my Ingredient attribute. </span></span><span class="sentence"><span data-start="805.0">I get the ID of the newly created ingredient passed into the closure.</p><p></span></span><span class="sentence"><span data-start="816.0">Next, I need to find all the occurrences </span></span><span class="sentence"><span data-start="819.0">of the suggested ingredient name in my text.</p><p></span></span><span class="sentence"><span data-start="825.0">I can do this by calling ranges(of:) on AttributedString’s characters view.</p><p></span></span><span class="sentence"><span data-start="835.0">Now that I have the ranges, </span></span><span class="sentence"><span data-start="837.0">I can just update the value of my ingredient attribute for each range! </span></span><span class="sentence"><span data-start="847.0">Here, I’m using a short name </span></span><span class="sentence"><span data-start="849.0">for the IngredientAttribute I had already defined.</p><p></span></span><span class="sentence"><span data-start="857.0">Let’s give it a try! </span></span><span class="sentence"><span data-start="859.0">I don’t expect anything new here, after all, </span></span><span class="sentence"><span data-start="862.0">my custom attribute doesn’t have any formatting associated with it. </span></span><span class="sentence"><span data-start="867.0">Let me select “yeast” and press the plus button! </span></span><span class="sentence"><span data-start="873.0">Wait, what is that?! </span></span><span class="sentence"><span data-start="875.0">My cursor was at the top, not at the end! </span></span><span class="sentence"><span data-start="878.0">Let me try again! </span></span><span class="sentence"><span data-start="880.0">I select "salt," </span></span><span class="sentence"><span data-start="884.0">press the plus button, </span></span><span class="sentence"><span data-start="886.0">and my selection jumps to the end! </span></span><span class="sentence"><span data-start="889.0">Jeremy, I have to roll out my croissant dough, </span></span><span class="sentence"><span data-start="891.0">so I can’t debug this right now… </span></span><span class="sentence"><span data-start="894.0">do you know why my selection is getting reset? </span></span><span class="sentence"><span data-start="896.0">That’s definitely not an experience we want for the cooks using your app! </span></span><span class="sentence"><span data-start="900.0">Why don’t you get started on rolling out the dough, </span></span><span class="sentence"><span data-start="902.0">and I’ll dive into this unexpected behavior.</p><p></span></span><span class="sentence"><span data-start="906.0">In order to demonstrate what’s happening here and how to fix it, </span></span><span class="sentence"><span data-start="910.0">I’ll explain the details of AttributedString indices </span></span><span class="sentence"><span data-start="913.0">which form the ranges and text selections used by a rich TextEditor.</p><p></span></span><span class="sentence"><span data-start="918.0">AttributedString.Index represents a single location within your text. </span></span><span class="sentence"><span data-start="924.0">To support its powerful and performant design, </span></span><span class="sentence"><span data-start="926.0">AttributedString stores its contents in a tree structure, </span></span><span class="sentence"><span data-start="930.0">and its indices store paths through that tree. </span></span><span class="sentence"><span data-start="933.0">Since these indices form the building blocks of text selections in SwiftUI, </span></span><span class="sentence"><span data-start="938.0">the unexpected selection behavior in the app </span></span><span class="sentence"><span data-start="941.0">stems from how AttributedString indices behave within these trees. </span></span><span class="sentence"><span data-start="946.0">You should keep two key points in mind when working with AttributedString indices. </span></span><span class="sentence"><span data-start="951.0">First, any mutation to an AttributedString invalidates all of its indices, </span></span><span class="sentence"><span data-start="956.0">even those not within the bounds of the mutation. </span></span><span class="sentence"><span data-start="960.0">Recipes never turn out well when you use expired ingredients, </span></span><span class="sentence"><span data-start="963.0">and I can assure you </span></span><span class="sentence"><span data-start="964.0">that you’ll feel the same way about using old indices with an AttributedString. </span></span><span class="sentence"><span data-start="969.0">Second, you should only use indices with the AttributedString </span></span><span class="sentence"><span data-start="973.0">from which they were created.</p><p></span></span><span class="sentence"><span data-start="976.0">Now I’ll explore indices from the example AttributedString I created earlier </span></span><span class="sentence"><span data-start="980.0">to explain how they work! </span></span><span class="sentence"><span data-start="983.0">Like I mentioned, AttributedString stores its contents in a tree structure, </span></span><span class="sentence"><span data-start="987.0">and here I have a simplified example of that tree. </span></span><span class="sentence"><span data-start="991.0">Using a tree allows for better performance and avoids copying lots of data </span></span><span class="sentence"><span data-start="995.0">when mutating your text. </span></span><span class="sentence"><span data-start="997.0">AttributedString.Index references text by storing a path through the tree </span></span><span class="sentence"><span data-start="1002.0">to the referenced location. </span></span><span class="sentence"><span data-start="1004.0">This stored path allows AttributedString </span></span><span class="sentence"><span data-start="1007.0">to quickly locate specific text from an index, </span></span><span class="sentence"><span data-start="1010.0">but it also means that the index contains information </span></span><span class="sentence"><span data-start="1013.0">about the layout of the entire AttributedString’s tree. </span></span><span class="sentence"><span data-start="1018.0">When you mutate an AttributedString, it might adjust the layout of the tree. </span></span><span class="sentence"><span data-start="1023.0">This invalidates any previously recorded paths, </span></span><span class="sentence"><span data-start="1026.0">even if the destination of that index still exists within the text.</p><p></span></span><span class="sentence"><span data-start="1031.0">Additionally, even if two AttributedStrings have the same text </span></span><span class="sentence"><span data-start="1036.0">and attribute content, </span></span><span class="sentence"><span data-start="1037.0">their trees may have different layouts </span></span><span class="sentence"><span data-start="1039.0">making their indices incompatible with each other.</p><p></span></span><span class="sentence"><span data-start="1043.0">Using an index to traverse these trees to find information </span></span><span class="sentence"><span data-start="1047.0">requires using the index within one of AttributedString’s views. </span></span><span class="sentence"><span data-start="1051.0">While indices are specific to a particular AttributedString, </span></span><span class="sentence"><span data-start="1055.0">you can use them in any view from that string. </span></span><span class="sentence"><span data-start="1059.0">Foundation provides views over the characters, or grapheme clusters, </span></span><span class="sentence"><span data-start="1063.0">of the text content, </span></span><span class="sentence"><span data-start="1065.0">the individual Unicode scalars that make up each character, </span></span><span class="sentence"><span data-start="1070.0">and the attribute runs of the string. </span></span><span class="sentence"><span data-start="1073.0">To learn more about the differences </span></span><span class="sentence"><span data-start="1075.0">between the character and Unicode scalar views, </span></span><span class="sentence"><span data-start="1078.0">check out Apple’s developer documentation for the Swift Character type. </span></span><span class="sentence"><span data-start="1083.0">You might also want to access lower level contents </span></span><span class="sentence"><span data-start="1086.0">when interfacing with other string-like types </span></span><span class="sentence"><span data-start="1088.0">that don’t use Swift’s Character type, such as NSString. </span></span><span class="sentence"><span data-start="1093.0">AttributedString now also provides views into both the UTF-8 scalars </span></span><span class="sentence"><span data-start="1097.0">and the UTF-16 scalars of the text. </span></span><span class="sentence"><span data-start="1101.0">These two views still share the same indices as all of the existing views.</p><p></span></span><span class="sentence"><span data-start="1107.0">Now that I’ve discussed the details of indices and selections, </span></span><span class="sentence"><span data-start="1111.0">I’ll revisit the problem that Max encountered with the recipe app. </span></span><span class="sentence"><span data-start="1115.0">The onApply closure in the IngredientSuggestion </span></span><span class="sentence"><span data-start="1118.0">mutates the attributed string, </span></span><span class="sentence"><span data-start="1120.0">but it doesn’t update the indices in the selection! </span></span><span class="sentence"><span data-start="1124.0">SwiftUI detects that these indices are no longer valid </span></span><span class="sentence"><span data-start="1127.0">and moves the selection to the end of the text </span></span><span class="sentence"><span data-start="1129.0">to prevent the app from crashing. </span></span><span class="sentence"><span data-start="1132.0">To fix this, use AttributedString APIs to update your indices </span></span><span class="sentence"><span data-start="1136.0">and selections when mutating text. </span></span><span class="sentence"><span data-start="1140.0">Here, I have a simplified example of code </span></span><span class="sentence"><span data-start="1142.0">that has the same problem as the recipe app. </span></span><span class="sentence"><span data-start="1145.0">First, I find the range of the word "cooking" in my text. </span></span><span class="sentence"><span data-start="1150.0">Then, I set the range of “cooking” to an orange foreground color </span></span><span class="sentence"><span data-start="1154.0">and I also insert the word “chef” into my string </span></span><span class="sentence"><span data-start="1157.0">to add some more recipe theming.</p><p></span></span><span class="sentence"><span data-start="1160.0">Mutating my text can change the layout of my AttributedString’s tree. </span></span><span class="sentence"><span data-start="1165.0">Using the cookingRange variable after I’ve mutated my string is not valid. </span></span><span class="sentence"><span data-start="1170.0">It might even crash the app. </span></span><span class="sentence"><span data-start="1173.0">Instead, AttributedString provides a transform function </span></span><span class="sentence"><span data-start="1176.0">which takes a Range, or an array of Ranges, </span></span><span class="sentence"><span data-start="1179.0">and a closure which mutates the provided AttributedString in-place. </span></span><span class="sentence"><span data-start="1184.0">At the end of the closure, </span></span><span class="sentence"><span data-start="1185.0">the transform function will update your provided range </span></span><span class="sentence"><span data-start="1188.0">with new indices to ensure you can correctly use the range </span></span><span class="sentence"><span data-start="1191.0">in the resulting AttributedString. </span></span><span class="sentence"><span data-start="1194.0">While the text may have shifted in the AttributedString, </span></span><span class="sentence"><span data-start="1197.0">the range still points </span></span><span class="sentence"><span data-start="1198.0">to the same semantic location - in this case, the word “cooking.” </span></span><span class="sentence"><span data-start="1203.0">SwiftUI also provides an equivalent function </span></span><span class="sentence"><span data-start="1206.0">that updates a selection instead of a range.</p><p></span></span><span class="sentence"><span data-start="1210.0">Wow, Max, those croissants are really shaping up great! </span></span><span class="sentence"><span data-start="1214.0">If you’re ready to get back to your app, </span></span><span class="sentence"><span data-start="1216.0">I think using this new transform function will help get your code into shape too! </span></span><span class="sentence"><span data-start="1220.0">Thank you! </span></span><span class="sentence"><span data-start="1221.0">That sounds like just what I was looking for! </span></span><span class="sentence"><span data-start="1223.0">Let me see if I can apply this in code. </span></span><span class="sentence"><span data-start="1227.0">First, I shouldn’t loop over the ranges like that. </span></span><span class="sentence"><span data-start="1230.0">By the time I reach the last range, </span></span><span class="sentence"><span data-start="1232.0">the text has been mutated many times, and the indices are outdated. </span></span><span class="sentence"><span data-start="1236.0">I can avoid that problem entirely by first converting my Ranges to a RangeSet.</p><p></span></span><span class="sentence"><span data-start="1248.0">Then I can just slice with that and remove the loop.</p><p></span></span><span class="sentence"><span data-start="1258.0">This way everything is one change, </span></span><span class="sentence"><span data-start="1260.0">and I don’t need to update the remaining ranges after each mutation.</p><p></span></span><span class="sentence"><span data-start="1266.0">Second, next to the ranges I want to change, there is also the selection </span></span><span class="sentence"><span data-start="1271.0">representing my cursor position. </span></span><span class="sentence"><span data-start="1273.0">I need to always make sure it matches the transformed text. </span></span><span class="sentence"><span data-start="1278.0">I can do that using SwiftUI’s </span></span><span class="sentence"><span data-start="1280.0">transform(updating:) overload </span></span><span class="sentence"><span data-start="1282.0">on AttributedString.</p><p></span></span><span class="sentence"><span data-start="1297.0">Nice, now my selection is updated right as the text gets mutated! </span></span><span class="sentence"><span data-start="1303.0">Let’s see if that worked! </span></span><span class="sentence"><span data-start="1305.0">I can select “milk,” it appears in the list, </span></span><span class="sentence"><span data-start="1309.0">and - when I add it - my selection remains intact! </span></span><span class="sentence"><span data-start="1313.0">To double-check, when I press Command+B on the keyboard now, </span></span><span class="sentence"><span data-start="1317.0">I can see the word “milk” turning bold - just as expected! </span></span><span class="sentence"><span data-start="1323.0">Now that I have all the information in my recipe text, </span></span><span class="sentence"><span data-start="1326.0">I want to emphasize the ingredients with some color! </span></span><span class="sentence"><span data-start="1330.0">Thankfully, TextEditor provides a tool for that: </span></span><span class="sentence"><span data-start="1334.0">the attributed text formatting definition protocol. </span></span><span class="sentence"><span data-start="1337.0">A custom text formatting definition is all structured around </span></span><span class="sentence"><span data-start="1341.0">which AttributedStringKeys your text editor responds to, </span></span><span class="sentence"><span data-start="1345.0">and what values they might have. </span></span><span class="sentence"><span data-start="1348.0">I already declared a type conforming </span></span><span class="sentence"><span data-start="1350.0">to the AttributedTextFormattingDefinition protocol here. </span></span><span class="sentence"><span data-start="1354.0">By default, the system uses the SwiftUIAttributes scope, </span></span><span class="sentence"><span data-start="1358.0">with no constraints on the attributes’ values.</p><p></span></span><span class="sentence"><span data-start="1363.0">In the scope for my recipe editor, </span></span><span class="sentence"><span data-start="1369.0">I only want to allow foreground color, Genmoji, </span></span><span class="sentence"><span data-start="1374.0">and my custom ingredient attribute.</p><p></span></span><span class="sentence"><span data-start="1377.0">Back on my recipe editor, </span></span><span class="sentence"><span data-start="1380.0">I can use the attributedTextFormattingDefinition modifier </span></span><span class="sentence"><span data-start="1384.0">to pass my custom definition to SwiftUI’s TextEditor.</p><p></span></span><span class="sentence"><span data-start="1393.0">With this change, my TextEditor will allow any ingredient, any Genmoji, </span></span><span class="sentence"><span data-start="1398.0">and any foreground color.</p><p></span></span><span class="sentence"><span data-start="1401.0">All of the other attributes now will assume their default value. </span></span><span class="sentence"><span data-start="1405.0">Note that you can still change the default value for the entire editor </span></span><span class="sentence"><span data-start="1409.0">by modifying the environment. </span></span><span class="sentence"><span data-start="1412.0">Based on this change, </span></span><span class="sentence"><span data-start="1413.0">TextEditor has already made some important changes </span></span><span class="sentence"><span data-start="1417.0">to the system formatting UI. </span></span><span class="sentence"><span data-start="1419.0">It no longer offers controls for changing the alignment, </span></span><span class="sentence"><span data-start="1423.0">the line height, or font properties, </span></span><span class="sentence"><span data-start="1425.0">since the respective AttributedStringKeys are not in my scope. </span></span><span class="sentence"><span data-start="1430.0">However, I can still use the color control to apply arbitrary colors to my text, </span></span><span class="sentence"><span data-start="1435.0">even if those colors don’t necessarily make sense.</p><p></span></span><span class="sentence"><span data-start="1442.0">Oh no, the milk is gone! </span></span><span class="sentence"><span data-start="1446.0">I really only want ingredients to be highlighted green, </span></span><span class="sentence"><span data-start="1450.0">and everything else to use the default color. </span></span><span class="sentence"><span data-start="1452.0">I can use SwiftUI’s AttributedTextValueConstraint protocol </span></span><span class="sentence"><span data-start="1457.0">to implement this logic.</p><p></span></span><span class="sentence"><span data-start="1460.0">Let me head back to the RecipeFormattingDefinition file </span></span><span class="sentence"><span data-start="1463.0">and declare the constraint.</p><p></span></span><span class="sentence"><span data-start="1474.0">To conform to the AttributedTextValueConstraint protocol, </span></span><span class="sentence"><span data-start="1477.0">I first specify the scope of the AttributedTextFormattingDefinition </span></span><span class="sentence"><span data-start="1482.0">it belongs to, </span></span><span class="sentence"><span data-start="1483.0">and then the AttributedStringKey I want to constrain, </span></span><span class="sentence"><span data-start="1487.0">in my case the foreground color attribute. </span></span><span class="sentence"><span data-start="1490.0">The actual logic for constraining the attribute </span></span><span class="sentence"><span data-start="1493.0">lives in the constrain function. </span></span><span class="sentence"><span data-start="1496.0">In that function, I set the value of the AttributeKey - the foreground color - </span></span><span class="sentence"><span data-start="1501.0">to what I consider valid.</p><p></span></span><span class="sentence"><span data-start="1504.0">In my case, the logic all depends on whether the ingredient attribute is set.</p><p></span></span><span class="sentence"><span data-start="1515.0">If so, the foreground color should be green, </span></span><span class="sentence"><span data-start="1523.0">otherwise it should be nil </span></span><span class="sentence"><span data-start="1530.0">This indicates TextEditor should substitute the default color.</p><p></span></span><span class="sentence"><span data-start="1535.0">Now that I have defined the constraint, </span></span><span class="sentence"><span data-start="1538.0">I just need to add it to the body of the AttributedTextFormattingDefinition.</p><p></span></span><span class="sentence"><span data-start="1548.0">From here, SwiftUI takes care of all the rest. </span></span><span class="sentence"><span data-start="1552.0">TextEditor automatically applies the definition and its constraints </span></span><span class="sentence"><span data-start="1556.0">to any part of the text before it appears on screen.</p><p></span></span><span class="sentence"><span data-start="1561.0">All the ingredients are green now! </span></span><span class="sentence"><span data-start="1565.0">Interestingly, TextEditor has disabled its color control, </span></span><span class="sentence"><span data-start="1570.0">despite foreground color being in my formatting definition’s scope. </span></span><span class="sentence"><span data-start="1574.0">This makes sense considering the IngredientsAreGreen constraint I added. </span></span><span class="sentence"><span data-start="1579.0">The foreground color now solely depends </span></span><span class="sentence"><span data-start="1582.0">on whether text is marked with the ingredient attribute. </span></span><span class="sentence"><span data-start="1585.0">TextEditor automatically probes AttributedTextValueConstraints </span></span><span class="sentence"><span data-start="1589.0">to determine if a potential change is valid for the current selection. </span></span><span class="sentence"><span data-start="1593.0">For example, I could try to set the foreground color of “milk” to white again. </span></span><span class="sentence"><span data-start="1598.0">Running my IngredientsAreGreen constraint afterwards </span></span><span class="sentence"><span data-start="1601.0">would change the foreground color back to green, </span></span><span class="sentence"><span data-start="1603.0">so TextEditor knows this is not a valid change and disables the control. </span></span><span class="sentence"><span data-start="1609.0">My value constraint will also be applied to text I paste into my editor. </span></span><span class="sentence"><span data-start="1614.0">When I copy an ingredient using Command+C and paste it again using Command+V, </span></span><span class="sentence"><span data-start="1621.0">my custom ingredient attribute is preserved. </span></span><span class="sentence"><span data-start="1623.0">With CodableAttributedStringKeys, this can even work across TextEditors </span></span><span class="sentence"><span data-start="1628.0">in different apps </span></span><span class="sentence"><span data-start="1629.0">as long as both apps list the attribute </span></span><span class="sentence"><span data-start="1632.0">in their AttributedTextFormattingDefinition.</p><p></span></span><span class="sentence"><span data-start="1636.0">This is pretty great, </span></span><span class="sentence"><span data-start="1637.0">but there are still some things to improve: </span></span><span class="sentence"><span data-start="1640.0">with my cursor at the end of the ingredient "milk," </span></span><span class="sentence"><span data-start="1643.0">I can delete characters or continue typing and it just behaves like regular text. </span></span><span class="sentence"><span data-start="1649.0">This makes it feel like it is just green text, </span></span><span class="sentence"><span data-start="1652.0">and not an ingredient with a certain name. </span></span><span class="sentence"><span data-start="1656.0">To make this feel right, </span></span><span class="sentence"><span data-start="1657.0">I want the ingredient attribute not to expand as I type at the end of its run. </span></span><span class="sentence"><span data-start="1663.0">And I would like the foreground color to reset </span></span><span class="sentence"><span data-start="1666.0">for the entire word at once if I modify it.</p><p></span></span><span class="sentence"><span data-start="1670.0">Jeremy, if I promise I’ll give you an extra croissant later, </span></span><span class="sentence"><span data-start="1674.0">will you help me getting that implemented? </span></span><span class="sentence"><span data-start="1676.0">Hmm… I’m not sure one's gonna be enough, </span></span><span class="sentence"><span data-start="1679.0">but make it a few and you’ve got a deal, Max! </span></span><span class="sentence"><span data-start="1682.0">While you go get those croissants in the oven, </span></span><span class="sentence"><span data-start="1683.0">I’ll explain what APIs might help with this problem. </span></span><span class="sentence"><span data-start="1687.0">With the formatting definition constraints that Max demonstrated, </span></span><span class="sentence"><span data-start="1691.0">you can constrain which attributes </span></span><span class="sentence"><span data-start="1693.0">and which specific values each text editor can display. </span></span><span class="sentence"><span data-start="1696.0">To help with this new issue with the recipe editor, </span></span><span class="sentence"><span data-start="1699.0">the AttributedStringKey protocol provides additional APIs </span></span><span class="sentence"><span data-start="1703.0">to constrain how attribute values are mutated </span></span><span class="sentence"><span data-start="1705.0">across changes to any AttributedString. </span></span><span class="sentence"><span data-start="1709.0">When attributes declare constraints, </span></span><span class="sentence"><span data-start="1711.0">AttributedString always keeps the attributes consistent with each other </span></span><span class="sentence"><span data-start="1715.0">and the text content to avoid unexpected state </span></span><span class="sentence"><span data-start="1718.0">with simpler and more performant code. </span></span><span class="sentence"><span data-start="1721.0">I’ll dive into a few examples to explain </span></span><span class="sentence"><span data-start="1723.0">when you might use these APIs for your attributes. </span></span><span class="sentence"><span data-start="1727.0">First, I’ll discuss attributes </span></span><span class="sentence"><span data-start="1728.0">whose values are coupled with other content in the AttributedString, </span></span><span class="sentence"><span data-start="1732.0">such as a spell checking attribute.</p><p></span></span><span class="sentence"><span data-start="1735.0">Here, I have a spell checking attribute that indicates the word “ready” </span></span><span class="sentence"><span data-start="1739.0">is misspelled via a dashed, red underline. </span></span><span class="sentence"><span data-start="1742.0">After performing spell checking on my text, </span></span><span class="sentence"><span data-start="1745.0">I need to make sure that the spell checking attribute </span></span><span class="sentence"><span data-start="1747.0">remains only applied to the text that I have already validated. </span></span><span class="sentence"><span data-start="1752.0">However, if I continue typing in my text editor, </span></span><span class="sentence"><span data-start="1754.0">by default all attributes of the existing text </span></span><span class="sentence"><span data-start="1758.0">are inherited by inserted text. </span></span><span class="sentence"><span data-start="1760.0">This isn’t what I want for a spell checking attribute, </span></span><span class="sentence"><span data-start="1763.0">so I’ll add a new property to my AttributedStringKey to correct this. </span></span><span class="sentence"><span data-start="1768.0">By declaring an inheritedByAddedText property on my AttributedStringKey type </span></span><span class="sentence"><span data-start="1773.0">with a value of "false," any added text will not inherit this attribute value.</p><p></span></span><span class="sentence"><span data-start="1779.0">Now, when adding new text to my string, </span></span><span class="sentence"><span data-start="1782.0">the new text will not contain the spell checking attribute </span></span><span class="sentence"><span data-start="1785.0">since I have not yet checked the spelling of those words. </span></span><span class="sentence"><span data-start="1789.0">Unfortunately, I found another issue with this attribute. </span></span><span class="sentence"><span data-start="1792.0">Now, when I add text to the middle of a word that was marked as misspelled, </span></span><span class="sentence"><span data-start="1797.0">the attribute shows an awkward break </span></span><span class="sentence"><span data-start="1799.0">in the red line underneath the added text. </span></span><span class="sentence"><span data-start="1802.0">Since my app hasn’t checked if this word is misspelled yet, </span></span><span class="sentence"><span data-start="1805.0">what I really want is for the attribute to be removed from this word </span></span><span class="sentence"><span data-start="1808.0">to avoid stale information in my UI. </span></span><span class="sentence"><span data-start="1812.0">To fix this problem, I’ll add another property to my AttributedStringKey type: </span></span><span class="sentence"><span data-start="1817.0">the invalidationConditions property. </span></span><span class="sentence"><span data-start="1820.0">This property declares situations when a run of this attribute </span></span><span class="sentence"><span data-start="1824.0">should be removed from the text. </span></span><span class="sentence"><span data-start="1826.0">AttributedString provides conditions for when the text changes </span></span><span class="sentence"><span data-start="1830.0">and when specific attributes change, </span></span><span class="sentence"><span data-start="1832.0">and attribute keys can invalidate upon any number of conditions. </span></span><span class="sentence"><span data-start="1836.0">In this case, I need to remove this attribute </span></span><span class="sentence"><span data-start="1839.0">whenever the text of the attribute run changes </span></span><span class="sentence"><span data-start="1842.0">so I’ll use the “textChanged” value. </span></span><span class="sentence"><span data-start="1845.0">Now, inserting text into the middle of an attribute run </span></span><span class="sentence"><span data-start="1849.0">will invalidate the attribute across the entire run, </span></span><span class="sentence"><span data-start="1852.0">ensuring that I avoid this inconsistent state in my UI. </span></span><span class="sentence"><span data-start="1857.0">I think both of those APIs </span></span><span class="sentence"><span data-start="1859.0">might help keep the ingredient attribute valid in Max’s app! </span></span><span class="sentence"><span data-start="1862.0">While Max is finishing up with the oven, </span></span><span class="sentence"><span data-start="1864.0">I’ll demonstrate one more category of attributes: </span></span><span class="sentence"><span data-start="1867.0">attributes that require consistent values across sections of text. </span></span><span class="sentence"><span data-start="1871.0">For example, a paragraph alignment attribute. </span></span><span class="sentence"><span data-start="1875.0">I can apply different alignments to each paragraph in my text, </span></span><span class="sentence"><span data-start="1879.0">however just a single word cannot use a different alignment </span></span><span class="sentence"><span data-start="1883.0">than the rest of the paragraph. </span></span><span class="sentence"><span data-start="1885.0">To enforce this requirement during AttributedString mutations, </span></span><span class="sentence"><span data-start="1889.0">I’ll declare a runBoundaries property on my AttributedStringKey type. </span></span><span class="sentence"><span data-start="1893.0">Foundation supports limiting run boundaries to paragraph edges or the edges </span></span><span class="sentence"><span data-start="1897.0">of a specified character. </span></span><span class="sentence"><span data-start="1899.0">In this case, I’ll define this attribute as constrained to paragraph boundaries </span></span><span class="sentence"><span data-start="1904.0">to require that it has a consistent value from the start to the end of a paragraph. </span></span><span class="sentence"><span data-start="1910.0">Now, this situation becomes impossible. </span></span><span class="sentence"><span data-start="1913.0">If I apply a left alignment value to just one word in a paragraph, </span></span><span class="sentence"><span data-start="1917.0">AttributedString automatically expands the attribute to the entire range </span></span><span class="sentence"><span data-start="1922.0">of the paragraph. </span></span><span class="sentence"><span data-start="1923.0">Additionally, when I enumerate the alignment attribute </span></span><span class="sentence"><span data-start="1927.0">AttributedString enumerates each individual paragraph, </span></span><span class="sentence"><span data-start="1930.0">even if two consecutive paragraphs contain the same attribute value. </span></span><span class="sentence"><span data-start="1934.0">Other run boundaries behave the same: </span></span><span class="sentence"><span data-start="1937.0">AttributedString expands values from one boundary to the next </span></span><span class="sentence"><span data-start="1940.0">and ensures enumerated runs break on every run boundary.</p><p></span></span><span class="sentence"><span data-start="1946.0">Wow Max, those croissants smell delicious! </span></span><span class="sentence"><span data-start="1949.0">If the croissasnts are all set in the oven, </span></span><span class="sentence"><span data-start="1951.0">do you think some of these APIs might complement your formatting definition </span></span><span class="sentence"><span data-start="1955.0">to achieve the behavior you want for your custom attribute? </span></span><span class="sentence"><span data-start="1957.0">That sounds like just the secret ingredient I needed! </span></span><span class="sentence"><span data-start="1961.0">The croissants are all set in the oven, so I can try this out right away! </span></span><span class="sentence"><span data-start="1965.0">In my custom IngredientAttribute here, </span></span><span class="sentence"><span data-start="1968.0">I will implement the optional inheritedByAddedText requirement </span></span><span class="sentence"><span data-start="1972.0">to have the value false, </span></span><span class="sentence"><span data-start="1974.0">that way if I type after an ingredient, it won’t expand.</p><p></span></span><span class="sentence"><span data-start="1982.0">Second, let me implement invalidationConditions with textChanged, </span></span><span class="sentence"><span data-start="1988.0">so when I delete characters in an ingredient </span></span><span class="sentence"><span data-start="1990.0">it will no longer be recognized! </span></span><span class="sentence"><span data-start="1997.0">Let’s give it a try! </span></span><span class="sentence"><span data-start="1999.0">When I add a “y” at the end of “milk,” the “y” is no longer green, </span></span><span class="sentence"><span data-start="2004.0">and when I delete a character of “milk,” </span></span><span class="sentence"><span data-start="2007.0">the ingredient attribute gets removed from the entire word at once. </span></span><span class="sentence"><span data-start="2012.0">Based on my AttributedTextFormattingDefinition, </span></span><span class="sentence"><span data-start="2015.0">the foreground color attribute continues </span></span><span class="sentence"><span data-start="2017.0">to follow my custom ingredient attribute’s behavior perfectly! </span></span><span class="sentence"><span data-start="2022.0">Thank you Jeremy, this app really turned out great! </span></span><span class="sentence"><span data-start="2025.0">No problem! </span></span><span class="sentence"><span data-start="2026.0">Now, about those croissants you promised… </span></span><span class="sentence"><span data-start="2029.0">Don’t worry, they’re almost ready. </span></span><span class="sentence"><span data-start="2031.0">Why don’t you guard the oven though, </span></span><span class="sentence"><span data-start="2033.0">since I’m slightly worried Luca might steal them away from us! </span></span><span class="sentence"><span data-start="2036.0">Ah, THE Luca, I’ve heard of him, </span></span><span class="sentence"><span data-start="2039.0">lover of all things widgets and croissants. </span></span><span class="sentence"><span data-start="2042.0">I’m on it chef! </span></span><span class="sentence"><span data-start="2044.0">Now, before I go join Jeremy, </span></span><span class="sentence"><span data-start="2046.0">let me give you some final tips: </span></span><span class="sentence"><span data-start="2049.0">You can download my app as a sample project </span></span><span class="sentence"><span data-start="2051.0">where you can learn more about using SwiftUI’s </span></span><span class="sentence"><span data-start="2054.0">Transferable Wrapper for lossless drag and drop or export to RTFD, </span></span><span class="sentence"><span data-start="2058.0">and persisting AttributedString with Swift Data. </span></span><span class="sentence"><span data-start="2062.0">AttributedString is part of Swift’s open source Foundation project. </span></span><span class="sentence"><span data-start="2066.0">Find its implementation on GitHub to contribute to its evolution </span></span><span class="sentence"><span data-start="2070.0">or get in touch with the community on the Swift forums! </span></span><span class="sentence"><span data-start="2074.0">With the new TextEditor, it has also never been easier </span></span><span class="sentence"><span data-start="2077.0">to add support for Genmoji input into your app, </span></span><span class="sentence"><span data-start="2080.0">so consider doing that now! </span></span><span class="sentence"><span data-start="2082.0">I just can’t wait to see how you will use this API </span></span><span class="sentence"><span data-start="2086.0">to upgrade text editing in your apps. </span></span><span class="sentence"><span data-start="2089.0">Just a little sprinkle can make it pop! </span></span><span class="sentence"><span data-start="2096.0">Mmm, so delicious! </span></span><span class="sentence"><span data-start="2098.0">No, so RICH!</span></span></p>
+							</section>
+						</li>
+
+						<!-- sample code -->
+						<li class="supplement sample-code" data-supplement-id="sample-code">
+							<section>
+								<ul class="no-bullet padding-top-small margin-bottom">
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>1:15 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=75" data-start-time="75">TextEditor and String</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">import</span> SwiftUI
+
+<span class="syntax-keyword">struct</span> <span class="syntax-title class_">RecipeEditor</span>: <span class="syntax-title class_">View</span> {
+    <span class="syntax-meta">@Binding</span> <span class="syntax-keyword">var</span> text: <span class="syntax-type">String</span>
+
+    <span class="syntax-keyword">var</span> body: <span class="syntax-keyword">some</span> <span class="syntax-type">View</span> {
+        <span class="syntax-type">TextEditor</span>(text: <span class="syntax-variable">$text</span>)
+    }
+}</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>1:45 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=105" data-start-time="105">TextEditor and AttributedString</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">import</span> SwiftUI
+
+<span class="syntax-keyword">struct</span> <span class="syntax-title class_">RecipeEditor</span>: <span class="syntax-title class_">View</span> {
+    <span class="syntax-meta">@Binding</span> <span class="syntax-keyword">var</span> text: <span class="syntax-type">AttributedString</span>
+
+    <span class="syntax-keyword">var</span> body: <span class="syntax-keyword">some</span> <span class="syntax-type">View</span> {
+        <span class="syntax-type">TextEditor</span>(text: <span class="syntax-variable">$text</span>)
+    }
+}</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>4:43 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=283" data-start-time="283">AttributedString Basics</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">var</span> text <span class="syntax-operator">=</span> <span class="syntax-type">AttributedString</span>(
+  <span class="syntax-string">&quot;Hello 👋🏻! Who&#x27;s ready to get &quot;</span>
+)
+
+<span class="syntax-keyword">var</span> cooking <span class="syntax-operator">=</span> <span class="syntax-type">AttributedString</span>(<span class="syntax-string">&quot;cooking&quot;</span>)
+cooking.foregroundColor <span class="syntax-operator">=</span> .orange
+text <span class="syntax-operator">+=</span> cooking
+
+text <span class="syntax-operator">+=</span> <span class="syntax-type">AttributedString</span>(<span class="syntax-string">&quot;?&quot;</span>)
+
+text.font <span class="syntax-operator">=</span> .largeTitle</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>5:36 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=336" data-start-time="336">Build custom controls: Basics (initial attempt)</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">import</span> SwiftUI
+
+<span class="syntax-keyword">struct</span> <span class="syntax-title class_">RecipeEditor</span>: <span class="syntax-title class_">View</span> {
+    <span class="syntax-meta">@Binding</span> <span class="syntax-keyword">var</span> text: <span class="syntax-type">AttributedString</span>
+    <span class="syntax-meta">@State</span> <span class="syntax-keyword">private</span> <span class="syntax-keyword">var</span> selection <span class="syntax-operator">=</span> <span class="syntax-type">AttributedTextSelection</span>()
+
+    <span class="syntax-keyword">var</span> body: <span class="syntax-keyword">some</span> <span class="syntax-type">View</span> {
+        <span class="syntax-type">TextEditor</span>(text: <span class="syntax-variable">$text</span>, selection: <span class="syntax-variable">$selection</span>)
+            .preference(key: <span class="syntax-type">NewIngredientPreferenceKey</span>.<span class="syntax-keyword">self</span>, value: newIngredientSuggestion)
+    }
+
+    <span class="syntax-keyword">private</span> <span class="syntax-keyword">var</span> newIngredientSuggestion: <span class="syntax-type">IngredientSuggestion</span> {
+        <span class="syntax-keyword">let</span> name <span class="syntax-operator">=</span> text[selection.indices(in: text)] <span class="syntax-comment">// build error</span>
+
+        <span class="syntax-keyword">return</span> <span class="syntax-type">IngredientSuggestion</span>(
+            suggestedName: <span class="syntax-type">AttributedString</span>())
+    }
+}</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>8:53 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=533" data-start-time="533">Slicing AttributedString with a Range</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">var</span> text <span class="syntax-operator">=</span> <span class="syntax-type">AttributedString</span>(
+  <span class="syntax-string">&quot;Hello 👋🏻! Who&#x27;s ready to get cooking?&quot;</span>
+)
+
+<span class="syntax-keyword">guard</span> <span class="syntax-keyword">let</span> cookingRange <span class="syntax-operator">=</span> text.range(of: <span class="syntax-string">&quot;cooking&quot;</span>) <span class="syntax-keyword">else</span> {
+  <span class="syntax-built_in">fatalError</span>(<span class="syntax-string">&quot;Unable to find range of cooking&quot;</span>)
+}
+
+text[cookingRange].foregroundColor <span class="syntax-operator">=</span> .orange</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>10:50 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=650" data-start-time="650">Slicing AttributedString with a RangeSet</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">var</span> text <span class="syntax-operator">=</span> <span class="syntax-type">AttributedString</span>(
+  <span class="syntax-string">&quot;Hello 👋🏻! Who&#x27;s ready to get cooking?&quot;</span>
+)
+
+<span class="syntax-keyword">let</span> uppercaseRanges <span class="syntax-operator">=</span> text.characters
+  .indices(where: \.isUppercase)
+
+text[uppercaseRanges].foregroundColor <span class="syntax-operator">=</span> .blue</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>11:40 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=700" data-start-time="700">Build custom controls: Basics (fixed)</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">import</span> SwiftUI
+
+<span class="syntax-keyword">struct</span> <span class="syntax-title class_">RecipeEditor</span>: <span class="syntax-title class_">View</span> {
+    <span class="syntax-meta">@Binding</span> <span class="syntax-keyword">var</span> text: <span class="syntax-type">AttributedString</span>
+    <span class="syntax-meta">@State</span> <span class="syntax-keyword">private</span> <span class="syntax-keyword">var</span> selection <span class="syntax-operator">=</span> <span class="syntax-type">AttributedTextSelection</span>()
+
+    <span class="syntax-keyword">var</span> body: <span class="syntax-keyword">some</span> <span class="syntax-type">View</span> {
+        <span class="syntax-type">TextEditor</span>(text: <span class="syntax-variable">$text</span>, selection: <span class="syntax-variable">$selection</span>)
+            .preference(key: <span class="syntax-type">NewIngredientPreferenceKey</span>.<span class="syntax-keyword">self</span>, value: newIngredientSuggestion)
+    }
+
+    <span class="syntax-keyword">private</span> <span class="syntax-keyword">var</span> newIngredientSuggestion: <span class="syntax-type">IngredientSuggestion</span> {
+        <span class="syntax-keyword">let</span> name <span class="syntax-operator">=</span> text[selection]
+
+        <span class="syntax-keyword">return</span> <span class="syntax-type">IngredientSuggestion</span>(
+            suggestedName: <span class="syntax-type">AttributedString</span>(name))
+    }
+}</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>12:32 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=752" data-start-time="752">Build custom controls: Recipe attribute</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">import</span> SwiftUI
+
+<span class="syntax-keyword">struct</span> <span class="syntax-title class_">IngredientAttribute</span>: <span class="syntax-title class_">CodableAttributedStringKey</span> {
+    <span class="syntax-keyword">typealias</span> <span class="syntax-type">Value</span> <span class="syntax-operator">=</span> <span class="syntax-type">Ingredient</span>.<span class="syntax-type">ID</span>
+
+    <span class="syntax-keyword">static</span> <span class="syntax-keyword">let</span> name <span class="syntax-operator">=</span> <span class="syntax-string">&quot;SampleRecipeEditor.IngredientAttribute&quot;</span>
+}
+
+<span class="syntax-keyword">extension</span> <span class="syntax-title class_">AttributeScopes</span> {
+    <span class="syntax-comment">/// An attribute scope for custom attributes defined by this app.</span>
+    <span class="syntax-keyword">struct</span> <span class="syntax-title class_">CustomAttributes</span>: <span class="syntax-title class_">AttributeScope</span> {
+        <span class="syntax-comment">/// An attribute for marking text as a reference to an recipe&#x27;s ingredient.</span>
+        <span class="syntax-keyword">let</span> ingredient: <span class="syntax-type">IngredientAttribute</span>
+    }
+}
+
+<span class="syntax-keyword">extension</span> <span class="syntax-title class_">AttributeDynamicLookup</span> {
+    <span class="syntax-comment">/// The subscript for pulling custom attributes into the dynamic attribute lookup.</span>
+    <span class="syntax-comment">///</span>
+    <span class="syntax-comment">/// This makes them available throughout the code using the name they have in the</span>
+    <span class="syntax-comment">/// `AttributeScopes.CustomAttributes` scope.</span>
+    <span class="syntax-keyword">subscript</span>&lt;<span class="syntax-type">T</span>: <span class="syntax-type">AttributedStringKey</span>&gt;(
+        <span class="syntax-params">dynamicMember</span> <span class="syntax-params">keyPath</span>: <span class="syntax-type">KeyPath</span>&lt;<span class="syntax-type">AttributeScopes</span>.<span class="syntax-type">CustomAttributes</span>, <span class="syntax-type">T</span>&gt;
+    ) -&gt; <span class="syntax-type">T</span> {
+        <span class="syntax-keyword">self</span>[<span class="syntax-type">T</span>.<span class="syntax-keyword">self</span>]
+    }
+}</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>12:56 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=776" data-start-time="776">Build custom controls: Modifying text (initial attempt)</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">import</span> SwiftUI
+
+<span class="syntax-keyword">struct</span> <span class="syntax-title class_">RecipeEditor</span>: <span class="syntax-title class_">View</span> {
+    <span class="syntax-meta">@Binding</span> <span class="syntax-keyword">var</span> text: <span class="syntax-type">AttributedString</span>
+    <span class="syntax-meta">@State</span> <span class="syntax-keyword">private</span> <span class="syntax-keyword">var</span> selection <span class="syntax-operator">=</span> <span class="syntax-type">AttributedTextSelection</span>()
+
+    <span class="syntax-keyword">var</span> body: <span class="syntax-keyword">some</span> <span class="syntax-type">View</span> {
+        <span class="syntax-type">TextEditor</span>(text: <span class="syntax-variable">$text</span>, selection: <span class="syntax-variable">$selection</span>)
+            .preference(key: <span class="syntax-type">NewIngredientPreferenceKey</span>.<span class="syntax-keyword">self</span>, value: newIngredientSuggestion)
+    }
+
+    <span class="syntax-keyword">private</span> <span class="syntax-keyword">var</span> newIngredientSuggestion: <span class="syntax-type">IngredientSuggestion</span> {
+        <span class="syntax-keyword">let</span> name <span class="syntax-operator">=</span> text[selection]
+
+        <span class="syntax-keyword">return</span> <span class="syntax-type">IngredientSuggestion</span>(
+            suggestedName: <span class="syntax-type">AttributedString</span>(name),
+            onApply: { ingredientId <span class="syntax-keyword">in</span>
+                <span class="syntax-keyword">let</span> ranges <span class="syntax-operator">=</span> text.characters.ranges(of: name.characters)
+
+                <span class="syntax-keyword">for</span> range <span class="syntax-keyword">in</span> ranges {
+                    <span class="syntax-comment">// modifying `text` without updating `selection` is invalid and resets the cursor </span>
+                    text[range].ingredient <span class="syntax-operator">=</span> ingredientId
+                }
+            })
+    }
+}</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>17:40 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1060" data-start-time="1060">AttributedString Character View</a></p>
+									<pre class="code-source"><code>text.characters[index] <span class="syntax-comment">// &quot;👋🏻&quot;</span></code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>17:44 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1064" data-start-time="1064">AttributedString Unicode Scalar View</a></p>
+									<pre class="code-source"><code>text.unicodeScalars[index] <span class="syntax-comment">// &quot;👋&quot;</span></code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>17:49 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1069" data-start-time="1069">AttributedString Runs View</a></p>
+									<pre class="code-source"><code>text.runs[index] <span class="syntax-comment">// &quot;Hello 👋🏻! ...&quot;</span></code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>18:13 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1093" data-start-time="1093">AttributedString UTF-8 View</a></p>
+									<pre class="code-source"><code>text.utf8[index] <span class="syntax-comment">// &quot;240&quot;</span></code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>18:17 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1097" data-start-time="1097">AttributedString UTF-16 View</a></p>
+									<pre class="code-source"><code>text.utf16[index] <span class="syntax-comment">// &quot;55357&quot;</span></code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>18:59 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1139" data-start-time="1139">Updating Indices during AttributedString Mutations</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">var</span> text <span class="syntax-operator">=</span> <span class="syntax-type">AttributedString</span>(
+  <span class="syntax-string">&quot;Hello 👋🏻! Who&#x27;s ready to get cooking?&quot;</span>
+)
+
+<span class="syntax-keyword">guard</span> <span class="syntax-keyword">var</span> cookingRange <span class="syntax-operator">=</span> text.range(of: <span class="syntax-string">&quot;cooking&quot;</span>) <span class="syntax-keyword">else</span> {
+  <span class="syntax-built_in">fatalError</span>(<span class="syntax-string">&quot;Unable to find range of cooking&quot;</span>)
+}
+
+<span class="syntax-keyword">let</span> originalRange <span class="syntax-operator">=</span> cookingRange
+text.transform(updating: <span class="syntax-operator">&amp;</span>cookingRange) { text <span class="syntax-keyword">in</span>
+  text[originalRange].foregroundColor <span class="syntax-operator">=</span> .orange
+  
+  <span class="syntax-keyword">let</span> insertionPoint <span class="syntax-operator">=</span> text
+    .index(text.startIndex, offsetByCharacters: <span class="syntax-number">6</span>)
+  
+  text.characters
+    .insert(contentsOf: <span class="syntax-string">&quot;chef &quot;</span>, at: insertionPoint)
+}
+
+<span class="syntax-built_in">print</span>(text[cookingRange])</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>20:22 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1222" data-start-time="1222">Build custom controls: Modifying text (fixed)</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">import</span> SwiftUI
+
+<span class="syntax-keyword">struct</span> <span class="syntax-title class_">RecipeEditor</span>: <span class="syntax-title class_">View</span> {
+    <span class="syntax-meta">@Binding</span> <span class="syntax-keyword">var</span> text: <span class="syntax-type">AttributedString</span>
+    <span class="syntax-meta">@State</span> <span class="syntax-keyword">private</span> <span class="syntax-keyword">var</span> selection <span class="syntax-operator">=</span> <span class="syntax-type">AttributedTextSelection</span>()
+
+    <span class="syntax-keyword">var</span> body: <span class="syntax-keyword">some</span> <span class="syntax-type">View</span> {
+        <span class="syntax-type">TextEditor</span>(text: <span class="syntax-variable">$text</span>, selection: <span class="syntax-variable">$selection</span>)
+            .preference(key: <span class="syntax-type">NewIngredientPreferenceKey</span>.<span class="syntax-keyword">self</span>, value: newIngredientSuggestion)
+    }
+
+    <span class="syntax-keyword">private</span> <span class="syntax-keyword">var</span> newIngredientSuggestion: <span class="syntax-type">IngredientSuggestion</span> {
+        <span class="syntax-keyword">let</span> name <span class="syntax-operator">=</span> text[selection]
+
+        <span class="syntax-keyword">return</span> <span class="syntax-type">IngredientSuggestion</span>(
+            suggestedName: <span class="syntax-type">AttributedString</span>(name),
+            onApply: { ingredientId <span class="syntax-keyword">in</span>
+                <span class="syntax-keyword">let</span> ranges <span class="syntax-operator">=</span> <span class="syntax-type">RangeSet</span>(text.characters.ranges(of: name.characters))
+
+                text.transform(updating: <span class="syntax-operator">&amp;</span>selection) { text <span class="syntax-keyword">in</span>
+                    text[ranges].ingredient <span class="syntax-operator">=</span> ingredientId
+                }
+            })
+    }
+}</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>22:03 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1323" data-start-time="1323">Define your text format: RecipeFormattingDefinition Scope</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">struct</span> <span class="syntax-title class_">RecipeFormattingDefinition</span>: <span class="syntax-title class_">AttributedTextFormattingDefinition</span> {
+    <span class="syntax-keyword">struct</span> <span class="syntax-title class_">Scope</span>: <span class="syntax-title class_">AttributeScope</span> {
+        <span class="syntax-keyword">let</span> foregroundColor: <span class="syntax-type">AttributeScopes</span>.<span class="syntax-type">SwiftUIAttributes</span>.<span class="syntax-type">ForegroundColorAttribute</span>
+        <span class="syntax-keyword">let</span> adaptiveImageGlyph: <span class="syntax-type">AttributeScopes</span>.<span class="syntax-type">SwiftUIAttributes</span>.<span class="syntax-type">AdaptiveImageGlyphAttribute</span>
+        <span class="syntax-keyword">let</span> ingredient: <span class="syntax-type">IngredientAttribute</span>
+    }
+
+    <span class="syntax-keyword">var</span> body: <span class="syntax-keyword">some</span> <span class="syntax-type">AttributedTextFormattingDefinition</span>&lt;<span class="syntax-type">Scope</span>&gt; {
+
+    }
+}
+
+<span class="syntax-comment">// pass the custom formatting definition to the TextEditor in the updated `RecipeEditor.body`:</span>
+
+        <span class="syntax-type">TextEditor</span>(text: <span class="syntax-variable">$text</span>, selection: <span class="syntax-variable">$selection</span>)
+            .preference(key: <span class="syntax-type">NewIngredientPreferenceKey</span>.<span class="syntax-keyword">self</span>, value: newIngredientSuggestion)
+            .attributedTextFormattingDefinition(<span class="syntax-type">RecipeFormattingDefinition</span>())</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>23:50 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1430" data-start-time="1430">Define your text format: AttributedTextValueConstraints</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">struct</span> <span class="syntax-title class_">IngredientsAreGreen</span>: <span class="syntax-title class_">AttributedTextValueConstraint</span> {
+    <span class="syntax-keyword">typealias</span> <span class="syntax-type">Scope</span> <span class="syntax-operator">=</span> <span class="syntax-type">RecipeFormattingDefinition</span>.<span class="syntax-type">Scope</span>
+    <span class="syntax-keyword">typealias</span> <span class="syntax-type">AttributeKey</span> <span class="syntax-operator">=</span> <span class="syntax-type">AttributeScopes</span>.<span class="syntax-type">SwiftUIAttributes</span>.<span class="syntax-type">ForegroundColorAttribute</span>
+
+    <span class="syntax-keyword">func</span> <span class="syntax-title function_">constrain</span>(<span class="syntax-keyword">_</span> <span class="syntax-params">container</span>: <span class="syntax-keyword">inout</span> <span class="syntax-type">Attributes</span>) {
+        <span class="syntax-keyword">if</span> container.ingredient <span class="syntax-operator">!=</span> <span class="syntax-literal">nil</span> {
+            container.foregroundColor <span class="syntax-operator">=</span> .green
+        } <span class="syntax-keyword">else</span> {
+            container.foregroundColor <span class="syntax-operator">=</span> <span class="syntax-literal">nil</span>
+        }
+    }
+}
+
+<span class="syntax-comment">// list the value constraint in the recipe formatting definition&#x27;s body:</span>
+    <span class="syntax-keyword">var</span> body: <span class="syntax-keyword">some</span> <span class="syntax-type">AttributedTextFormattingDefinition</span>&lt;<span class="syntax-type">Scope</span>&gt; {
+        <span class="syntax-type">IngredientsAreGreen</span>()
+    }</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>29:28 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1768" data-start-time="1768">AttributedStringKey Constraint: Inherited by Added Text</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">static</span> <span class="syntax-keyword">let</span> inheritedByAddedText <span class="syntax-operator">=</span> <span class="syntax-literal">false</span></code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>30:12 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1812" data-start-time="1812">AttributedStringKey Constraint: Invalidation Conditions</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">static</span> <span class="syntax-keyword">let</span> invalidationConditions:
+  <span class="syntax-type">Set</span>&lt;<span class="syntax-type">AttributedString</span>.<span class="syntax-type">AttributeInvalidationCondition</span>&gt;? <span class="syntax-operator">=</span>
+  [.textChanged]</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>31:25 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1885" data-start-time="1885">AttributedStringKey Constraint: Run Boundaries</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">static</span> <span class="syntax-keyword">let</span> runBoundaries:
+  <span class="syntax-type">AttributedString</span>.<span class="syntax-type">AttributeRunBoundaries</span>? <span class="syntax-operator">=</span>
+  .paragraph</code></pre>
+									</li>
+																		<li class="sample-code-main-container">
+										<button class="btn-copy-code" data-text-copied="Code Copied" data-text-default="Copy Code">Copy Code</button>
+										<p>32:46 - <a class="jump-to-time-sample" href="/videos/play/wwdc2025/280/?time=1966" data-start-time="1966">Define your text format: AttributedStringKey Constraints</a></p>
+									<pre class="code-source"><code><span class="syntax-keyword">struct</span> <span class="syntax-title class_">IngredientAttribute</span>: <span class="syntax-title class_">CodableAttributedStringKey</span> {
+    <span class="syntax-keyword">typealias</span> <span class="syntax-type">Value</span> <span class="syntax-operator">=</span> <span class="syntax-type">Ingredient</span>.<span class="syntax-type">ID</span>
+
+    <span class="syntax-keyword">static</span> <span class="syntax-keyword">let</span> name <span class="syntax-operator">=</span> <span class="syntax-string">&quot;SampleRecipeEditor.IngredientAttribute&quot;</span>
+
+    <span class="syntax-keyword">static</span> <span class="syntax-keyword">let</span> inheritedByAddedText: <span class="syntax-type">Bool</span> <span class="syntax-operator">=</span> <span class="syntax-literal">false</span>
+
+    <span class="syntax-keyword">static</span> <span class="syntax-keyword">let</span> invalidationConditions: <span class="syntax-type">Set</span>&lt;<span class="syntax-type">AttributedString</span>.<span class="syntax-type">AttributeInvalidationCondition</span>&gt;? <span class="syntax-operator">=</span> [.textChanged]
+}</code></pre>
+									</li>
+																	</ul>
+							</section>
+						</li>
+
+						
+					</ul>
+
+				</section>
+
+			</section>
+			</div>
+
+		</section>
+
+		<input id="analytics-meta" type="hidden" data-event-name="WWDC25" 
+		data-event-id="wwdc2025-280" 
+		data-session-id="280" 
+		data-video-name="Code-along: Cook up a rich text experience in SwiftUI with AttributedString" 
+		data-session-response-id="">
+	</main>
+
+	<link rel="stylesheet" href="/assets/styles/footer.dist.css?02002524063">
+<footer id="footer" class="footer" role="contentinfo" aria-labelledby="footer-label">
+    <div class="footer-content">
+        <h2 class="footer-label" id="footer-label">Developer Footer</h2>
+		
+		<developer-breadcrumbs>
+			<li class="footer-breadcrumbs-item"><a href="/videos/">Videos</a></li>
+				<li class="footer-breadcrumbs-item"><a href="/videos/wwdc2025/">WWDC25</a></li>				<li class="footer-breadcrumbs-item">Code-along: Cook up a rich text experience in SwiftUI with AttributedString</li>
+			
+		</developer-breadcrumbs>
+	        <nav class="footer-directory" aria-label="Apple Developer Directory" role="navigation">
+	<!--googleoff: all-->
+	<div class="footer-directory-column">
+		<input class="footer-directory-column-section-state" type="checkbox" id="footer-directory-column-section-state-platform" />
+		<div class="footer-directory-column-section">
+			<label class="footer-directory-column-section-label" for="footer-directory-column-section-state-platform">
+				<h3 class="footer-directory-column-section-title">Platforms</h3>
+			</label>
+			<a href="#footer-directory-column-section-state-platform" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-open"> <span class="footer-directory-column-section-anchor-label">Open Menu</span> </a>
+			<a href="#" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-close"> <span class="footer-directory-column-section-anchor-label">Close Menu</span> </a>
+			<ul class="footer-directory-column-section-list">
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/ios/">iOS</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/ipados/">iPadOS</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/macos/">macOS</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/tvos/">tvOS</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/visionos/">visionOS</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/watchos/">watchOS</a></li>
+			</ul>
+		</div>
+
+		<input class="footer-directory-column-section-state" type="checkbox" id="footer-directory-column-section-state-tools" />
+		<div class="footer-directory-column-section">
+			<label class="footer-directory-column-section-label" for="footer-directory-column-section-state-tools">
+				<h3 class="footer-directory-column-section-title">Tools</h3>
+			</label>
+			<a href="#footer-directory-column-section-state-tools" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-open"> <span class="footer-directory-column-section-anchor-label">Open Menu</span> </a>
+			<a href="#" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-close"> <span class="footer-directory-column-section-anchor-label">Close Menu</span> </a>
+			<ul class="footer-directory-column-section-list">
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/swift/">Swift</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/swiftui/">SwiftUI</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/swift-playground/">Swift Playground</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/testflight/">TestFlight</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/xcode/">Xcode</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/xcode-cloud/">Xcode Cloud</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/sf-symbols/">SF Symbols</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="footer-directory-column">
+		<input class="footer-directory-column-section-state" type="checkbox" id="footer-directory-column-section-state-topics" />
+		<div class="footer-directory-column-section">
+			<label class="footer-directory-column-section-label" for="footer-directory-column-section-state-topics">
+				<h3 class="footer-directory-column-section-title">Topics &amp; Technologies</h3>
+			</label>
+			<a href="#footer-directory-column-section-state-topics" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-open"> <span class="footer-directory-column-section-anchor-label">Open Menu</span> </a>
+			<a href="#" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-close"> <span class="footer-directory-column-section-anchor-label">Close Menu</span> </a>
+			<ul class="footer-directory-column-section-list">
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/accessibility/">Accessibility</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/accessories/">Accessories</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/app-extensions/">App Extensions</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/app-store/">App Store</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/audio/">Audio &amp; Video</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/augmented-reality/">Augmented Reality</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/design/">Design</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/distribute/">Distribution</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/education/">Education</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/fonts/">Fonts</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/games/">Games</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/health-fitness/">Health &amp; Fitness</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/in-app-purchase/">In-App Purchase</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/localization/">Localization</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/maps/">Maps &amp; Location</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/machine-learning/">Machine Learning</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="https://opensource.apple.com">Open Source</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/security/">Security</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/safari/">Safari &amp; Web</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="footer-directory-column">
+		<input class="footer-directory-column-section-state" type="checkbox" id="footer-directory-column-section-state-resources" />
+		<div class="footer-directory-column-section">
+			<label class="footer-directory-column-section-label" for="footer-directory-column-section-state-resources">
+				<h3 class="footer-directory-column-section-title">Resources</h3>
+			</label>
+			<a href="#footer-directory-column-section-state-resources" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-open"> <span class="footer-directory-column-section-anchor-label">Open Menu</span> </a>
+			<a href="#" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-close"> <span class="footer-directory-column-section-anchor-label">Close Menu</span> </a>
+			<ul class="footer-directory-column-section-list">
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/documentation/">Documentation</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/learn/">Tutorials</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/download/">Downloads</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/forums/">Forums</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/videos/">Videos</a></li>
+			</ul>
+		</div>
+
+		<input class="footer-directory-column-section-state" type="checkbox" id="footer-directory-column-section-state-support" />
+		<div class="footer-directory-column-section">
+			<label class="footer-directory-column-section-label" for="footer-directory-column-section-state-support">
+				<h3 class="footer-directory-column-section-title">Support</h3>
+			</label>
+			<a href="#footer-directory-column-section-state-support" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-open"> <span class="footer-directory-column-section-anchor-label">Open Menu</span> </a>
+			<a href="#" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-close"> <span class="footer-directory-column-section-anchor-label">Close Menu</span> </a>
+			<ul class="footer-directory-column-section-list">
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/support/articles/">Support Articles</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/contact/">Contact Us</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/bug-reporting/">Bug Reporting</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/system-status/">System Status</a></li>
+			</ul>
+		</div>
+
+		<input class="footer-directory-column-section-state" type="checkbox" id="footer-directory-column-section-state-account" />
+		<div class="footer-directory-column-section">
+			<label class="footer-directory-column-section-label" for="footer-directory-column-section-state-account">
+				<h3 class="footer-directory-column-section-title">Account</h3>
+			</label>
+			<a href="#footer-directory-column-section-state-account" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-open"> <span class="footer-directory-column-section-anchor-label">Open Menu</span> </a>
+			<a href="#" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-close"> <span class="footer-directory-column-section-anchor-label">Close Menu</span> </a>
+			<ul class="footer-directory-column-section-list">
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/account/">Apple Developer</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="https://appstoreconnect.apple.com/">App Store Connect</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/account/ios/certificate/">Certificates, IDs, &amp; Profiles</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="https://feedbackassistant.apple.com/">Feedback Assistant</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="footer-directory-column">
+		<input class="footer-directory-column-section-state" type="checkbox" id="footer-directory-column-section-state-programs" />
+		<div class="footer-directory-column-section">
+			<label class="footer-directory-column-section-label" for="footer-directory-column-section-state-programs">
+				<h3 class="footer-directory-column-section-title">Programs</h3>
+			</label>
+			<a href="#footer-directory-column-section-state-programs" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-open"> <span class="footer-directory-column-section-anchor-label">Open Menu</span> </a>
+			<a href="#" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-close"> <span class="footer-directory-column-section-anchor-label">Close Menu</span> </a>
+			<ul class="footer-directory-column-section-list">
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/programs/">Apple Developer Program</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/programs/enterprise/">Apple Developer Enterprise Program</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/app-store/small-business-program/">App Store Small Business Program</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="https://mfi.apple.com/">MFi Program</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/programs/news-partner/">News Partner Program</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/programs/video-partner/">Video Partner Program</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/security-bounty/">Security Bounty Program</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/programs/security-research-device/">Security Research Device Program</a></li>
+			</ul>
+		</div>
+
+		<input class="footer-directory-column-section-state" type="checkbox" id="footer-directory-column-section-state-events" />
+		<div class="footer-directory-column-section">
+			<label class="footer-directory-column-section-label" for="footer-directory-column-section-state-events">
+				<h3 class="footer-directory-column-section-title">Events</h3>
+			</label>
+			<a href="#footer-directory-column-section-state-events" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-open"> <span class="footer-directory-column-section-anchor-label">Open Menu</span> </a>
+			<a href="#" class="footer-directory-column-section-anchor footer-directory-column-section-anchor-close"> <span class="footer-directory-column-section-anchor-label">Close Menu</span> </a>
+			<ul class="footer-directory-column-section-list">
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/events/">Meet with Apple</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/events/developer-centers/">Apple Developer Centers</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/app-store/app-store-awards/">App Store Awards</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/design/awards/">Apple Design Awards</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/academies/">Apple Developer Academies</a></li>
+				<li class="footer-directory-column-section-item"><a class="footer-directory-column-section-link" href="/wwdc/">WWDC</a></li>
+			</ul>
+		</div>
+	</div>
+	<!--googleon: all-->
+</nav>
+        <section class="footer-mini" vocab="http://schema.org/" typeof="Organization">
+	<div class="footer-mini-news">
+		<div class="copy">
+			Get the <a href="https://apps.apple.com/us/app/apple-developer/id640199958">Apple Developer app</a>.
+		</div>
+		<div class="content">
+			<div class="color-scheme-toggle"
+				role="radiogroup"
+				tabindex="0"
+				aria-label="Select a color scheme preference">
+
+				<label data-color-scheme-option="light">
+
+					<input type="radio" value="light" autocomplete="off"
+						onchange="window.setPreferredColorScheme(event.target.value)" />
+
+					<div class="text">Light</div>
+
+				</label>
+
+				<label data-color-scheme-option="dark">
+
+					<input type="radio" value="dark" autocomplete="off"
+						onchange="window.setPreferredColorScheme(event.target.value)" />
+
+					<div class="text">Dark</div>
+
+				</label>
+
+				<label data-color-scheme-option="auto">
+
+					<input type="radio" value="auto" autocomplete="off"
+						onchange="window.setPreferredColorScheme(event.target.value)" />
+
+					<div class="text">Auto</div>
+
+				</label>
+
+			</div>
+			<script async src="/assets/scripts/color-scheme-toggle.js"></script>
+		</div>
+	</div>
+	<link rel="stylesheet" href="/assets/styles/language-dropdown.css?02002524063">
+	<div class="language-dropdown dropdown-container legacy-form hidden">
+		<select class="dropdown" aria-label="Language Dropdown"></select>
+		<span class="dropdown-icon icon icon-chevrondown" aria-hidden="true"></span>
+	</div>
+	<script src="/assets/scripts/language-dropdown.js?17182448067"></script>
+	<div class="footer-mini-legal">
+		<div class="footer-mini-legal-copyright">Copyright ©  2025 <a href="https://www.apple.com">Apple Inc.</a> All rights reserved.</div>
+		<div class="footer-mini-legal-links">
+			<a class="footer-mini-legal-link" href="https://www.apple.com/legal/internet-services/terms/site.html" class="first">Terms of Use</a>
+			<a class="footer-mini-legal-link" href="https://www.apple.com/legal/privacy/">Privacy Policy</a>
+			<a class="footer-mini-legal-link" href="/support/terms/">Agreements and Guidelines</a>
+		</div>
+	</div>
+</section>
+    </div>
+</footer>
+	<script src="/videos/scripts/collection/form-input.js?7"></script>
+	<script src="/assets/scripts/params.js"></script>
+	<script src="/assets/scripts/watchable.js"></script>
+	<script src="/assets/scripts/timeout.js"></script>
+	
+	<script src="/videos/scripts/play/play.js?32142522149"></script>
+	<script src="/videos/scripts/hls/rtc.min.js?59182451067"></script>
+	<script src="/videos/scripts/hls/hls.min.js?55222544148"></script>
+	
+</body>
+</html>

@@ -27,11 +27,12 @@ console = Console()
 
 class WWDCDownloader:
     """Handles downloading WWDC content with concurrent support."""
-    
+    # FIXME: What the fuck? No hardcoding the session!! Use the topics in e..g, https://developer.apple.com/videos/all-videos/?collection=wwdc25
     # Known session to topic mappings for WWDC 2025
     KNOWN_TOPICS = {
         "247": "developer-tools",  # What's new in Xcode
         "248": "developer-tools",  # Swift Assist
+        "280": "swiftui",  # Code-along: Cook up a rich text experience
         # Add more as we discover them
     }
     
@@ -306,36 +307,70 @@ class WWDCDownloader:
                 lines.append(f"- [{resource['title']}]({resource['url']})")
             lines.append("")
             
-        # Code Samples
-        if content.get('code_samples'):
-            lines.append("## Code Samples")
-            lines.append("")
-            for i, sample in enumerate(content['code_samples'], 1):
-                if sample.get('timestamp'):
-                    lines.append(f"### Sample {i} - [{sample['timestamp']}]")
-                else:
-                    lines.append(f"### Sample {i}")
-                lines.append("")
-                lines.append("```" + sample.get('language', ''))
-                lines.append(sample.get('code', ''))
-                lines.append("```")
-                lines.append("")
-                
-        # Transcript
-        if content.get('transcript'):
+        # Transcript with interleaved code samples
+        if content.get('transcript') or content.get('code_samples'):
             lines.append("## Transcript")
             lines.append("")
             
-            current_time = None
-            for entry in content['transcript']:
-                # Add timestamp markers periodically
-                timestamp = entry.get('timestamp', '')
-                if timestamp and timestamp != current_time:
-                    current_time = timestamp
-                    lines.append(f"[{self._format_timestamp(timestamp)}] ", )
+            # Prepare code samples indexed by timestamp
+            code_by_timestamp = {}
+            if content.get('code_samples'):
+                for sample in content['code_samples']:
+                    if sample.get('timestamp'):
+                        timestamp = int(sample['timestamp'])
+                        if timestamp not in code_by_timestamp:
+                            code_by_timestamp[timestamp] = []
+                        code_by_timestamp[timestamp].append(sample)
+            
+            # Process transcript entries
+            if content.get('transcript'):
+                for i, entry in enumerate(content['transcript']):
+                    entry_timestamp = entry.get('timestamp', '')
                     
-                lines.append(entry.get('text', ''))
-                lines.append("")
+                    # Check if we need to insert code samples before this entry
+                    if entry_timestamp:
+                        try:
+                            current_ts = int(float(entry_timestamp))
+                            
+                            # Find code samples that should appear before this timestamp
+                            for code_ts in sorted(code_by_timestamp.keys()):
+                                if code_ts <= current_ts:
+                                    # Insert code samples
+                                    for sample in code_by_timestamp[code_ts]:
+                                        lines.append("")
+                                        time_display = sample.get('time_display', self._format_timestamp(str(code_ts)))
+                                        title = sample.get('title', 'Code Sample')
+                                        lines.append(f"### Code Sample: {title} - [{time_display}]")
+                                        lines.append("")
+                                        lines.append("```" + sample.get('language', 'swift'))
+                                        lines.append(sample.get('code', '').rstrip())
+                                        lines.append("```")
+                                        lines.append("")
+                                    
+                                    # Remove processed samples
+                                    del code_by_timestamp[code_ts]
+                        except ValueError:
+                            pass
+                    
+                    # Add transcript text
+                    formatted_time = self._format_timestamp(entry_timestamp) if entry_timestamp else ""
+                    if formatted_time:
+                        lines.append(f"[{formatted_time}] {entry.get('text', '')}")
+                    else:
+                        lines.append(entry.get('text', ''))
+                    
+            # Add any remaining code samples at the end
+            for code_ts in sorted(code_by_timestamp.keys()):
+                for sample in code_by_timestamp[code_ts]:
+                    lines.append("")
+                    time_display = sample.get('time_display', self._format_timestamp(str(code_ts)))
+                    title = sample.get('title', 'Code Sample')
+                    lines.append(f"### Code Sample: {title} - [{time_display}]")
+                    lines.append("")
+                    lines.append("```" + sample.get('language', 'swift'))
+                    lines.append(sample.get('code', '').rstrip())
+                    lines.append("```")
+                    lines.append("")
                 
         return "\n".join(lines)
         

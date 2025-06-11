@@ -280,40 +280,63 @@ class WWDCParser:
         """Extract code samples."""
         code_samples = []
         
-        # Find code supplement
-        code_section = soup.find("li", {"data-supplement-id": "code"})
+        # Find code supplement (try different selectors)
+        code_section = soup.find("li", class_="supplement sample-code")
+        if not code_section:
+            code_section = soup.find("li", {"data-supplement-id": "sample-code"})
+        if not code_section:
+            code_section = soup.find("li", {"data-supplement-id": "code"})
         if not code_section:
             return code_samples
             
-        # Find all code blocks
-        for pre_elem in code_section.find_all("pre"):
-            code_elem = pre_elem.find("code")
-            if code_elem:
-                # Get language from class
-                language = ""
-                if code_elem.get("class"):
-                    for cls in code_elem["class"]:
-                        if cls.startswith("language-"):
-                            language = cls.replace("language-", "")
+        # Find all code sample containers
+        for container in code_section.find_all("li", class_="sample-code-main-container"):
+            sample_data = {}
+            
+            # Extract title and timestamp from the jump-to-time link
+            time_link = container.find("a", class_="jump-to-time-sample")
+            if time_link:
+                sample_data['title'] = time_link.get_text(strip=True)
+                sample_data['timestamp'] = time_link.get("data-start-time", "")
+                
+                # Extract time display from parent p tag
+                p_tag = time_link.parent
+                if p_tag and p_tag.name == 'p':
+                    # Get all text nodes before the link
+                    time_text = ""
+                    for child in p_tag.children:
+                        if child == time_link:
                             break
-                            
-                # Get timestamp if available
-                timestamp = ""
-                # Look for timestamp in parent elements
-                parent = pre_elem.parent
-                while parent and not timestamp:
-                    ts_elem = parent.find("span", {"data-start": True})
-                    if ts_elem:
-                        timestamp = ts_elem.get("data-start", "")
-                    parent = parent.parent
+                        if isinstance(child, str):
+                            time_text += child
                     
-                code_text = code_elem.get_text()
-                if code_text.strip():
-                    code_samples.append({
-                        "code": code_text,
-                        "language": language,
-                        "timestamp": timestamp
-                    })
+                    # Clean up and extract time
+                    time_text = time_text.strip()
+                    if time_text.endswith(" -"):
+                        time_text = time_text[:-2].strip()
+                    sample_data['time_display'] = time_text
+                else:
+                    sample_data['time_display'] = ""
+            
+            # Extract code
+            pre_elem = container.find("pre", class_="code-source")
+            if pre_elem:
+                code_elem = pre_elem.find("code")
+                if code_elem:
+                    # Get raw text content
+                    code_text = code_elem.get_text()
+                    
+                    # Clean up any HTML entities
+                    import html
+                    code_text = html.unescape(code_text)
+                    
+                    sample_data['code'] = code_text
+                    
+                    # Detect language (default to swift for WWDC)
+                    sample_data['language'] = 'swift'
+                    
+            if 'code' in sample_data and sample_data['code'].strip():
+                code_samples.append(sample_data)
                     
         return code_samples
         
