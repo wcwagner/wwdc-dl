@@ -1,21 +1,26 @@
-# WWDC: Complete Toolkit for Apple Developer Content
+# WWDC-DL: Complete WWDC Content Downloader & Organizer
 
-A Python command-line tool for managing WWDC content - download, list, summarize, and export sessions for LLM consumption. Downloads videos (SD quality), transcripts, code samples, and metadata, then generates AI summaries for creating LLMs.txt files.
+A Python command-line tool that downloads and organizes Apple WWDC (Worldwide Developers Conference) session content. It automatically extracts transcripts, code samples, chapter markers, and resource links from WWDC videos, organizing everything by topic for easy navigation and reference. Built for developers who want offline access to WWDC content or need to process it for AI/LLM training.
 
-## Overview
+## Key Features
 
-WWDC tool downloads and organizes WWDC content to help fast-forward LLM knowledge with the latest Apple development practices. It handles:
-- Video downloads (SD quality for efficiency)
-- Transcript and code extraction
-- Smart incremental updates
-- AI-powered summarization
+- **Smart Organization**: Automatically organizes sessions by Apple's official topics (Swift, SwiftUI, Developer Tools, etc.)
+- **Rich Content Extraction**: Extracts transcripts with timestamps, code samples with context, chapter markers, and documentation links
+- **Video Downloads**: Optional SD-quality video downloads for offline viewing
+- **Metadata Caching**: Fast incremental updates with intelligent caching
+- **AI-Ready Output**: Structured markdown format perfect for LLM training or AI processing
 
 ## Installation
 
 ```bash
-# Install from source
-git clone https://github.com/wwagner19/wwdc
-cd wwdc
+# Clone the repository
+git clone https://github.com/wwagner19/wwdc-dl
+cd wwdc-dl
+
+# Install using uv (recommended)
+uv sync
+
+# Or install with pip
 pip install -e .
 ```
 
@@ -266,21 +271,58 @@ wwdc/
 
 ### Development
 
+This project uses `uv` for package management and running commands.
+
 ```bash
-# Install in development mode
-pip install -e ".[dev]"
+# Install dependencies
+uv sync
+
+# Run the CLI tool
+uv run wwdc [command]
 
 # Run tests
-pytest
+uv run pytest
 
-# Type check
-pyright
+# Type checking
+uvx pyright
 
-# Format
-ruff format
+# Format code
+uvx ruff format
 
-# Lint
-ruff check --fix
+# Lint and fix
+uvx ruff check --fix
+
+# Check without fixing
+uvx ruff check
+```
+
+#### Pre-commit Hooks (Recommended)
+
+To automatically format and lint code before commits:
+
+```bash
+# Install pre-commit
+uvx pre-commit install
+
+# Run manually on all files
+uvx pre-commit run --all-files
+```
+
+Create `.pre-commit-config.yaml`:
+```yaml
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.6
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
 ```
 
 ## Roadmap
@@ -315,17 +357,34 @@ ruff check --fix
 ## Example Workflow
 
 ```bash
+# Using uv to run commands:
+
 # 1. Download all developer tools sessions
-wwdc download -t developer-tools
+uv run wwdc download -t developer-tools
 
-# 2. Generate summaries
-wwdc summarize -t developer-tools
+# 2. Download specific sessions
+uv run wwdc download -s 247,268,280
 
-# 3. Export for LLM training
-wwdc export-llm -t developer-tools -o developer-tools-2025.txt
+# 3. Download everything without videos
+uv run wwdc download -t all --text-only
 
-# Or do it all for the entire conference
-wwdc download -t all
-wwdc summarize -t all
-wwdc export-llm -t all -o wwdc-2025-complete.txt
+# 4. List available topics
+uv run wwdc list topics
+
+# 5. List sessions in a topic
+uv run wwdc list sessions -t swift
+
+# Future features (not yet implemented):
+# Generate summaries
+uv run wwdc summarize -t developer-tools
+
+# Export for LLM training
+uv run wwdc export-llm -t developer-tools -o developer-tools-2025.txt
 ```
+
+## Important Notes for Development
+
+- **Always use `uv run wwdc` to run the CLI tool**
+- **Use `uvx` for development tools (ruff, pyright, etc.)**
+- **Do NOT use `-v` flag - it's not implemented. The tool accepts `--verbose` in some places but not consistently**
+- **Sessions are organized by topic directories, never in an "all" directory**

@@ -11,3 +11,25 @@ wheels/
 
 # Downloaded WWDC content
 wwdc-content/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyright/
+
+# Pre-commit
+.pre-commit-config.yaml.lock
