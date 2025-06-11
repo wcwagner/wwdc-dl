@@ -262,6 +262,9 @@ wwdc/
 5. **Fixed directory structure** ✓ - Sessions downloaded with `-t all` now go to their proper topic directories, not an "all" directory
 6. **Enhanced content extraction** ✓ - Now properly extracts chapters with timestamps and resource links (documentation)
 7. **Enriched metadata** ✓ - metadata.json now includes chapters, resources, and descriptions for each session
+8. **AI Summarization** ✓ - Integrated LLM CLI for generating structured summaries
+9. **Frame Extraction** ✓ - Smart video frame extraction using FFmpeg scene detection
+10. **LLM Export** ✓ - Export summaries in formats optimized for LLM training
 
 ### Remaining Improvements
 
@@ -352,7 +355,9 @@ repos:
 2. **Smart** - Never re-download completed content
 3. **Organized** - Clear directory structure by year/topic/session
 4. **Efficient** - SD video, 5 concurrent downloads
-5. **LLM-Ready** - Content formatted for AI consumption
+5. **AI-Powered** - Generate summaries with LLM CLI
+6. **Visual Extraction** - Smart frame extraction from videos
+7. **LLM-Ready** - Export consolidated content for training
 
 ## Example Workflow
 
@@ -374,12 +379,17 @@ uv run wwdc list topics
 # 5. List sessions in a topic
 uv run wwdc list sessions -t swift
 
-# Future features (not yet implemented):
-# Generate summaries
+# Generate summaries (requires LLM CLI setup)
 uv run wwdc summarize -t developer-tools
+uv run wwdc summarize -s 247,248 -m claude-3-sonnet
+
+# Extract video frames
+uv run wwdc extract-frames -t developer-tools
+uv run wwdc extract-frames -s 247 --method smart --advanced
 
 # Export for LLM training
 uv run wwdc export-llm -t developer-tools -o developer-tools-2025.txt
+uv run wwdc export-llm -t all --consolidated -o wwdc-2025-complete.txt
 ```
 
 ## Important Notes for Development

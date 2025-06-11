@@ -1,0 +1,84 @@
+You are creating a comprehensive developer reference from WWDC session summaries. Extract and consolidate the most important information following this structure:
+
+## Overview
+Provide a high-level summary of the major themes and changes across all sessions in this topic.
+
+## New Features & APIs
+
+### [Feature Name]
+- **Introduced in**: [Session number]
+- **Minimum Version**: iOS X.X / macOS X.X
+- **Purpose**: Brief description
+- **Key APIs**:
+  ```swift
+  // Essential code pattern
+  ```
+- **Important Notes**: Gotchas, performance considerations
+
+Group related APIs together and show relationships between features.
+
+## Migration Requirements
+
+### Breaking Changes
+For each breaking change across sessions:
+1. **What changed**: [Deprecated API] → [New API]
+2. **Migration deadline**: iOS X.X
+3. **Migration steps**:
+   ```swift
+   // Before
+   oldAPI()
+   
+   // After
+   newAPI()
+   ```
+
+### Project Updates
+- Minimum deployment targets
+- Required plist changes
+- New capabilities or entitlements
+
+## Best Practices
+
+### [Topic Area]
+Consolidate recommendations across sessions:
+- Preferred patterns with code examples
+- Performance optimizations
+- Testing strategies
+- Accessibility requirements
+
+## Common Patterns
+Identify recurring patterns or approaches across multiple sessions:
+- Shared architectural patterns
+- Consistent error handling approaches
+- Recommended data flow patterns
+
+## Quick Reference
+
+### Essential Methods
+Create a searchable list of the most important new methods:
+- `ClassName.methodName()` - Brief description
+- `FrameworkName.feature` - What it does
+
+### Configuration Keys
+List all new configuration options:
+- `Info.plist` keys
+- Build settings
+- Environment variables
+
+## Troubleshooting Guide
+Common issues and solutions mentioned across sessions:
+- Error messages and fixes
+- Performance bottlenecks
+- Compatibility issues
+
+## Learning Path
+Suggested order for understanding these features:
+1. Start with [Session X] for fundamentals
+2. Then [Session Y] for advanced usage
+3. Reference [Session Z] for edge cases
+
+Format the output to be:
+- Searchable (include specific API names)
+- Copy-paste friendly (working code examples)
+- Scannable (clear hierarchy and sections)
+- LLM-training friendly (structured data, clear relationships)
