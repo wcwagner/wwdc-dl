@@ -262,8 +262,8 @@ wwdc/
 5. **Fixed directory structure** ✓ - Sessions downloaded with `-t all` now go to their proper topic directories, not an "all" directory
 6. **Enhanced content extraction** ✓ - Now properly extracts chapters with timestamps and resource links (documentation)
 7. **Enriched metadata** ✓ - metadata.json now includes chapters, resources, and descriptions for each session
-8. **AI Summarization** ✓ - Integrated LLM CLI for generating structured summaries
-9. **Frame Extraction** ✓ - Smart video frame extraction using FFmpeg scene detection
+8. **AI Summarization** ✓ - Integrated LLM CLI for generating structured summaries with cost controls
+9. **Token Guards** ✓ - Automatic token counting and cost estimation to prevent excessive API charges
 10. **LLM Export** ✓ - Export summaries in formats optimized for LLM training
 
 ### Remaining Improvements
@@ -356,7 +356,7 @@ repos:
 3. **Organized** - Clear directory structure by year/topic/session
 4. **Efficient** - SD video, 5 concurrent downloads
 5. **AI-Powered** - Generate summaries with LLM CLI
-6. **Visual Extraction** - Smart frame extraction from videos
+6. **Cost-Aware** - Token counting and cost estimation before API calls
 7. **LLM-Ready** - Export consolidated content for training
 
 ## Example Workflow
@@ -383,10 +383,6 @@ uv run wwdc list sessions -t swift
 uv run wwdc summarize -t developer-tools
 uv run wwdc summarize -s 247,248 -m claude-3-sonnet
 
-# Extract video frames
-uv run wwdc extract-frames -t developer-tools
-uv run wwdc extract-frames -s 247 --method smart --advanced
-
 # Export for LLM training
 uv run wwdc export-llm -t developer-tools -o developer-tools-2025.txt
 uv run wwdc export-llm -t all --consolidated -o wwdc-2025-complete.txt
@@ -398,3 +394,26 @@ uv run wwdc export-llm -t all --consolidated -o wwdc-2025-complete.txt
 - **Use `uvx` for development tools (ruff, pyright, etc.)**
 - **Do NOT use `-v` flag - it's not implemented. The tool accepts `--verbose` in some places but not consistently**
 - **Sessions are organized by topic directories, never in an "all" directory**
+
+### Cost Management
+
+The summarizer includes built-in cost protection:
+- **Token Estimation**: Conservative estimation (1 token ≈ 4 characters)
+- **Cost Limits**: Default $0.50 per session, configurable
+- **Model Limits**: Respects each model's token limits with 80% safety margin
+- **Batch Warnings**: Prompts for confirmation if total cost exceeds $5
+- **Auto-abort**: Stops processing on token/cost errors to prevent runaway charges
+
+Example costs (approximate):
+- gpt-4o-mini: ~$0.01-0.05 per session
+- gpt-4o: ~$0.05-0.20 per session
+- claude-3-haiku: ~$0.01-0.03 per session
+- gemini-2.0-flash: ~$0.001-0.005 per session
+
+### About Referenced Documents
+
+The tool extracts resource links (documentation, guides) but does NOT include them in LLM summarization calls. This design choice:
+- Keeps token usage predictable and costs low
+- Avoids potential errors from external content
+- Focuses summaries on the actual session content
+- Resource links are preserved in content.md for manual reference

@@ -9,6 +9,7 @@ from typing import Dict, List, Optional
 import aiofiles
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
+import click
 
 console = Console()
 
@@ -41,6 +42,34 @@ DEFAULT_WWDC_PROMPT = """You are an expert iOS/macOS developer. Summarize this W
 
 Keep it concise and developer-focused. Focus on actionable information."""
 
+# Token limits and pricing (approximate)
+TOKEN_LIMITS = {
+    "gpt-4": 8192,
+    "gpt-4-turbo": 128000,
+    "gpt-4o": 128000,
+    "gpt-4o-mini": 128000,
+    "claude-3-opus": 200000,
+    "claude-3-sonnet": 200000,
+    "claude-3-haiku": 200000,
+    "gemini-2.0-flash": 32000,
+}
+
+# Approximate cost per 1K tokens (input + output averaged)
+COST_PER_1K_TOKENS = {
+    "gpt-4": 0.04,  # $0.03 input + $0.06 output averaged
+    "gpt-4-turbo": 0.015,  # $0.01 input + $0.03 output averaged
+    "gpt-4o": 0.0075,  # $0.005 input + $0.015 output averaged
+    "gpt-4o-mini": 0.00075,  # $0.00015 input + $0.0006 output averaged
+    "claude-3-opus": 0.045,  # $0.015 input + $0.075 output averaged
+    "claude-3-sonnet": 0.009,  # $0.003 input + $0.015 output averaged
+    "claude-3-haiku": 0.000625,  # $0.00025 input + $0.00125 output averaged
+    "gemini-2.0-flash": 0.00015,  # Very cheap
+}
+
+# Safety margin for token counting
+TOKEN_SAFETY_MARGIN = 0.8  # Use only 80% of limit
+MAX_CONTENT_TOKENS = 100000  # Hard limit regardless of model
+
 
 class LLMSummarizer:
     """Summarize WWDC content using LLM CLI."""
@@ -50,11 +79,15 @@ class LLMSummarizer:
         model: str = "gpt-4o-mini",
         verbose: bool = False,
         llm_binary: str = "llm",
+        max_tokens_per_request: Optional[int] = None,
+        max_cost_per_session: float = 0.50,  # Default $0.50 per session
     ):
         self.model = model
         self.verbose = verbose
         self.llm_binary = llm_binary
         self.prompt_template = None
+        self.max_tokens_per_request = max_tokens_per_request
+        self.max_cost_per_session = max_cost_per_session
         self._check_llm_cli()
         self._load_prompt_template()
 
@@ -85,6 +118,49 @@ class LLMSummarizer:
         else:
             self.prompt_template = DEFAULT_WWDC_PROMPT
 
+    def _estimate_tokens(self, text: str) -> int:
+        """Estimate token count (rough approximation)."""
+        # Rough estimate: 1 token ≈ 4 characters or 0.75 words
+        # This is conservative to avoid underestimating
+        return max(len(text) // 4, len(text.split()) * 4 // 3)
+
+    def _estimate_cost(self, tokens: int, model: str) -> float:
+        """Estimate cost for token usage."""
+        cost_per_1k = COST_PER_1K_TOKENS.get(model, 0.01)  # Default to $0.01 if unknown
+        return (tokens / 1000) * cost_per_1k
+
+    def _check_token_limits(self, content: str, model: str) -> tuple[bool, str, int, float]:
+        """Check if content exceeds token limits or cost threshold.
+        
+        Returns: (is_safe, message, estimated_tokens, estimated_cost)
+        """
+        # Estimate tokens
+        prompt_tokens = self._estimate_tokens(self.prompt_template)
+        content_tokens = self._estimate_tokens(content)
+        total_tokens = prompt_tokens + content_tokens + 1000  # Buffer for response
+        
+        # Get model limits
+        model_base = model.split("-")[0] + "-" + model.split("-")[1] if "-" in model else model
+        max_tokens = TOKEN_LIMITS.get(model, TOKEN_LIMITS.get(model_base, 8192))
+        safe_limit = int(max_tokens * TOKEN_SAFETY_MARGIN)
+        
+        # Check hard limit
+        if content_tokens > MAX_CONTENT_TOKENS:
+            return False, f"Content too large: ~{content_tokens:,} tokens (max {MAX_CONTENT_TOKENS:,})", total_tokens, 0
+        
+        # Check model limit
+        if total_tokens > safe_limit:
+            return False, f"Exceeds {model} limit: ~{total_tokens:,} tokens (safe limit {safe_limit:,})", total_tokens, 0
+        
+        # Estimate cost
+        estimated_cost = self._estimate_cost(total_tokens, model)
+        
+        # Check cost threshold
+        if estimated_cost > self.max_cost_per_session:
+            return False, f"Estimated cost ${estimated_cost:.2f} exceeds limit ${self.max_cost_per_session:.2f}", total_tokens, estimated_cost
+        
+        return True, "OK", total_tokens, estimated_cost
+
     async def summarize_session(
         self, content_path: Path, output_path: Optional[Path] = None
     ) -> str:
@@ -96,15 +172,28 @@ class LLMSummarizer:
         async with aiofiles.open(content_path, "r") as f:
             content = await f.read()
 
+        # Check token limits and cost
+        is_safe, message, tokens, cost = self._check_token_limits(content, self.model)
+        
+        if not is_safe:
+            console.print(f"[red]Cannot summarize {content_path.name}: {message}[/red]")
+            console.print(f"[yellow]Consider using a model with higher limits or reducing content[/yellow]")
+            raise ValueError(f"Token/cost limit exceeded: {message}")
+        
+        if self.verbose:
+            console.print(f"[blue]Summarizing {content_path.name}...[/blue]")
+            console.print(f"[dim]Estimated: ~{tokens:,} tokens, ~${cost:.3f}[/dim]")
+
         # Run LLM CLI
         cmd = [
             self.llm_binary,
             "-m", self.model,
             "-s", self.prompt_template,
         ]
-
-        if self.verbose:
-            console.print(f"[blue]Summarizing {content_path.name}...[/blue]")
+        
+        # Add max tokens if specified
+        if self.max_tokens_per_request:
+            cmd.extend(["-o", f"max_tokens {self.max_tokens_per_request}"])
 
         process = await asyncio.create_subprocess_exec(
             *cmd,
@@ -135,8 +224,9 @@ class LLMSummarizer:
         """Summarize all sessions in a topic."""
         summaries = {}
         sessions = []
+        total_estimated_cost = 0.0
 
-        # Collect sessions
+        # Collect sessions and estimate total cost
         for session_dir in topic_dir.iterdir():
             if not session_dir.is_dir():
                 continue
@@ -153,11 +243,27 @@ class LLMSummarizer:
                 )
                 continue
 
-            sessions.append((session_dir.name, content_file, summary_file))
+            # Quick cost estimation
+            try:
+                async with aiofiles.open(content_file, "r") as f:
+                    content = await f.read()
+                    _, _, _, cost = self._check_token_limits(content, self.model)
+                    total_estimated_cost += cost
+                    sessions.append((session_dir.name, content_file, summary_file, cost))
+            except Exception:
+                sessions.append((session_dir.name, content_file, summary_file, 0))
 
         if not sessions:
             console.print("[yellow]No sessions to summarize[/yellow]")
             return summaries
+        
+        # Warn about cost
+        if total_estimated_cost > 5.0:  # Warn if over $5
+            console.print(f"[bold yellow]Estimated total cost: ${total_estimated_cost:.2f}[/bold yellow]")
+            console.print(f"[yellow]Processing {len(sessions)} sessions with {self.model}[/yellow]")
+            if not click.confirm("Continue?", default=True):
+                console.print("[red]Aborted[/red]")
+                return summaries
 
         # Process sessions
         with Progress(
@@ -169,7 +275,13 @@ class LLMSummarizer:
                 f"Summarizing {len(sessions)} sessions...", total=len(sessions)
             )
 
-            for session_name, content_file, summary_file in sessions:
+            for session_data in sessions:
+                if len(session_data) == 4:
+                    session_name, content_file, summary_file, est_cost = session_data
+                else:
+                    session_name, content_file, summary_file = session_data
+                    est_cost = 0
+                    
                 progress.update(
                     task, description=f"Summarizing {session_name}..."
                 )
@@ -182,6 +294,9 @@ class LLMSummarizer:
                     console.print(
                         f"[red]Error summarizing {session_name}: {e}[/red]"
                     )
+                    if "token" in str(e).lower() or "cost" in str(e).lower():
+                        console.print(f"[yellow]Skipping remaining sessions in topic to avoid further costs[/yellow]")
+                        break
 
         return summaries
 
