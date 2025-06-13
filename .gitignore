@@ -9,8 +9,6 @@ wheels/
 # Virtual environments
 .venv
 
-# Downloaded WWDC content
-wwdc-content/
 
 # IDE and editor files
 .vscode/

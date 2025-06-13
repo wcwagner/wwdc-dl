@@ -1,6 +1,6 @@
 # WWDC-DL: Complete WWDC Content Downloader & Organizer
 
-A Python command-line tool that downloads and organizes Apple WWDC (Worldwide Developers Conference) session content. It automatically extracts transcripts, code samples, chapter markers, and resource links from WWDC videos, organizing everything by topic for easy navigation and reference. Built for developers who want offline access to WWDC content or need to process it for AI/LLM training.
+A Python command-line tool that downloads and organizes Apple WWDC (Worldwide Developers Conference) session content. It automatically extracts transcripts, code samples, chapter markers, and resource links from WWDC videos, organizing everything by topic in a central `~/.wwdc` cache directory. Built for developers who want offline access to WWDC content, need to search across sessions for specific APIs, or want to process content for AI/LLM training.
 
 ## Key Features
 
@@ -73,6 +73,9 @@ wwdc list topics
 # List sessions in a topic
 wwdc list sessions -t developer-tools
 
+# Find sessions by keyword (case-insensitive)
+wwdc find 'ShowSnippetView' 'snippet' | files-to-prompt
+
 # Generate AI summary for a session
 wwdc summarize -s 247
 
@@ -88,7 +91,6 @@ wwdc export-llm -t developer-tools -o developer-tools.txt
 ```
 Global:
   -y, --year       WWDC year (default: 2025)
-  -d, --directory  Output directory (default: ./wwdc-content)
   -v, --verbose    Enable verbose output
 
 download:
@@ -100,6 +102,11 @@ download:
 list:
   topics           Show all available topics
   sessions         Show sessions in a topic
+
+find:
+  [keywords...]    Search keywords (case-insensitive)
+  -y, --year       Search specific year (default: current)
+  -a, --all-years  Search across all downloaded years
 
 summarize:
   -s, --session    Session ID(s) to summarize
@@ -114,7 +121,7 @@ export-llm:
 ## Directory Structure
 
 ```
-wwdc-content/                            # Default output directory
+~/.wwdc/                                 # Central cache directory
 └── 2025/
     ├── developer-tools/
     │   ├── 247-whats-new-xcode/
@@ -378,6 +385,14 @@ uv run wwdc list topics
 
 # 5. List sessions in a topic
 uv run wwdc list sessions -t swift
+
+# 6. Find sessions by keyword and build context
+uv run wwdc find 'AppIntent' 'ShowSnippetView' | files-to-prompt
+uv run wwdc find 'NavigationStack' 'NavigationPath' | files-to-prompt
+
+# 7. Search across all years
+uv run wwdc find 'NavigationStack' --all-years | files-to-prompt
+uv run wwdc find 'App Intents' 'perform()' -a | files-to-prompt
 
 # Generate summaries (requires LLM CLI setup)
 uv run wwdc summarize -t developer-tools

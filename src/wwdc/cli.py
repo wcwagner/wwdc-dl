@@ -11,21 +11,18 @@ from . import __version__
 @click.group()
 @click.version_option(version=__version__, prog_name="wwdc")
 @click.option("-y", "--year", type=int, default=datetime.now().year, help="WWDC year")
-@click.option(
-    "-d",
-    "--directory",
-    type=Path,
-    default=Path("./wwdc-content"),
-    help="Output directory",
-)
 @click.option("-v", "--verbose", is_flag=True, help="Enable verbose output")
 @click.pass_context
-def cli(ctx: click.Context, year: int, directory: Path, verbose: bool) -> None:
+def cli(ctx: click.Context, year: int, verbose: bool) -> None:
     """WWDC toolkit - download, list, summarize, and export Apple Developer content."""
     ctx.ensure_object(dict)
     ctx.obj["year"] = year
-    ctx.obj["directory"] = directory
+    # Always use ~/.wwdc as the directory
+    ctx.obj["directory"] = Path.home() / ".wwdc"
     ctx.obj["verbose"] = verbose
+    
+    # Ensure the directory exists
+    ctx.obj["directory"].mkdir(exist_ok=True)
 
 
 @cli.command()
@@ -180,6 +177,77 @@ def summarize(
                 asyncio.run(summarizer.summarize_topic(topic_dir, force=force))
             else:
                 console.print(f"[red]Topic directory not found: {topic}[/red]")
+
+
+@cli.command()
+@click.argument("keywords", nargs=-1, required=True)
+@click.option("-a", "--all-years", is_flag=True, help="Search across all years")
+@click.pass_context
+def find(ctx: click.Context, keywords: tuple[str, ...], all_years: bool) -> None:
+    """Find sessions by keyword and output paths for files-to-prompt."""
+    import subprocess
+    from pathlib import Path
+    
+    directory = ctx.obj["directory"]
+    
+    # Determine which directories to search
+    if all_years:
+        # Search all year directories
+        search_dirs = [d for d in directory.iterdir() if d.is_dir() and d.name.isdigit()]
+        if not search_dirs:
+            # Silent exit - no matches
+            return
+    else:
+        # Search specific year
+        year = ctx.obj["year"]
+        year_dir = directory / str(year)
+        if not year_dir.exists():
+            # Silent exit - no matches
+            return
+        search_dirs = [year_dir]
+    
+    # Collect all matching files
+    all_matches = {}
+    
+    for search_dir in search_dirs:
+        for keyword in keywords:
+            # Use ripgrep for fast searching (case-insensitive by default)
+            cmd = ["rg", "-i", "-l", keyword, str(search_dir)]
+            
+            try:
+                result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+                files = result.stdout.strip().split("\n")
+                
+                # Filter for content.md files only
+                content_files = [f for f in files if f.endswith("content.md") and f]
+                
+                for file_path in content_files:
+                    if file_path not in all_matches:
+                        all_matches[file_path] = set()
+                    all_matches[file_path].add(keyword)
+                    
+            except subprocess.CalledProcessError:
+                # No matches for this keyword in this directory
+                continue
+            except FileNotFoundError:
+                # Print to stderr so it doesn't interfere with piping
+                click.echo("Error: ripgrep (rg) not found. Install with: brew install ripgrep", err=True)
+                ctx.exit(1)
+    
+    if not all_matches:
+        # Silent exit - no output
+        return
+    
+    # Sort by number of matching keywords (most relevant first), then by year (newest first)
+    sorted_matches = sorted(
+        all_matches.items(), 
+        key=lambda x: (len(x[1]), -int(Path(x[0]).parts[-4])),  # parts[-4] is the year
+        reverse=True
+    )
+    
+    # Output file paths for piping
+    for file_path, _ in sorted_matches:
+        click.echo(file_path)
 
 
 @cli.command(name="export-llm")
