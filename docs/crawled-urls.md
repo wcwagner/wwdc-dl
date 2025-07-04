@@ -53,7 +53,10 @@ Each entry includes:
 
 | Session | Date | Output | Type | Notes |
 |---------|------|--------|------|-------|
-| | | | | |
+| https://developer.apple.com/videos/play/wwdc2025/266/ | 2025-07-04 | sources/wwdc/wwdc2025-266-explore-concurrency-in-swiftui.md | video | Explore concurrency in SwiftUI |
+| https://developer.apple.com/videos/play/wwdc2025/268/ | 2025-07-04 | sources/wwdc/wwdc2025-268-embracing-swift-concurrency.md | video | Embracing Swift concurrency |
+| https://developer.apple.com/videos/play/wwdc2025/270/ | 2025-07-04 | sources/wwdc/wwdc2025-270-code-along-elevate-app-swift-concurrency.md | video | Code-along: Elevate an app with Swift concurrency |
+| https://developer.apple.com/videos/play/wwdc2023/10170/ | 2025-07-04 | sources/wwdc/wwdc2023-10170-beyond-basics-structured-concurrency.md | video | Beyond the basics of structured concurrency |
 
 ---
 

@@ -12,21 +12,21 @@ Create a comprehensive Swift 6.2 concurrency guide for macOS and iOS development
 ### ✅ Completed
 - Created directory structure in `docs/sources/`
 - Created URL tracking file at `docs/crawled-urls.md`
-- Created DOCC URL converter script at `docs/docc_url_converter.py` (renamed from apple_url_converter.py)
-- Processed initial Swift.org pages:
-  - Migration guide overview: `sources/swift-org/swift-6-migration-guide.md`
-  - Data race safety: `sources/swift-org/data-race-safety.md`
-
-### 🔄 In Progress
-- Processing remaining Swift.org documentation pages
-- Need to continue with Swift book concurrency chapter
+- Created DOCC URL converter script at `docs/docc_url_converter.py`
+- Processed Swift.org migration guide pages (all sub-pages)
+- Processed Swift book concurrency chapter
+- Processed Apple Developer concurrency guide
+- Processed community blog posts (Hacking with Swift, Antoine van der Lee)
+- Processed GitHub repository: LucasVanDongen/Modern-Concurrency-2025
+- Processed all 4 WWDC sessions:
+  - WWDC 2025 Session 266 - Explore concurrency in SwiftUI
+  - WWDC 2025 Session 268 - Embracing Swift concurrency
+  - WWDC 2025 Session 270 - Code-along: Elevate an app with Swift concurrency
+  - WWDC 2023 Session 10170 - Beyond the basics of structured concurrency
 
 ### 📋 Remaining Tasks
-1. Complete Swift.org documentation crawling
-2. Process GitHub repository: LucasVanDongen/Modern-Concurrency-2025
-3. Extract WWDC session transcripts (266, 268, 270 from 2025; 10170 from 2023)
-4. Crawl community blog sources
-5. Process Apple Developer documentation
+1. Process additional community blog sources if needed
+2. Consolidate and analyze all content for comprehensive guide
 
 ## Directory Structure
 
@@ -38,12 +38,27 @@ docs/
 │   ├── blogs/          # Community blogs
 │   ├── github/         # GitHub repositories
 │   └── wwdc/           # WWDC session transcripts
+├── prompts/            # LLM prompts for conversions
+│   ├── wwdc-session.prompt.md     # WWDC session conversion
+│   ├── docc-archive.prompt.md     # DOCC archive conversion
+│   ├── html-to-markdown.prompt.md # HTML to markdown conversion
+│   └── restructure-wwdc.prompt.md # Restructure WWDC sessions
 ├── crawled-urls.md     # Tracking all processed URLs
 ├── docc_url_converter.py # DOCC URL to JSON converter
 └── CLAUDE.md           # This file - project instructions
 ```
 
 ## Key Instructions
+
+### Using Prompts
+
+All LLM prompts are stored in the `prompts/` directory for version control and consistency:
+- **wwdc-session.prompt.md** - Convert WWDC session HTML to markdown with proper formatting
+- **docc-archive.prompt.md** - Convert DOCC JSON archives to markdown
+- **html-to-markdown.prompt.md** - Convert general HTML pages to markdown
+- **restructure-wwdc.prompt.md** - Restructure WWDC sessions to interleave code with transcript
+
+Use prompts with `$(cat prompts/[prompt-file])` in bash commands.
 
 ### DOCC Archive Handling
 
@@ -68,11 +83,8 @@ Both Swift.org and Apple Developer documentation use DOCC format. These require 
 Use the `llm` tool for DOCC to markdown conversion:
 
 ```bash
-# Basic conversion
-curl -s "https://www.swift.org/migration/data/documentation/migrationguide.json" | llm -m gemini-2.0-flash-latest -s "Convert this DocC archive to markdown" > output.md
-
-# Detailed conversion with all content
-curl -s "[json-url]" | llm -m gemini-2.0-flash-latest -s "Convert this DocC archive to markdown. Include all code examples with Swift syntax highlighting, important notes, warnings, and preserve the document structure." > output.md
+# Convert DOCC archive to markdown
+curl -s "[json-url]" | llm -m gemini-2.5-flash -s "$(cat prompts/docc-archive.prompt.md)" > output.md
 ```
 
 ### Processing Other Content
@@ -80,7 +92,7 @@ curl -s "[json-url]" | llm -m gemini-2.0-flash-latest -s "Convert this DocC arch
 For HTML pages (blogs, articles):
 ```bash
 # Convert HTML to markdown
-curl -s "https://www.avanderlee.com/concurrency/async-await/" | llm -m gemini-2.0-flash-latest -s "Convert this HTML to markdown preserving all code examples and technical details"
+curl -s "[html-url]" | llm -m gemini-2.5-flash -s "$(cat prompts/html-to-markdown.prompt.md)" > output.md
 ```
 
 For complex analysis across multiple files:
@@ -91,16 +103,23 @@ gemini -p "@sources/ What are the key concurrency patterns in Swift 6.2?"
 
 ### WWDC Session Processing
 
-For WWDC sessions, we'll keep everything self-contained in this docs directory:
-1. Visit the WWDC video pages directly
-2. Extract transcripts and relevant content manually or via web scraping
-3. Convert to markdown and save in `sources/wwdc/` directory
+For WWDC sessions, use the `llm` tool to convert the HTML pages directly:
 
-Sessions to process:
-- https://developer.apple.com/videos/play/wwdc2025/266/
-- https://developer.apple.com/videos/play/wwdc2025/268/
-- https://developer.apple.com/videos/play/wwdc2025/270/
-- https://developer.apple.com/videos/play/wwdc2023/10170/
+```bash
+# Convert WWDC session to markdown
+curl -s "[wwdc-session-url]" | \
+llm -m gemini-2.5-flash -s "$(cat prompts/wwdc-session.prompt.md)" > sources/wwdc/wwdc[year]-[session]-[title].md
+
+# If needed, restructure to interleave code with transcript
+llm -m gemini-2.5-flash -s "$(cat prompts/restructure-wwdc.prompt.md)" < sources/wwdc/[session-file].md > sources/wwdc/[session-file]-temp.md
+mv sources/wwdc/[session-file]-temp.md sources/wwdc/[session-file].md
+```
+
+Sessions processed:
+- ✅ https://developer.apple.com/videos/play/wwdc2025/266/
+- ✅ https://developer.apple.com/videos/play/wwdc2025/268/
+- ✅ https://developer.apple.com/videos/play/wwdc2025/270/
+- ✅ https://developer.apple.com/videos/play/wwdc2023/10170/
 
 ## Source URLs
 
@@ -151,7 +170,7 @@ chmod +x docc_url_converter.py
 ./docc_url_converter.py [url]
 
 # Process a DOCC page
-curl -s "[json-url]" | llm -m gemini-2.0-flash-latest -s "Convert this DocC archive to markdown" > output.md
+curl -s "[json-url]" | llm -m gemini-2.5-flash -s "Convert this DocC archive to markdown" > output.md
 
 # Check progress
 cat crawled-urls.md
