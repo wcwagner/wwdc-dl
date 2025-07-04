@@ -102,6 +102,19 @@ Each entry includes:
 | https://github.com/swiftlang/swift-evolution/blob/main/proposals/0430-transferring-parameters-and-results.md | 2025-07-04 | sources/swift-evolution/SE-0430-transferring-parameters-and-results.md | proposal | sending parameter and result values |
 | https://github.com/swiftlang/swift-evolution/blob/main/proposals/0431-isolated-any-functions.md | 2025-07-04 | sources/swift-evolution/SE-0431-isolated-any-functions.md | proposal | @isolated(any) function types |
 | https://github.com/swiftlang/swift-evolution/blob/main/proposals/0434-global-actor-isolated-types-usability.md | 2025-07-04 | sources/swift-evolution/SE-0434-global-actor-isolated-types-usability.md | proposal | Usability of global-actor-isolated types |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0371-isolated-synchronous-deinit.md | 2025-07-04 | sources/swift-evolution/SE-0371-isolated-synchronous-deinit.md | proposal | Isolated synchronous deinit |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0428-resolve-distributed-actor-protocols.md | 2025-07-04 | sources/swift-evolution/SE-0428-resolve-distributed-actor-protocols.md | proposal | Resolve distributed actor protocols |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0433-mutex.md | 2025-07-04 | sources/swift-evolution/SE-0433-mutex.md | proposal | Synchronous Mutual Exclusion Lock |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0442-allow-taskgroup-childtaskresult-type-to-be-inferred.md | 2025-07-04 | sources/swift-evolution/SE-0442-allow-taskgroup-childtaskresult-type-to-be-inferred.md | proposal | Allow TaskGroup's ChildTaskResult Type To Be Inferred |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0449-nonisolated-for-global-actor-cutoff.md | 2025-07-04 | sources/swift-evolution/SE-0449-nonisolated-for-global-actor-cutoff.md | proposal | Allow nonisolated to prevent global actor inference |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0461-async-function-isolation.md | 2025-07-04 | sources/swift-evolution/SE-0461-async-function-isolation.md | proposal | Run nonisolated async functions on the caller's actor by default |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0462-task-priority-escalation-apis.md | 2025-07-04 | sources/swift-evolution/SE-0462-task-priority-escalation-apis.md | proposal | Task Priority Escalation APIs |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0463-sendable-completion-handlers.md | 2025-07-04 | sources/swift-evolution/SE-0463-sendable-completion-handlers.md | proposal | Import Objective-C completion handler parameters as @Sendable |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0466-control-default-actor-isolation.md | 2025-07-04 | sources/swift-evolution/SE-0466-control-default-actor-isolation.md | proposal | Control default actor isolation inference |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0468-async-stream-continuation-hashable-conformance.md | 2025-07-04 | sources/swift-evolution/SE-0468-async-stream-continuation-hashable-conformance.md | proposal | Hashable conformance for Async(Throwing)Stream.Continuation |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0469-task-names.md | 2025-07-04 | sources/swift-evolution/SE-0469-task-names.md | proposal | Task Naming |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0470-isolated-conformances.md | 2025-07-04 | sources/swift-evolution/SE-0470-isolated-conformances.md | proposal | Global-actor isolated conformances |
+| https://github.com/swiftlang/swift-evolution/blob/main/proposals/0472-task-start-synchronously-on-caller-context.md | 2025-07-04 | sources/swift-evolution/SE-0472-task-start-synchronously-on-caller-context.md | proposal | Starting tasks synchronously from caller context |
 
 ## WWDC Sessions
 

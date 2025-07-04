@@ -13,10 +13,12 @@ class WWDCParser:
 
     BASE_URL = "https://developer.apple.com"
 
-    def __init__(self, year: int):
+    def __init__(self, year: int, exclude_asl: bool = True, exclude_keynotes: bool = True):
         self.year = str(year)
         self._topics_cache: Optional[List[str]] = None
         self._sessions_cache: Dict[str, List[Dict]] = {}
+        self.exclude_asl = exclude_asl
+        self.exclude_keynotes = exclude_keynotes
 
     def get_topics(self) -> List[str]:
         """Get list of available topics (synchronous wrapper)."""

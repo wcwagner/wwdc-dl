@@ -1,0 +1,3406 @@
+<documents>
+<document index="1">
+<source>/Users/williamwagner/.wwdc/2025/developer-tools/245-what’s-new-in-swift/content.md</source>
+<document_content>
+# What’s new in Swift
+
+**Session 245** - WWDC 2025
+
+## Description
+Join us for an update on Swift. We'll talk about workflow improvements that make you more productive, and new and modernized library APIs...
+
+## Chapters
+- 0:00 - Introduction & Agenda
+- 0:48 - swiftlang updates
+- 3:06 - Development workflow: Writing code
+- 4:40 - Development workflow: Building
+- 7:36 - Development workflow: Debugging
+- 9:14 - Libraries: Subprocess
+- 10:45 - Libraries: Foundation
+- 12:31 - Libraries: Observation
+- 14:13 - Libraries: Testing
+- 16:08 - Swift throughout the stack: Embedded Swift
+- 18:00 - Swift throughout the stack: Security
+- 19:37 - Swift throughout the stack: Server
+- 23:23 - Swift throughout the stack: Platforms
+- 26:11 - Language evolution: Performance
+- 30:28 - Language evolution: Concurrency
+- 37:15 - Wrap up
+- 0:00 - Introduction & Agenda
+- 0:48 - swiftlang updates
+- 3:06 - Development workflow: Writing code
+- 4:40 - Development workflow: Building
+- 7:36 - Development workflow: Debugging
+- 9:14 - Libraries: Subprocess
+- 10:45 - Libraries: Foundation
+- 12:31 - Libraries: Observation
+- 14:13 - Libraries: Testing
+- 16:08 - Swift throughout the stack: Embedded Swift
+- 18:00 - Swift throughout the stack: Security
+- 19:37 - Swift throughout the stack: Server
+- 23:23 - Swift throughout the stack: Platforms
+- 26:11 - Language evolution: Performance
+- 30:28 - Language evolution: Concurrency
+- 37:15 - Wrap up
+
+## Resources
+- [The Swift Programming Language](https://docs.swift.org/swift-book/)
+- [Documentation](https://developer.apple.com/documentation/)
+- [Agreements and Guidelines](https://developer.apple.com/support/terms/)
+
+## Transcript
+
+[00:07] Hello, and welcome to What’s New in Swift.
+[00:09] I'm Holly.
+[00:10] And I’m Allan.
+[00:11] And today we’ll show you the new features and improvements in Swift 6.2.
+[00:16] These improvements aim to make you a more productive Swift programmer,
+[00:20] no matter where you choose to write code or what kind of code you’re writing.
+[00:24] First, we’ll talk about workflow improvements
+[00:27] for writing, building, and debugging code.
+[00:30] Then we’ll cover new library APIs for fundamental programming tasks.
+[00:35] We’ll also show you how Swift can be adopted
+[00:37] at every layer of the software stack.
+[00:40] Finally, we’ll explore new language features
+[00:43] that make concurrency more approachable and help you achieve
+[00:46] peak performance when you need it.
+[00:48] All of the changes we’ll cover today were developed together in open source.
+[00:53] The swiftlang organization on GitHub has grown to over 50 projects,
+[00:58] including the compiler, the Swift.org website,
+[01:01] the foundation and testing libraries,
+[01:03] and other key components underpinning the broader ecosystem.
+[01:07] Beyond migrating projects into swiftlang,
+[01:11] we’ve open sourced Xcode’s build system called Swift Build.
+[01:15] Swift Build also supports the build process
+[01:18] for Apple’s operating systems.
+[01:20] There’s an active open source effort to adopt Swift Build
+[01:24] as the Swift Package Manager’s low-level build system.
+[01:27] This will unify the build engine between Xcode
+[01:30] and the Swift.org toolchains.
+[01:33] You can read more about Swift Build
+[01:35] in the blog post on “The Next Chapter in Swift Build Technologies”.
+[01:40] One of the newest members of the swiftlang project
+[01:42] is a version manager called swiftly.
+[01:45] Swiftly was originally developed by the open source community
+[01:48] for streamlining Swift toolchain management on Linux.
+[01:52] Swiftly now supports macOS, and the 1.0 release is available on swift.org.
+[01:58] With just one command, you can install the latest Swift toolchain.
+[02:03] Or you can install a nightly snapshot from a GitHub branch
+[02:06] to try out in-development language features.
+[02:10] In Xcode, toolchains installed by swiftly are available in the Toolchains menu.
+[02:16] Remember that if you’re building an app, you still need to use the Xcode toolchain
+[02:20] to submit your app to the App Store.
+[02:23] In VS Code, you can select toolchains installed by swiftly
+[02:28] from the Toolchain command.
+[02:30] You can learn more about swiftly 1.0 on the Swift blog.
+[02:35] The improvements to getting up and running with Swift
+[02:37] extend beyond installing the tools.
+[02:40] The Swift.org homepage has a new look
+[02:43] and a refreshed focus on helping you dive into different areas,
+[02:46] from apps to cloud services to embedded systems.
+[02:50] This work is in collaboration with the Swift Website Workgroup.
+[02:54] Getting started with Swift has never been easier.
+[02:58] Allan will show you how Swift 6.2 brings more flexibility
+[03:01] to create a development environment that works for you.
+[03:04] Thanks, Holly.
+[03:06] This year’s Swift release is full of improvements
+[03:09] to development workflows,
+[03:10] and you’ll benefit from them no matter how you choose to write Swift code.
+[03:15] These enhancements cover a wide range of workflows,
+[03:18] including writing code, building, and debugging.
+[03:22] Let’s start by taking a look at what’s new for you this year
+[03:25] if you develop in VS Code.
+[03:28] The Swift extension in the VS Code marketplace
+[03:31] is now officially verified and distributed by Swift.org.
+[03:35] It also gained a number of new features over the past year.
+[03:39] The first is background indexing.
+[03:41] In Swift 6.1, we enabled background indexing by default
+[03:44] for Swift PM projects in VS Code and other IDEs.
+[03:49] This allows editor features, like jump to definition,
+[03:52] to stay up to date as you make changes to your project.
+[03:55] Code completion results in VS Code are now more relevant,
+[03:58] thanks to improvements made to SourceKit-LSP.
+[04:02] Debugging has also been simplified.
+[04:04] LLDB support is now included automatically when you install the Swift extension.
+[04:10] The latest version of the extension also includes a new project panel,
+[04:14] which makes it easy to find your package’s dependencies, targets, and tasks.
+[04:20] Finally, the VS Code Swift extension
+[04:22] also has a new way to view your project’s documentation.
+[04:26] You can bring up a DocC preview side-by-side with your code,
+[04:29] and it will update live as you type.
+[04:32] The VS Code Swift extension is developed in open source,
+[04:35] and you can find it on GitHub in the swiftlang organization.
+[04:40] Now, let’s talk about some improvements to building Swift code
+[04:43] that are available to you everywhere.
+[04:45] One of the most important aspects of your productivity
+[04:48] is the performance of your tools.
+[04:51] Swift 6.2 significantly improves
+[04:54] clean build times for projects that use macro-based APIs.
+[04:58] To see how, let’s say you have a project
+[05:00] that uses a macro from an imaginary package called Stringify.
+[05:05] Previously, in order to build your projects,
+[05:08] Swift PM first had to fetch the sources of swift-syntax,
+[05:12] which is a library that powers macros.
+[05:14] Then it would build swift-syntax, build the Stringify macro plugin,
+[05:19] and finally build your code.
+[05:21] While the build of swift-syntax could be cached,
+[05:23] it still lengthened the time needed to perform a clean build.
+[05:27] This can be especially noticeable in a continuous integration environment.
+[05:31] To speed up your build, the latest releases of Swift PM and Xcode
+[05:35] support pre-built swift-syntax dependencies.
+[05:38] This completely eliminates an expensive build step,
+[05:41] and for some projects, it reduces clean build times by minutes.
+[05:46] If you own a package that provides macros,
+[05:49] your clients will be able to take advantage of this optimization
+[05:52] as long as the package depends on a tagged release of swift-syntax.
+[05:57] Your productivity isn’t always just about build performance, though.
+[06:01] Sometimes trying to resolve issues found by the compiler is what slows you down.
+[06:06] For example, when you write concurrent code in the Swift 6 language mode,
+[06:11] the compiler may detect potential data races that you need to prevent.
+[06:15] This error is identifying something important,
+[06:18] but that doesn’t mean it’s obvious how to solve it.
+[06:22] That’s why in Swift 6.2, we’ve begun expanding the documentation available
+[06:26] for many categories of diagnostics.
+[06:29] These extended explanations of common warnings and errors
+[06:32] help you understand the problem and give you concrete solutions.
+[06:36] You can access the documentation from your IDE and online at swift.org.
+[06:42] Having control over how diagnostics behave can also be important.
+[06:47] For example, to keep code free of warnings,
+[06:49] you might use the “warnings as errors” setting.
+[06:52] This works well for warnings that are simple to address,
+[06:55] but some warnings, like those for deprecated APIs,
+[06:58] you may not want to be forced to resolve immediately.
+[07:02] Swift 6.2 gives you the flexibility to decide
+[07:05] which warnings to treat as errors.
+[07:07] For example, you could decide to treat all warnings as errors by default,
+[07:11] but make an exception for deprecated declarations.
+[07:15] On the other hand, if you’re only interested in preventing
+[07:17] some categories of warnings,
+[07:19] you can just promote those warnings to errors instead.
+[07:23] Adding controls for compiler warnings was a great example
+[07:26] of a community-driven effort to improve Swift for all developers.
+[07:30] Thank you to the proposal authors and everyone who participated
+[07:33] in the discussions on the forums.
+[07:36] Finally, let's take a look at a few great improvements to debugging in Swift 6.2.
+[07:43] In this release, we’ve greatly improved
+[07:45] the experience of debugging asynchronous code.
+[07:48] As you step through code running in a Swift task,
+[07:50] LLDB now follows execution into asynchronous functions,
+[07:55] even if that requires switching between threads.
+[07:58] The debugger's understanding of Swift’s task-centric model
+[08:02] allows it to show you which task is executing.
+[08:05] You can even name a task to make it easier to identify.
+[08:08] Task names will also appear in Instruments profiles
+[08:11] that are recorded with the Swift Concurrency template.
+[08:15] You can also use new commands like swift task info
+[08:19] to get more information about the currently executing task,
+[08:22] such as its priority and child tasks.
+[08:26] Lastly, your debugging sessions will be more responsive this year,
+[08:29] thanks to explicitly built modules, which is a build system feature
+[08:33] that enables parallelism and reuse when building module dependencies.
+[08:38] Prior to explicitly built modules, the Xcode build and debugger would use
+[08:42] completely separate module graphs.
+[08:45] Now the debugger is able to reuse the modules from the build.
+[08:49] That means that the first time you run p or po in the debugger,
+[08:53] the command will evaluate much faster
+[08:55] because type information is immediately available.
+[08:58] Explicitly built modules are enabled by default in Xcode 26.
+[09:03] Those are just some of the tooling improvements
+[09:05] that we’ve made to Swift this year.
+[09:07] Next, I’ll take you through some important updates we’ve made
+[09:10] to the core Swift libraries that you use every day.
+[09:14] Libraries help you with all kinds of tasks,
+[09:17] and Swift’s core libraries provide essential building blocks
+[09:21] for writing Swift code.
+[09:23] Swift 6.2 modernizes more of Foundation’s API surface,
+[09:27] and it provides new APIs to streamline everyday programming tasks.
+[09:34] To improve the experience of using Swift for scripting tasks,
+[09:37] the Foundation Workgroup introduced a new package with APIs
+[09:41] for launching a subprocess.
+
+### Code Sample: Subprocess: Call `run` with string - [9:44]
+
+```swift
+import Subprocess
+
+let result = try await run(
+  .name("pwd")
+)
+```
+
+[09:44] You start by adding and importing the new Subprocess package.
+[09:49] Then you launch a subprocess by calling the run function and awaiting the result.
+[09:55] If you provide a string with the process name, the run method
+[09:58] will look up the executable based on the $PATH environment variable.
+[10:03] In most cases, you’ll launch a subprocess using a FilePath
+
+### Code Sample: Subprocess: Call `run` with file path - [10:04]
+
+```swift
+import Subprocess
+
+let swiftPath = FilePath("/usr/bin/swift")
+let result = try await run(
+  .path(swiftPath),
+  arguments: ["--version"]
+)
+```
+
+
+### Code Sample: Subprocess: Accessing standard output - [10:05]
+
+```swift
+import Subprocess
+
+let swiftPath = FilePath("/usr/bin/swift")
+let result = try await run(
+  .path(swiftPath),
+  arguments: ["--version"]
+)
+
+let swiftVersion = result.standardOutput
+```
+
+[10:07] to specify the full path to an executable.
+[10:10] When the subprocess terminates, you can inspect the exit status,
+[10:15] the standard output, and other information about the process execution.
+[10:20] The subprocess library has many more capabilities that give you
+[10:23] fine grained control over process execution,
+[10:27] platform specific configuration options, and more.
+[10:31] You can explore the full API surface in the swift-subprocess repository.
+[10:36] The package is in version 0.1, and feedback from your adoption
+[10:40] will inform the API that is released in version 1.0.
+[10:45] The Foundation Workgroup also improved everyday APIs
+[10:48] used most commonly in app projects.
+
+### Code Sample: NotificationCenter: Dynamic types - [10:51]
+
+```swift
+import UIKit
+
+@MainActor 
+class KeyboardObserver {
+ func registerObserver(screen: UIScreen) {
+    let center = NotificationCenter.default
+    let token = center.addObserver(
+      forName: UIResponder.keyboardWillShowNotification,
+      object: screen,
+      queue: .main
+    ) { notification in
+      guard let userInfo = notification.userInfo else { return }
+      let startFrame = userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect
+      let endFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+
+      guard let startFrame, let endFrame else { return }
+
+      self.keyboardWillShow(startFrame: startFrame, endFrame: endFrame)
+    }
+  }
+  
+  func keyboardWillShow(startFrame: CGRect, endFrame: CGRect) {}
+}
+```
+
+[10:52] Responding to notifications from UIKit is very common in iOS apps,
+[10:56] but the code to observe a notification is prone to mistakes.
+[11:01] First, you have to be careful to register
+[11:03] for a notification name that the object supports posting.
+[11:07] If you make a mistake, your notification callback will never run.
+[11:12] Information about the notification is stored in an untyped dictionary,
+[11:16] which requires you to manually subscript using the right key
+[11:20] and dynamic cast the result to the correct type.
+[11:24] And even when the notification is
+[11:25] guaranteed to be posted on the main thread,
+[11:28] you’d still get concurrency errors when accessing main actor APIs.
+[11:33] Notification names and payloads now support concrete types.
+
+### Code Sample: NotificationCenter: Concrete types - [11:34]
+
+```swift
+import UIKit
+
+@MainActor
+class KeyboardObserver {
+  func registerObserver(screen: UIScreen) {
+    let center = NotificationCenter.default
+    let token = center.addObserver(
+      of: screen,
+      for: .keyboardWillShow
+    ) { keyboardState in
+      let startFrame = keyboardState.startFrame
+      let endFrame = keyboardState.endFrame
+
+      self.keyboardWillShow(startFrame: startFrame, endFrame: endFrame) 
+    }
+  }
+  
+  func keyboardWillShow(startFrame: CGRect, endFrame: CGRect) {}
+}
+```
+
+[11:38] Concrete types allow the compiler to check
+[11:40] that the object supports the notification kind you’re registering for.
+[11:45] They also eliminate boilerplate when working with the notification payload.
+[11:50] The notification type specifies where the notification is posted.
+[11:55] You can freely access main actor APIs
+[11:57] if the notification is posted on the main actor.
+
+### Code Sample: NotificationCenter: Conformances - [12:01]
+
+```swift
+extension UIResponder { 
+  public struct KeyboardWillShowMessage: NotificationCenter.MainActorMessage
+}
+
+extension HTTPCookieStorage {
+  public struct CookiesChangedMessage: NotificationCenter.AsyncMessage
+}
+```
+
+[12:01] A conformance to MainActorMessage guarantees that the notification is
+[12:05] always posted synchronously on the main thread.
+[12:10] A conformance to AsyncMessage means the notification
+[12:13] is posted asynchronously on an arbitrary thread.
+[12:17] Concrete notification types are available in the SDK
+[12:21] for the notifications posted by frameworks like UIKit and Foundation.
+[12:25] You can also add concrete notification types
+[12:28] for your own notifications.
+[12:31] Broadcasting system notifications to registered observers
+[12:34] is based on a more general observer pattern.
+[12:37] The Observation Library provides general-purpose APIs
+[12:41] for automatically tracking state changes in an object graph.
+[12:46] You can opt a class into observation tracking
+
+### Code Sample: Observation: The @Observable macro - [12:48]
+
+```swift
+import Observation
+
+enum Item {
+  case none
+  case banana
+  case star
+}
+
+@Observable
+class Player {
+  let name: String
+  var score: Int = 0
+  var item: Item = .none
+
+  init(name: String) {
+    self.name = name
+  }
+}
+```
+
+[12:49] using the @Observable macro.
+[12:51] Swift 6.2 introduces a way to stream state changes with an AsyncSequence
+[12:56] from an observable type.
+
+### Code Sample: Observation: The Observations type - [12:58]
+
+```swift
+import Observation
+
+enum Item {
+  case none
+  case banana
+  case star
+}
+
+@Observable
+class Player {
+  let name: String
+  var score: Int = 0
+  var item: Item = .none
+
+  init(name: String) {
+    self.name = name
+  }
+}
+
+let player = Player(name: "Holly")
+let values = Observations {
+  let score = "\(player.score) points"
+  let item =
+    switch player.item {
+    case .none: "no item"
+    case .banana: "a banana"
+    case .star: "a star"
+    }
+  return "\(score) and \(item)"
+}
+```
+
+[12:58] You start by creating an instance of the new
+[13:01] Observations type with a closure.
+[13:04] In the closure, you compute the value that you want to observe changes to.
+[13:09] Here, I want to observe the string describing the player’s current state,
+[13:13] and I want a new value each time the score is updated or the player gets a new item.
+[13:19] You’ll get an updated value based on the observable properties
+[13:22] that are used in the closure.
+[13:25] Updates happen transactionally.
+[13:28] The tracking for an update begins when any of the observable properties
+[13:31] in the closure have their willSet called.
+[13:35] And it ends at the next await where the code suspends.
+[13:39] The updated value will include all synchronous changes
+[13:42] to other properties between these two points of the code.
+[13:46] This ensures that synchronous updates to multiple properties don’t lead
+[13:50] to observation updates with the object in an inconsistent state.
+
+### Code Sample: Observation: Transactional updates - [13:56]
+
+```swift
+import Observation
+
+enum Item {
+  case none
+  case banana
+  case star
+}
+
+@Observable
+class Player {
+  let name: String
+  var score: Int = 0
+  var item: Item = .none
+
+  init(name: String) {
+    self.name = name
+  }
+}
+
+let player = Player(name: "Holly")
+let values = Observations {
+  let score = "\(player.score) points"
+  let item =
+    switch player.item {
+    case .none: "no item"
+    case .banana: "a banana"
+    case .star: "a star"
+    }
+  return "\(score) and \(item)"
+}
+
+player.score += 2
+player.item = .banana
+```
+
+[13:56] If I synchronously update both the score and the item,
+[13:59] I’ll only get one updated value that contains both changes.
+[14:04] The observations type conforms to AsyncSequence,
+
+### Code Sample: Observation: AsyncSequence - [14:05]
+
+```swift
+import Observation
+
+enum Item {
+  case none
+  case banana
+  case star
+}
+
+@Observable
+class Player {
+  let name: String
+  var score: Int = 0
+  var item: Item = .none
+
+  init(name: String) {
+    self.name = name
+  }
+}
+
+let player = Player(name: "Holly")
+let values = Observations {
+  let score = "\(player.score) points"
+  let item =
+    switch player.item {
+    case .none: "no item"
+    case .banana: "a banana"
+    case .star: "a star"
+    }
+  return "\(score) and \(item)"
+}
+
+player.score += 2
+player.item = .banana
+
+for await value in values { print(value) }
+```
+
+[14:08] so you can iterate over updated values using a for-await loop.
+[14:13] As developers, we write tests every day.
+[14:16] Swift Testing is a cross platform library that provides macros
+
+### Code Sample: Swift Testing - [14:17]
+
+```swift
+import Testing
+import Foundation
+import EvolutionMetadataModel
+
+@Test
+func validateProposalID() async throws {
+  let (data, _) = try await URLSession.shared.data(from: evolutionJSONMetadataURL)
+
+  let jsonDecoder = JSONDecoder()
+  let metadata = try jsonDecoder.decode(EvolutionMetadata.self, from: data)
+  for proposal in metadata.proposals {
+    #expect(proposal.id.starts(with: "SE"))
+  }
+}
+```
+
+[14:20] for describing and organizing your tests,
+[14:23] like the @Test attribute for declaring a test function.
+[14:28] You use the expect and require macros to validate your assumptions,
+[14:32] and Swift Testing gives you actionable information
+[14:34] when an expectation or requirement fails.
+[14:38] But sometimes, test failures are difficult to triage,
+[14:42] especially if they’re only failing in remote environments like CI.
+[14:46] Understanding a test failure might require more context
+[14:49] about the data used by the test.
+[14:53] Swift 6.2 introduces custom attachments to help you diagnose test failures.
+
+### Code Sample: Swift Testing: Attachments - [14:54]
+
+```swift
+import Testing
+import Foundation
+import EvolutionMetadataModel
+
+@Test
+func validateProposalID() async throws {
+  let (data, _) = try await URLSession.shared.data(from: evolutionJSONMetadataURL) 
+  Attachment.record(data, named: "evolution-metadata.json")
+
+  let jsonDecoder = JSONDecoder()
+  let metadata = try jsonDecoder.decode(EvolutionMetadata.self, from: data)
+  for proposal in metadata.proposals {
+    #expect(proposal.id.starts(with: "SE"))
+  }
+}
+```
+
+[14:59] You can add an attachment to a test by calling the Attachment.record method.
+[15:04] You can attach library types like Data and String,
+[15:08] and you can implement attachment support for your own types
+[15:11] by conforming to the attachable protocol.
+[15:15] Swift 6.2 also supports exit tests,
+[15:18] allowing you to test code that you expect to terminate under certain conditions.
+
+### Code Sample: Exit Tests: Preconditions - [15:23]
+
+```swift
+extension Proposal {
+  public var number: Int {
+    let components = id.split(separator: "-")
+    precondition(
+      components.count == 2 && components[1].allSatisfy(\.isNumber),
+      "Invalid proposal ID format \(id); expected SE-<Number>"
+    )
+
+    return Int(components[1])!
+  }
+}
+```
+
+[15:23] For example, if you write a function that validates assumptions
+[15:26] about input parameters through preconditions, you can write
+[15:30] a test case that will succeed when the precondition fails.
+
+### Code Sample: Exit Tests: processExitsWith argument - [15:34]
+
+```swift
+import Testing
+import EvolutionMetadataModel
+
+@Test
+func invalidProposalPrefix() async throws {
+  await #expect(processExitsWith: .failure) {
+    let proposal = Proposal(id: "SE-NNNN")
+    _ = proposal.number 
+  }
+}
+```
+
+[15:34] You write an exit test by passing the processExitsWith argument
+[15:38] to #expect or #require.
+[15:41] When you write an exit test,
+[15:43] Swift Testing will launch a new process to run your test
+[15:46] and you can validate that the process exits successfully
+[15:50] with a specific exit code or signal or with any failure status.
+[15:55] These general purpose libraries allow you to write and test portable Swift code
+[15:59] throughout your project, even beyond your application code.
+[16:03] At Apple, we use Swift throughout our entire software stack.
+[16:07] We use it for firmware, apps and frameworks,
+[16:10] and large-scale web services.
+[16:12] You can take advantage of improvements in Swift 6.2
+[16:15] when writing code for embedded devices,
+[16:17] security critical components, and servers.
+[16:21] You’ll also be able to target a few new platforms.
+[16:24] Let’s start at the bottom of the stack with Embedded Swift.
+[16:28] Embedded Swift is a subset of Swift that allows you to write code
+[16:32] targeting the most constrained environments,
+[16:34] like firmware for embedded devices and operating system kernels.
+[16:38] It’s a compilation mode that supports core Swift features
+[16:41] like value and reference types, closures, optionals,
+[16:44] error handling, generics, and more.
+[16:47] At Apple, we’re using Embedded Swift
+[16:50] in some of the lowest-level software running on the iPhone.
+[16:53] For example, in iOS 26, Embedded Swift
+[16:56] runs on the coprocessor that manages access
+[16:59] to the shared memory pages between the CPU and GPU.
+[17:03] If you want to try out Embedded Swift, you can learn more
+[17:06] by watching Go small with Embedded Swift.
+[17:10] Swift 6.2 expands Embedded Swift with new capabilities.
+[17:14] It now covers Swift's full string APIs, including string interpolation.
+[17:19] Swift’s any types, which can represent values of types conforming to a protocol,
+[17:24] are also now available whenever the protocol is
+[17:26] constrained to class types.
+[17:29] The Swift standard library is also gaining InlineArray and Span,
+[17:33] which are two new APIs for efficiently working with regions of memory.
+[17:37] These types, which Holly will cover in more detail later,
+[17:40] are perfect for the kind of performance-sensitive code
+[17:43] you often find in embedded programs.
+[17:46] As Embedded Swift has become increasingly capable, the community has been busy
+[17:50] creating examples that you can use to get started on your own embedded projects.
+[17:55] Check them out on GitHub in the swift-embedded-examples repository.
+[18:00] One of the benefits of Embedded Swift is that it allows you
+[18:02] to write low-level software in a language that is memory safe by default.
+[18:07] Memory safe code is more secure, and we’ve been working on making
+[18:10] Swift even better for code with the strongest security requirements.
+[18:16] Sometimes you need to write code
+[18:17] to accomplish something that is fundamentally unsafe.
+[18:20] When integrating with a dependency written in C, for example,
+[18:24] it’s common to use an API that takes pointers.
+[18:27] In security critical contexts, unsafe code should be avoided whenever possible.
+[18:33] If it can’t be avoided, though, it should be easy to identify.
+[18:37] That’s why we’ve introduced a new *opt-in* feature
+[18:39] in Swift 6.2 called strict-memory-safety.
+[18:43] This mode requires that all uses of unsafe APIs be
+[18:47] acknowledged explicitly in source code.
+[18:50] The annotations the mode requires help you identify which parts of your code
+[18:54] need extra attention from a security perspective.
+[18:57] Along with this new mode, Swift 6.2 also supports new annotations
+[19:02] for C and C++ headers that cause APIs to be
+[19:05] imported into Swift using safe, ergonomic types like Span.
+[19:10] To learn more about the new interoperability features,
+[19:13] check out Safely mix C, C++, and Swift.
+[19:18] In Apple’s operating systems, we’re adopting strict memory safety
+[19:21] in two security critical components: WebKit and a subsystem of the Messages app
+[19:26] that parses incoming messages and attachments.
+[19:29] Both of these components handle untrusted input, which makes it especially important
+[19:34] to limit the use of unsafe APIs.
+[19:37] Now, let’s check in on how Swift is being used in the server ecosystem.
+[19:42] Swift plays a big role in our services at Apple.
+[19:45] Every second, millions of requests are processed by backend services
+[19:49] that are powered by Swift.
+[19:51] One of those services is responsible for alerting users about passwords
+[19:55] that are compromised because they’ve been found in data breaches.
+[19:59] Previously built with Java, this service was recently rewritten in Swift,
+[20:03] and the benefits were dramatic.
+[20:06] Thanks to Swift’s efficient native code and deterministic memory management,
+[20:10] the throughput of the service increased by 40%,
+[20:12] while its hardware requirements were cut in half.
+[20:16] Many of you are benefiting from adopting Swift on the server.
+[20:20] For example, the engineers at Cultured Code
+[20:22] reimplemented the backend
+[20:24] for the popular Things app, called Things Cloud,
+[20:27] in Swift and wrote about their experience on swift.org.
+[20:31] For Things Cloud, using Swift led to a 3 times reduction
+[20:34] in compute costs, while improving average response times by 400%.
+[20:40] Aside from improved performance, another benefit of adopting Swift
+[20:44] was the opportunity to use the same language and tools
+[20:47] for both client and server development.
+[20:50] A key part of what allows teams to build server backends with Swift
+[20:54] is its libraries.
+[20:56] Swift has a growing package ecosystem that covers a wide range
+[20:59] of essential use cases.
+[21:01] There are libraries for networking, database drivers,
+[21:05] observability, message streaming, and more.
+[21:08] One notable update this year was the release of gRPC Swift version 2.
+[21:14] gRPC is a modern, high-performance package for building service APIs.
+[21:19] Some of the highlights from version 2 are modernized APIs that leverage
+[21:22] Swift concurrency, idiomatic generated  Swift code,
+[21:26] and a pluggable, high-performance transport layer.
+[21:29] The maintainers of gRPC Swift wrote a blog post on swift.org about the update.
+[21:34] Check it out to learn more.
+[21:37] Interoperability with C, Objective-C, and C++ is one of Swift’s core strengths.
+[21:43] You can gradually improve existing code bases
+[21:45] written in these languages by adopting Swift one file at a time.
+[21:50] In the server ecosystem, many existing applications are written in Java,
+[21:54] and we think there’s a great opportunity to offer incremental Swift adoption
+[21:58] in those codebases too.
+[22:00] That’s why last year we announced an exciting new open source project
+[22:04] called swift-java,
+[22:05] which aims to make the languages interoperate seamlessly.
+[22:10] With swift-java, you can create bindings that allow Swift code
+[22:13] to call Java code and vice versa.
+[22:16] These bindings are designed to wrap the native representations of values
+[22:20] from each language without excessive overhead.
+[22:23] Java bindings for Swift code can leverage Java’s next-generation
+[22:27] foreign interface technology, or fall back to JNI if necessary.
+[22:32] The swift-java project is currently experimental and rapidly evolving.
+[22:36] You can learn more about how it works
+[22:38] by watching Explore Swift and Java interoperability.
+[22:43] When working on apps that have both client and server components,
+[22:47] you need a workflow that can test your code in both environments, locally.
+[22:51] Apple is releasing a new open source containerization library
+[22:55] that you can use to build tools based on Linux containers
+[22:57] that run on your Mac.
+[22:59] The library is fully implemented in Swift and designed with a focus on security,
+[23:04] privacy, and performance.
+[23:06] This is a great example of using Swift for systems-level development.
+[23:11] To learn more about this library, watch Meet Containerization.
+[23:15] And visit the containerization repository on GitHub where you can find
+[23:19] command line binaries for running containers.
+[23:22] Finally, here are some updates on the platforms that Swift supports.
+[23:28] Swift 6.2 adds official support for FreeBSD, an operating system
+[23:32] that is popular on servers and embedded platforms.
+[23:36] Additionally, Swift is gaining support for WebAssembly, also known as Wasm.
+[23:41] WebAssembly is a virtual machine platform focused on portability, security,
+[23:46] and high performance.
+[23:47] Developers can build both client and server applications for Wasm
+[23:51] and then deploy them to the browser or other runtimes.
+[23:55] WebAssembly support started out as a community project.
+[23:59] Earlier this year, that project reached
+[24:01] an important milestone with a vision document
+[24:03] for official WebAssembly support in Swift.
+[24:06] Let’s check out Wasm support in action.
+[24:09] I have an app written in Swift that loads a 3D model
+[24:12] from a file and then renders it in the browser.
+[24:15] Here's what the app looks like right now.
+[24:19] The app is running on the Wasm virtual machine,
+[24:22] and the Swift logo is rendered using an experimental web standard called WebGPU.
+[24:29] The app uses JavaScriptKit, which is an open source package
+[24:32] developed by the SwiftWasm organization.
+[24:36] I can use this library to interact with the Javascript runtime
+[24:40] through native Swift APIs.
+[24:42] To make the final binary as compact as possible,
+[24:45] I’m compiling the app using Embedded Swift,
+[24:48] but for the most part, this code is just normal Swift code.
+[24:53] For example, I’ve added some geometry utilities that leverage generics.
+[24:57] And my parser for Wavefront object files uses Swift’s native String APIs.
+[25:04] Let's add some animation.
+[25:06] I’ll jump to the update method of our renderer.
+[25:13] To give the model some spin,
+[25:15] the logo’s rotation needs to be updated on each frame.
+[25:23] Let's test it out.
+[25:25] To re-run the application,
+[25:27] I’ve triggered a task from the Project Panel.
+[25:30] The task is configured to invoke Swift Build to compile the Wasm app.
+[25:34] It then makes the binary as small as possible
+[25:37] by running a few minimization tools on the build output.
+[25:40] Finally, it starts a web server to host the content.
+[25:45] That looks great.
+[25:48] The heart of Swift being a great choice
+[25:50] throughout the software stack is that it’s a great language.
+[25:53] Swift prioritizes safety and ease-of-use by default,
+[25:56] while still providing tools for advanced programmers
+[25:59] to write complex complex code and tune it for maximum performance.
+[26:02] And you can learn about language features as you need to.
+[26:05] So you can start small and dive deeper into advanced features when you’re ready.
+[26:11] Swift 6.2 evolves the language to make it easier to use
+[26:15] for both beginners and experts.
+[26:18] We’ve provided a more approachable path to introducing concurrency in a project.
+[26:23] And we’ve made the language more capable for experts
+[26:26] writing performance-critical code.
+[26:29] Let's start with performance updates.
+[26:32] The Array type is an ordered list of elements,
+[26:35] and it’s one of the most commonly used data types across Swift projects.
+[26:40] Features of Array like dynamic resizing make it easy to use
+[26:43] and suitable for so many tasks.
+[26:46] But this flexibility comes at a cost.
+[26:49] To support dynamic resizing,
+[26:51] an array stores a reference to a heap-allocated buffer.
+[26:55] When more elements are added and the array is at capacity,
+[26:59] new memory has to be allocated dynamically and the existing elements are copied over.
+[27:05] If you’re profiling performance-critical code
+[27:07] that uses Array in a hot path, you might notice memory allocation
+[27:11] or reference counting for the array buffer that you need to eliminate.
+[27:15] If the size of an array never changes, there’s no need to pay the cost
+[27:19] of heap allocation.
+[27:22] InlineArray is a new fixed-size array type
+[27:25] with inline storage for its elements.
+[27:28] The size is part of the type, written in angle brackets before the element type.
+[27:34] Instead of storing a reference to a buffer containing the elements,
+[27:39] the elements of an InlineArray are stored directly.
+[27:42] This means the elements can be stored on the stack,
+[27:45] or directly within other types without additional heap allocation.
+[27:50] InlineArrays can store copyable and non-copyable types.
+[27:55] When storing copyable types, the InlineArray itself can be copied,
+[27:59] and the element values are copied eagerly.
+[28:03] Writing the size as part of the type is achieved using a new generics feature
+[28:07] to allow integers as type parameters.
+[28:11] Just like the element type, the size of an InlineArray
+[28:13] can be inferred from an array literal.
+[28:16] If you write an InlineArray of 1, 2, and 3,
+[28:19] the type is inferred as an InlineArray of 3 ints.
+[28:24] Knowing the size of an InlineArray at compile time
+[28:26] also enables more optimizations, like eliminating bounds checking
+[28:30] when the index is less than the size.
+[28:33] A container type often needs to provide direct access to its underlying storage.
+[28:39] This is useful for performing local processing over contiguous memory
+[28:42] without needing to know the layout of the original container.
+[28:47] For example, a function might want to allow operating directly
+[28:50] over the contiguous storage of an Array or an InlineArray.
+[28:55] Before Swift 6.2, the common solution
+[28:58] was to drop down to unsafe pointers, which are efficient,
+[29:02] but are fundamentally unsafe and prone to mistakes.
+[29:06] The new Span type is an abstraction
+[29:08] that provides fast, direct access to contiguous memory
+[29:12] without compromising memory safety.
+[29:15] The standard library provides a span property
+[29:18] for all container types that have contiguous storage
+[29:21] for their elements, including Array, ArraySlice,
+[29:24] InlineArray, and more.
+[29:27] Span maintains memory safety by ensuring
+[29:30] that the contiguous memory remains valid while you’re using the Span.
+[29:35] These guarantees define away the memory safety problems
+[29:38] inherent to pointers, including use-after-free
+[29:41] and overlapping modification.
+[29:43] They’re checked at compile time with no runtime overhead.
+[29:48] For example, modifying the original container
+[29:51] will prevent access to the span afterward.
+[29:54] After the modification, you can’t access the span variable again.
+[29:59] A span also can’t outlive the original container.
+[30:03] This is called a lifetime dependency, and it prevents the underlying storage
+[30:07] from being destroyed while it can still be accessed through the span.
+[30:13] To learn new ways of controlling performance
+[30:15] with InlineArray and Span,
+[30:17] watch Improve memory usage and performance with Swift.
+[30:20] To learn more about understanding the performance characteristics
+[30:23] of your Swift code, check out Explore Swift performance.
+[30:28] Another aspect of performance is responsiveness, when a program
+[30:32] needs to perform multiple tasks at the same time.
+[30:36] Concurrent programming is hard because sharing memory between
+[30:39] multiple tasks is prone to mistakes that lead to unpredictable behavior.
+[30:45] Data-race safety in Swift 6 prevents
+[30:47] these mistakes at compile time, so you can write concurrent code
+[30:51] without fear of introducing hard-to-debug runtime bugs.
+[30:55] But in many cases, the most natural code to write
+[30:59] is prone to data races, leading to compiler errors
+[31:02] that you have to address.
+[31:05] A class with mutable state, like this PhotoProcessor class,
+
+### Code Sample: Concurrency: Async function error message - [31:06]
+
+```swift
+class PhotoProcessor {
+  func extractSticker(data: Data, with id: String?) async -> Sticker? {     }
+}
+
+@MainActor
+final class StickerModel {
+  let photoProcessor = PhotoProcessor()
+
+  func extractSticker(_ item: PhotosPickerItem) async throws -> Sticker? {
+    guard let data = try await item.loadTransferable(type: Data.self) else {
+      return nil
+    }
+
+    return await photoProcessor.extractSticker(data: data, with: item.itemIdentifier)
+  }
+}
+```
+
+[31:09] is safe as long as you don’t access it concurrently.
+[31:12] It has an async method to extract a Sticker
+[31:15] by computing the subject of the given image data.
+[31:19] But if you try to call extractSticker from UI code
+[31:22] on the main actor, you’ll get an error that the call risks causing data races.
+[31:27] This is because there are several places in the language
+[31:30] that offload work to the background implicitly,
+[31:33] even if you never needed code to run in parallel.
+[31:37] Swift 6.2 changes this philosophy to stay single threaded by default
+[31:42] until you choose to introduce concurrency.
+[31:46] The language changes in Swift 6.2 make the most natural code to write
+[31:50] data race free by default.
+[31:53] This provides a more approachable path to introducing concurrency in a project.
+[31:58] When you choose to introduce concurrency because you want to run code in parallel,
+[32:03] data-race safety will protect you.
+[32:05] First, we've made it easier to call async functions on types with mutable state.
+
+### Code Sample: Concurrency: Run async functions on the caller's actor - [32:06]
+
+```swift
+// Run async functions on the caller's actor
+
+class PhotoProcessor {
+  func extractSticker(data: Data, with id: String?) async -> Sticker? {}
+}
+
+@MainActor
+final class StickerModel {
+  let photoProcessor = PhotoProcessor()
+
+  func extractSticker(_ item: PhotosPickerItem) async throws -> Sticker? {
+    guard let data = try await item.loadTransferable(type: Data.self) else {
+      return nil
+    }
+
+    return await photoProcessor.extractSticker(data: data, with: item.itemIdentifier)
+  }
+}
+```
+
+[32:11] Instead of eagerly offloading async functions
+[32:13] that aren't tied to a specific actor,
+[32:16] the function will continue to run on the actor it was called from.
+[32:20] This eliminates data races because the values passed into the async function
+[32:25] are never sent outside the actor.
+[32:28] Async functions can still offload work in their implementation,
+[32:32] but clients don’t have to worry about their mutable state.
+
+### Code Sample: Concurrency: Conformance error - [32:36]
+
+```swift
+protocol Exportable {
+  func export()
+}
+
+
+extension StickerModel: Exportable { // error: Conformance of 'StickerModel' to protocol 'Exportable' crosses into main actor-isolated code and can cause data races
+  func export() {
+    photoProcessor.exportAsPNG()
+  }
+}
+```
+
+[32:36] Next, we’ve made it easier to implement conformances on main actor types.
+[32:42] Here I have a protocol called Exportable,
+[32:44] and I’m trying to implement a conformance for my main actor StickerModel class.
+[32:50] The export requirement doesn’t have actor isolation,
+[32:53] so the language assumed that it could be called from off the main actor,
+[32:57] and prevented StickerModel from using main actor state in its implementation.
+
+### Code Sample: Concurrency: Isolated conformances - [33:04]
+
+```swift
+// Isolated conformances
+
+protocol Exportable {
+  func export()
+}
+
+
+extension StickerModel: @MainActor Exportable {
+  func export() {
+    photoProcessor.exportAsPNG()
+  }
+}
+```
+
+[33:04] Swift 6.2 supports these conformances.
+[33:07] A conformance that needs main actor state is called an *isolated* conformance.
+[33:12] This is safe because the compiler ensures a main actor conformance
+[33:16] is only used on the main actor.
+
+### Code Sample: Concurrency: Isolated conformance use - [33:20]
+
+```swift
+// Isolated conformances
+
+@MainActor
+struct ImageExporter {
+  var items: [any Exportable]
+
+  mutating func add(_ item: StickerModel) {
+    items.append(item)
+  }
+
+  func exportAll() {
+    for item in items {
+      item.export()
+    }
+  }
+}
+```
+
+[33:20] I can create an ImageExporter type that adds a StickerModel
+[33:24] to an array of any Exportable items as long as it stays on the main actor.
+[33:30] But if I allow ImageExporter to be used from anywhere,
+
+### Code Sample: Concurrency: Isolated conformance error - [33:31]
+
+```swift
+// Isolated conformances
+
+nonisolated
+struct ImageExporter {
+  var items: [any Exportable]
+
+  mutating func add(_ item: StickerModel) {
+    items.append(item) // error: Main actor-isolated conformance of 'StickerModel' to 'Exportable' cannot be used in nonisolated context
+  }
+
+  func exportAll() {
+    for item in items {
+      item.export()
+    }
+  }
+}
+```
+
+[33:33] the compiler prevents adding StickerModel to the array
+[33:36] because it isn’t safe to call export on StickerModel
+[33:39] from outside the main actor.
+[33:42] With isolated conformances, you only have to solve data race safety issues
+[33:46] when the code indicates that it uses the conformance concurrently.
+
+### Code Sample: Concurrency: Unsafe static variable - [33:51]
+
+```swift
+final class StickerLibrary {
+  static let shared: StickerLibrary = .init() // error: Static property 'shared' is not concurrency-safe because non-'Sendable' type 'StickerLibrary' may have shared mutable state
+}
+```
+
+[33:52] Global and static variables are prone to data races
+[33:55] because they allow mutable state to be accessed from anywhere.
+[34:00] The most common way to protect global state is with the main actor.
+
+### Code Sample: Concurrency: Protecting static variables - [34:01]
+
+```swift
+final class StickerLibrary {
+  @MainActor
+  static let shared: StickerLibrary = .init()
+}
+```
+
+[34:04] And it’s common to annotate an entire class with the main actor
+
+### Code Sample: Concurrency: Protecting classes - [34:05]
+
+```swift
+@MainActor
+final class StickerLibrary {
+  static let shared: StickerLibrary = .init()
+}
+```
+
+[34:07] to protect all of its mutable state,
+[34:10] especially in a project that doesn’t have a lot of concurrent tasks.
+[34:14] You can model a program that's entirely single-threaded
+
+### Code Sample: Concurrency: A single-threaded program - [34:15]
+
+```swift
+@MainActor
+final class StickerLibrary {
+  static let shared: StickerLibrary = .init()
+}
+
+@MainActor
+final class StickerModel {
+  let photoProcessor: PhotoProcessor
+
+  var selection: [PhotosPickerItem]
+}
+
+extension StickerModel: @MainActor Exportable {
+  func export() {
+    photoProcessor.exportAsPNG()
+  }
+}
+```
+
+[34:17] by writing @MainActor on everything in your project.
+
+### Code Sample: Concurrency: Mode to infer main actor by default - [34:22]
+
+```swift
+// Mode to infer main actor by default
+
+final class StickerLibrary {
+  static let shared: StickerLibrary = .init()
+}
+
+final class StickerModel {
+  let photoProcessor: PhotoProcessor
+
+  var selection: [PhotosPickerItem]
+}
+
+extension StickerModel: Exportable {
+  func export() {
+    photoProcessor.exportAsPNG()
+  }
+}
+```
+
+[34:22] To make it easier to model single-threaded code,
+[34:24] we’ve introduced a mode to infer main actor by default.
+[34:29] This eliminates data-race safety errors about unsafe global and static variables,
+[34:34] calls to other main actor functions like ones from the SDK, and more,
+[34:39] because the main actor protects all mutable state by default.
+[34:43] It also reduces concurrency annotations in code that’s mostly single-threaded.
+[34:49] This mode is great for projects that do most of the work on the main actor,
+[34:53] and concurrent code is encapsulated within specific types or files.
+[34:58] It’s opt-in and it’s recommended for apps, scripts, and other executable targets.
+[35:05] Offloading work to the background is still important for performance,
+
+### Code Sample: Concurrency: Explicitly offloading async work - [35:06]
+
+```swift
+// Explicitly offloading async work
+
+class PhotoProcessor {
+  var cachedStickers: [String: Sticker]
+
+  func extractSticker(data: Data, with id: String) async -> Sticker {
+      if let sticker = cachedStickers[id] {
+        return sticker
+      }
+
+      let sticker = await Self.extractSubject(from: data)
+      cachedStickers[id] = sticker
+      return sticker
+  }
+
+  @concurrent
+  static func extractSubject(from data: Data) async -> Sticker {}
+}
+```
+
+[35:09] such as keeping apps responsive when performing CPU-intensive tasks.
+[35:14] Let’s look at the implementation of the extractSticker method on PhotoProcessor.
+[35:20] It first checks whether it already extracted a sticker for an image,
+[35:24] so it can return the cached sticker immediately.
+[35:28] If the sticker hasn’t been cached, it extracts the subject from the image
+[35:32] data and creates a new sticker.
+[35:35] The extractSubject method performs expensive image processing
+[35:38] that I don’t want to block the main actor or any other actor.
+[35:43] I can offload this work using the @concurrent attribute.
+[35:47] @concurrent ensures that a function always runs on the concurrent thread pool,
+[35:51] freeing up the actor to run other tasks at the same time.
+[35:56] These language changes work together to make concurrency more approachable.
+[36:01] You start by writing code that runs on the main actor by default,
+[36:05] where there’s no risk of data races.
+[36:08] When you start to use async functions,
+[36:10] those functions run wherever they’re called from.
+[36:13] There’s still no risk of data races
+[36:15] because all of your code still runs on the main actor.
+[36:19] When you’re ready to embrace concurrency to improve performance,
+[36:22] it’s easy to offload specific code to the background to run in parallel.
+[36:28] If you’re interested in learning more about using concurrency in practice,
+[36:32] check out Elevate an app with Swift concurrency.
+[36:35] To learn more about the fundamental concurrency concepts,
+[36:38] watch Embracing Swift concurrency.
+[36:42] Some of these language changes are opt-in
+[36:44] because they require changes in your project to adopt.
+[36:48] You can find and enable
+[36:49] all of the approachable concurrency language changes
+[36:52] under the Swift Compiler - Concurrency section of Xcode build settings.
+[36:56] You can also enable these features in a Swift package manifest file
+[37:00] using the SwiftSettings API.
+[37:03] Swift 6.2 includes migration tooling
+[37:06] to help you make the necessary code changes automatically.
+[37:09] You can learn more about migration tooling at swift.org/migration.
+[37:15] These concurrency improvements were shaped by your feedback
+[37:18] on adopting data array safety in your projects.
+[37:21] Whether you reported a bug,
+[37:23] asked a question about a concurrency error you didn’t understand,
+[37:26] reviewed an evolution proposal on the forums,
+[37:29] or authored language changes yourself, your input made a difference.
+[37:34] Thank you for helping make concurrency more approachable for everybody.
+[37:39] If you want to get involved in improving Swift,
+[37:41] join us on the forums at Swift.org.
+[37:43] Everyone is welcome to participate in pushing the language
+[37:46] and the ecosystem forward, and we’d love to hear
+[37:49] about your own projects in the community showcase section.
+[37:52] You can also use the forums to stay up to date
+[37:54] with everything happening in Swift,
+[37:56] whether it’s conferences, meetups, social media, and more.
+[37:59] Thanks for joining us today, and we’ll see you on the forums.
+</document_content>
+</document>
+<document index="2">
+<source>/Users/williamwagner/.wwdc/2025/swift/268-embracing-swift-concurrency/content.md</source>
+<document_content>
+# Embracing Swift concurrency
+
+**Session 268** - WWDC 2025
+
+## Description
+Join us to learn the core Swift concurrency concepts. Concurrency helps you improve app responsiveness and performance, and Swift is...
+
+## Chapters
+- 0:00 - Introduction
+- 3:17 - Single-threaded code
+- 6:00 - Asynchronous tasks
+- 7:24 - Interleaving
+- 10:22 - Introducing concurrency
+- 11:07 - Concurrent functions
+- 13:10 - Nonisolated code
+- 14:13 - Concurrent thread pool
+- 14:58 - Sharing data
+- 15:49 - Value types
+- 17:16 - Actor-isolated types
+- 18:30 - Classes
+- 23:18 - Actors
+- 26:12 - Wrap-up
+
+## Resources
+- [Swift Migration Guide](https://www.swift.org/migration/documentation/migrationguide/)
+- [The Swift Programming Language: Concurrency](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/)
+- [MyImage class with reference semantics](https://developer.apple.com/videos/play/wwdc2025/268/?time=1114)
+- [Documentation](https://developer.apple.com/documentation/)
+- [Agreements and Guidelines](https://developer.apple.com/support/terms/)
+
+## Transcript
+
+[00:06] Hello!
+[00:07] I’m Doug from the Swift team, and I’m excited to talk to you about how to make
+[00:12] the best use of Swift concurrency in your app.
+[00:15] Concurrency allows code to perform multiple tasks at the same time.
+[00:20] You can use concurrency in your app
+[00:22] to improve responsiveness when waiting on data,
+[00:25] like when reading files from disk or performing a network request.
+[00:29] It can also be used to offload expensive computation to the background,
+[00:33] like processing large images.
+[00:36] Swift’s concurrency model is designed to make
+[00:39] concurrent code easier to write correctly.
+[00:42] It makes the introduction of concurrency explicit
+[00:46] and identifies what data is shared across concurrent tasks.
+[00:50] It leverages this information to identify potential data races at compile time,
+[00:56] so you can introduce concurrency as you need it
+[00:58] without fear of creating hard-to-fix data races.
+[01:03] Many apps only need to use concurrency sparingly,
+[01:06] and some don't need concurrency at all.
+[01:09] Concurrent code is more complex than single-threaded code,
+[01:12] and you should only introduce concurrency as you need it.
+[01:17] Your apps should start by running all of their code on the main thread,
+[01:21] and you can get really far with single-threaded code.
+[01:24] The main thread is where your app receives UI-related events
+[01:28] and can update the UI in response.
+[01:30] If you aren’t doing a lot of computation in your app,
+[01:33] it’s fine to keep everything on the main thread!
+[01:36] Eventually, you are likely to need to introduce asynchronous code,
+[01:41] perhaps to fetch some content over the network.
+[01:44] Your code can wait for the content to come across the network
+[01:47] without causing the UI to hang.
+[01:50] If those tasks take too long to run, we can move them off to a background thread
+[01:56] that runs concurrently with the main thread.
+[01:59] As we develop our app further, we may find
+[02:02] that keeping all our data within the main thread
+[02:05] is causing the app to perform poorly.
+[02:08] Here, we can introduce data types for specific purposes
+[02:11] that always run in the background.
+[02:15] Swift concurrency provides tools like actors and tasks
+[02:19] for expressing these kinds of concurrent operations.
+[02:22] A large app is likely to have an architecture that looks a bit like this.
+[02:26] But you don’t start there, and not every app needs to end up here.
+[02:31] In this session, we’re going to talk through the steps
+[02:33] to take an app through this journey
+[02:35] from single-threaded to concurrent.
+[02:38] For each step along the way, we’ll help you determine when to take that step,
+[02:43] what Swift language features that you’ll use, how to use them effectively,
+[02:47] and why they work the way they do.
+[02:50] First, we’ll describe how single-threaded code works with Swift concurrency.
+[02:55] Then, we’ll introduce asynchronous tasks to help with high-latency operations,
+[02:59] like network access.
+[03:02] Next, we’ll introduce concurrency to move work to a background thread
+[03:07] and learn about sharing data across threads without introducing data races.
+[03:13] Finally, we’ll move data off the main thread with actors.
+[03:17] Let’s start with single-threaded code.
+
+### Code Sample: Single-threaded program - [3:20]
+
+```swift
+var greeting = "Hello, World!"
+
+func readArguments() { }
+
+func greet() {
+  print(greeting)
+}
+
+readArguments()
+greet()
+```
+
+[03:20] When you run a program, code starts running on the main thread.
+[03:24] Any code that you add stays on the main thread,
+[03:27] until you explicitly introduce concurrency to run code somewhere else.
+[03:32] Single-threaded code is easier to write and maintain,
+[03:35] because the code is only doing one thing at a time.
+[03:38] If you start to introduce concurrency later on,
+[03:41] Swift will protect your main thread code.
+[03:44] The main thread and all of its data is represented by the main actor.
+[03:49] There is no concurrency on the main actor,
+[03:51] because there is only one main thread that can run it.
+[03:54] We can specify that data or code is on the main actor using the @MainActor notation.
+[04:01] Swift will ensure that main-actor code only ever runs on the main thread,
+[04:05] and main-actor data is only ever accessed from there.
+[04:09] We say that such code is isolated to the main actor.
+
+### Code Sample: Data types in a the app - [4:13]
+
+```swift
+struct Image {
+}
+
+final class ImageModel {
+  var imageCache: [URL: Image] = [:]
+}
+
+final class Library {
+  static let shared: Library = Library()
+}
+```
+
+[04:14] Swift protects your main thread code using the main actor by default.
+[04:18] This is like the Swift compiler writing
+[04:20] @MainActor for you on everything in that module.
+[04:24] It lets us freely access shared state like static variables
+[04:27] from anywhere in our code.
+[04:29] In main actor mode, we don't have to worry about concurrent access
+[04:32] until we start to introduce concurrency.
+[04:36] Protecting code with the main actor by default is driven by a build setting.
+[04:40] Use this primarily for your main app module
+[04:43] and any modules that are focused on UI interactions.
+[04:47] This mode is enabled by default for new app projects
+[04:50] created with Xcode 26.
+[04:52] In this talk, we'll assume that main actor mode
+[04:54] is enabled throughout the code examples.
+
+### Code Sample: Load and display a local image - [4:57]
+
+```swift
+import Foundation
+
+class Image {
+}
+
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var imageCache: [URL: Image] = [:]
+  let view = View()
+
+  func fetchAndDisplayImage(url: URL) throws {
+    let data = try Data(contentsOf: url)
+    let image = decodeImage(data)
+    view.displayImage(image)
+  }
+
+  func decodeImage(_ data: Data) -> Image {
+    Image()
+  }
+}
+
+final class Library {
+  static let shared: Library = Library()
+}
+```
+
+[04:58] Let's add a method on our image model to fetch and display an image from a URL.
+[05:03] We want to load an image from a local file.
+[05:07] Then decode it,
+[05:08] and display it in our UI.
+[05:10] Our app has no concurrency in it at all.
+[05:13] There is just a single, main thread doing all of the work.
+[05:18] This whole function runs on the main thread in one piece.
+[05:21] So long as every operation in here is fast enough, that’s fine.
+[05:27] Right now, we’re only able to read files locally.
+[05:30] If we want to allow our app to fetch an image over the network,
+[05:34] we need to use a different API.
+
+### Code Sample: Fetch and display an image over the network - [5:36]
+
+```swift
+import Foundation
+
+struct Image {
+}
+
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var imageCache: [URL: Image] = [:]
+  let view = View()
+
+  func fetchAndDisplayImage(url: URL) throws {
+    let (data, _) = try URLSession.shared.data(from: url)
+    let image = decodeImage(data)
+    view.displayImage(image)
+  }
+
+  func decodeImage(_ data: Data) -> Image {
+    Image()
+  }
+}
+
+final class Library {
+  static let shared: Library = Library()
+}
+```
+
+[05:37] This URLSession API lets us fetch data over the network given a URL.
+[05:42] However, running this method on the main thread would freeze the UI
+[05:47] until the data has been downloaded from the network.
+[05:50] As a developer, it’s important to keep your app responsive.
+[05:54] That means taking care not to tie up the main thread for so long
+[05:58] that the UI will glitch or hang.
+[06:00] Swift concurrency provides tools to help:
+[06:03] asynchronous tasks can be used when waiting on data,
+[06:06] such as a network request, without tying up the main thread.
+
+### Code Sample: Fetch and display image over the network asynchronously - [6:10]
+
+```swift
+import Foundation
+
+class Image {
+}
+
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var imageCache: [URL: Image] = [:]
+  let view = View()
+
+  func fetchAndDisplayImage(url: URL) async throws {
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let image = decodeImage(data)
+    view.displayImage(image)
+  }
+
+  func decodeImage(_ data: Data) -> Image {
+    Image()
+  }
+}
+
+final class Library {
+  static let shared: Library = Library()
+}
+```
+
+[06:11] To prevent hangs like this, network access is asynchronous.
+[06:16] We can change fetchAndDisplayImage so that it's capable of handling asynchronous calls
+[06:21] by making the function 'async', and calling the URL session API with 'await'.
+[06:27] The await indicates where the function might suspend,
+[06:30] meaning that it stops running on the current thread
+[06:33] until the event it’s waiting for happens.
+[06:36] Then, it can resume execution.
+[06:39] We can think of this as breaking the function into two pieces:
+[06:43] the piece that runs up until we start to fetch the image,
+[06:46] and the piece that runs after the image has been fetched.
+[06:49] By breaking up the function this way,
+[06:51] we allow other work to run in between the two pieces,
+[06:55] keeping our UI responsive.
+[06:58] In practice, many library APIs, like URLSession,
+[07:02] will offload work to the background for you.
+[07:05] We still have not introduced concurrency
+[07:07] into our own code, because we didn't need to!
+[07:10] We improved the responsiveness of our application by making parts of it asynchronous,
+[07:15] and calling library APIs that offload work on our behalf.
+[07:19] All we needed to do in our code was adopt async/await.
+[07:24] So far, our code is only running one async function.
+[07:28] An async function runs in a task.
+
+### Code Sample: Creating a task to perform asynchronous work - [7:31]
+
+```swift
+import Foundation
+
+class Image {
+}
+
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var imageCache: [URL: Image] = [:]
+  let view = View()
+  var url: URL = URL("https://swift.org")!
+
+  func onTapEvent() {
+    Task {
+      do {
+	try await fetchAndDisplayImage(url: url)
+      } catch let error {
+        displayError(error)
+      }
+    }
+  }
+
+  func displayError(_ error: any Error) {
+  }
+
+  func fetchAndDisplayImage(url: URL) async throws {
+  }
+}
+
+final class Library {
+  static let shared: Library = Library()
+}
+```
+
+[07:31] A task executes independently of other code,
+[07:34] and should be created to perform a specific operation end-to-end.
+[07:39] It's common to create a task in response to an event, such as a button press.
+[07:44] Here, the task performs the full fetch-and-display image operation.
+[07:49] There can be many asynchronous tasks in a given app.
+[07:52] In addition to the fetch-and-display image task that we’ve been talking about,
+[07:56] here I’ve added a second task that
+[07:58] fetches the news, displays it, and then waits for a refresh.
+[08:02] Each task will complete its operations in order from start to finish.
+[08:07] Fetching happens in the background, but the other operations in each task
+[08:12] will all run on the main thread, and only one operation can run at a time.
+[08:17] The tasks are independent from each other,
+[08:19] so each task can take turns on the main thread.
+[08:23] The main thread will run the pieces of each task
+[08:25] as they become ready to run.
+[08:28] A single thread alternating between multiple tasks is called 'interleaving'.
+[08:34] This improves overall performance by making the most efficient use of system resources.
+[08:39] A thread can start making progress on any of the tasks as soon as possible,
+[08:43] rather than leaving the thread idle while waiting for a single operation.
+[08:48] If fetching the image completes before fetching the news,
+[08:51] the main thread will start decoding and displaying the image
+[08:54] before displaying the news.
+[08:57] But if fetching the news finishes first,
+[08:59] the main thread can start displaying the news before decoding the image.
+[09:06] Multiple asynchronous tasks are great when your app needs to perform
+[09:10] many independent operations at the same time.
+[09:13] When you need to perform work in a specific order,
+
+### Code Sample: Ordered operations in a task - [9:15]
+
+```swift
+import Foundation
+
+class Image {
+  func applyImageEffect() async { }
+}
+
+final class ImageModel {
+  func displayImage(_ image: Image) {
+  }
+
+  func loadImage() async -> Image {
+    Image()
+  }
+  
+  func onButtonTap() {
+    Task {
+      let image = await loadImage()
+      await image.applyImageEffect()
+      displayImage(image)
+    }
+  }
+}
+```
+
+[09:16] you should run that work in a single task.
+[09:20] To make your app responsive
+[09:21] when there are high-latency operations like a network request,
+[09:24] use an asynchronous task to hide that latency.
+[09:28] Libraries can help you here,
+[09:30] by providing asynchronous APIs that might do some concurrency on your behalf,
+[09:34] while your own code stays on the main thread.
+
+### Code Sample: Fetch and display image over the network asynchronously - [9:38]
+
+```swift
+import Foundation
+
+class Image {
+}
+
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var imageCache: [URL: Image] = [:]
+  let view = View()
+
+  func fetchAndDisplayImage(url: URL) async throws {
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let image = decodeImage(data)
+    view.displayImage(image)
+  }
+
+  func decodeImage(_ data: Data) -> Image {
+    Image()
+  }
+}
+```
+
+[09:38] The URLSession API has already introduced some concurrency for us,
+[09:41] because it’s handling the network access on a background thread.
+[09:45] Our own fetch-and-display image operation is running on the main thread.
+[09:50] We might find that the decode operation is taking too long.
+[09:54] This could show up as UI hangs when decoding a large image.
+[09:59] Asynchronous, single-threaded is often enough for an app.
+[10:03] But if you start to notice that your app isn’t responsive,
+[10:07] it’s an indication that too much is happening on the main thread.
+[10:11] A profiling tool such as Instruments
+[10:13] can help you determine where you are spending too much time.
+[10:17] If it’s work that can be made faster without concurrency, do that first.
+[10:22] If it can’t be made faster, you might need to introduce concurrency.
+[10:27] Concurrency is what lets parts of your code run on a background thread
+[10:31] in parallel with the main thread, so it doesn’t block the UI.
+[10:35] It can also be used to get work done faster
+[10:38] by using more of the CPU cores in your system.
+
+### Code Sample: Fetch and display image over the network asynchronously - [10:40]
+
+```swift
+import Foundation
+
+class Image {
+}
+
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var imageCache: [URL: Image] = [:]
+  let view = View()
+
+  func fetchAndDisplayImage(url: URL) async throws {
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let image = decodeImage(data, at: url)
+    view.displayImage(image)
+  }
+
+  func decodeImage(_ data: Data, at url: URL) -> Image {
+    Image()
+  }
+}
+```
+
+[10:41] Our goal is to get the decoding off the main thread,
+[10:45] so that work can happen on the background thread.
+[10:48] Because we're in the main actor by default mode,
+[10:51] fetchAndDisplaylmage and decodelmage are both isolated to the main actor.
+[10:56] Main actor code can freely access all data and code
+[11:00] that is accessible only to the main thread,
+[11:03] which is safe because there's no concurrency on the main thread.
+[11:07] We want to offload the call to decodeImage,
+
+### Code Sample: Fetch over network asynchronously and decode concurrently - [11:11]
+
+```swift
+import Foundation
+
+class Image {
+}
+
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var imageCache: [URL: Image] = [:]
+  let view = View()
+
+  func fetchAndDisplayImage(url: URL) async throws {
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let image = await decodeImage(data, at: url)
+    view.displayImage(image)
+  }
+
+  @concurrent
+  func decodeImage(_ data: Data, at url: URL) async -> Image {
+    Image()
+  }
+}
+```
+
+[11:11] Which we can do by applying the @concurrent attribute
+[11:14] to the decodeImage function.
+[11:16] @concurrent tells Swift to run the function in the background.
+[11:21] Changing where decodeImage runs
+[11:23] also changes our assumptions about what state decodeImage can access.
+[11:28] Let's take a look at the implementation.
+
+### Code Sample: Implementation of decodeImage - [11:30]
+
+```swift
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var cachedImage: [URL: Image] = [:]
+  let view = View()
+
+  func fetchAndDisplayImage(url: URL) async throws {
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let image = await decodeImage(data, at: url)
+    view.displayImage(image)
+  }
+
+  @concurrent
+  func decodeImage(_ data: Data, at url: URL) async -> Image {
+    if let image = cachedImage[url] {
+      return image
+    }
+
+    // decode image
+    let image = Image()
+    cachedImage[url] = image
+    return image
+  }
+}
+```
+
+[11:31] The implementation is checking a dictionary of cached image data
+[11:35] that's stored on the main actor, which is only safe to do on the main thread.
+[11:41] The Swift compiler shows us where the function
+[11:43] is trying to access data on the main actor.
+[11:46] This is exactly what we need to know
+[11:48] to make sure we're not introducing bugs as we add concurrency.
+[11:53] There are a few strategies you can use when breaking ties to the main actor
+[11:56] so you can introduce concurrency safely.
+[11:59] In some cases, you can move the main actor code into a caller
+[12:03] that always runs on the main actor.
+[12:05] This is a good strategy if you want to make sure that work happens synchronously.
+[12:11] Or, you can use await to access the main actor from concurrent code asynchronously.
+[12:18] If the code doesn’t need to be on the main actor at all, you can add
+[12:22] the nonisolated keyword to separate it from any actor.
+[12:26] We’re going to explore the first strategy now,
+[12:29] and will talk about the others later on.
+[12:32] I'm going to move the image caching
+[12:33] into fetchAndDisplayImage, which runs on the main actor.
+
+### Code Sample: Correct implementation of fetchAndDisplayImage with caching and concurrency - [12:37]
+
+```swift
+import Foundation
+
+class Image {
+}
+
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var cachedImage: [URL: Image] = [:]
+  let view = View()
+
+  func fetchAndDisplayImage(url: URL) async throws {
+    if let image = cachedImage[url] {
+      view.displayImage(image)
+      return
+    }
+
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let image = await decodeImage(data)
+    view.displayImage(image)
+  }
+
+  @concurrent
+  func decodeImage(_ data: Data) async -> Image {
+    // decode image
+    Image()
+  }
+}
+```
+
+[12:38] Checking the cache before making any async calls is good for eliminating latency.
+[12:43] If the image is in the cache, fetchAndDisplayImage
+[12:46] will complete synchronously without suspending at all.
+[12:50] This means the results will be delivered to the UI immediately,
+[12:53] and it will only suspend if the image is not already available.
+[12:58] And we can remove the url parameter
+[13:00] from decodeImage because we don't need it anymore.
+[13:03] Now, all we have to do is await the result of decodeImage.
+[13:09] An @concurrent function will always switch off of an actor to run.
+[13:14] If you want the function to stay on whatever actor it was called on,
+[13:17] you can use the nonisolated keyword.
+[13:20] Swift has additional ways to introduce more concurrency.
+[13:24] For more information, see “Beyond the basics of structured concurrency”.
+[13:29] If we were providing decoding APIs as part of a library for many clients to use,
+
+### Code Sample: JSONDecoder API should be non isolated - [13:30]
+
+```swift
+// Foundation
+import Foundation
+
+nonisolated
+public class JSONDecoder {
+  public func decode<T: Decodable>(_ type: T.Type, from data: Data) -> T {
+    fatalError("not implemented")
+  }
+}
+```
+
+[13:35] using @concurrent isn't always the best API choice.
+[13:38] How long it takes to decode data depends on how large the data is,
+[13:43] and decoding small amounts of data is okay to do on the main thread.
+[13:47] For libraries, it's best to provide a nonisolated API
+[13:52] and let clients decide whether to offload work.
+[13:56] Nonisolated code is very flexible, because you can call it from anywhere:
+[14:01] if you call it from the main actor, it will stay on the main actor.
+[14:05] If you call it from a background thread, it will stay on a background thread.
+[14:09] This makes it a great default for general-purpose libraries.
+[14:14] When you offload work to the background, the system handles scheduling the work
+[14:17] to run on a background thread.
+[14:20] The concurrent thread pool contains all of the system's background threads,
+[14:24] which can involve any number of threads.
+[14:27] For smaller devices like a watch,
+[14:28] there might be only be one or two threads in the pool.
+[14:32] Large systems with more cores will have more background threads in the pool.
+[14:37] It doesn't matter which background thread a task runs on,
+[14:39] and you can rely on the system to make the best use of resources.
+[14:43] For example, when a task suspends,
+[14:46] the original thread will start running other tasks that are ready.
+[14:50] When the task resumes,
+[14:51] it can start running on any available thread in the concurrent pool,
+[14:55] which might be different from the background thread it started on.
+[14:59] Now that we have concurrency, we will be sharing data among different threads.
+[15:03] Sharing mutable state in concurrent code is notoriously prone to mistakes
+[15:08] that lead to hard-to-fix runtime bugs.
+[15:11] Swift helps you catch these mistakes at compile time
+[15:14] so you can write concurrent code with confidence.
+
+### Code Sample: Fetch over network asynchronously and decode concurrently - [15:18]
+
+```swift
+import Foundation
+
+class Image {
+}
+
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var imageCache: [URL: Image] = [:]
+  let view = View()
+
+  func fetchAndDisplayImage(url: URL) async throws {
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let image = await decodeImage(data, at: url)
+    view.displayImage(image)
+  }
+
+  @concurrent
+  func decodeImage(_ data: Data, at url: URL) async -> Image {
+    Image()
+  }
+}
+```
+
+[15:18] Each time we go between the main actor and the concurrent pool,
+[15:22] we share data between different threads.
+[15:25] When we get the URL from the UI, it’s passed from the main actor
+[15:29] out the background thread to fetch the image.
+[15:32] Fetching the image returns data, which is passed along to image decoding.
+[15:38] Then, after we’ve decoded the image,
+[15:41] the image is passed back into the main actor, along with self.
+[15:45] Swift ensures that all of these values are accessed safely in concurrent code.
+[15:50] Let's see what happens if the UI update ends up creating additional tasks
+[15:54] that involve the URL.
+[15:56] Fortunately, URL is a value type.
+[15:59] That means that when we copy the URL into the background thread,
+[16:04] the background thread has a separate copy from the one that’s on the main thread.
+[16:08] If the user enters a new URL through the UI,
+[16:12] code on the main thread is free to use or modify its copy,
+[16:16] and the changes have no effect on the value used on the background thread.
+[16:20] This means that it is safe to share value types like URL
+[16:24] because it isn’t really sharing after all:
+[16:26] each copy is independent of the others.
+
+### Code Sample: Example of value types - [16:30]
+
+```swift
+// Value types are common in Swift
+import Foundation
+
+struct Post {
+  var author: String
+  var title: String
+  var date: Date
+  var categories: [String]
+}
+```
+
+[16:30] Value types have been a big part of Swift from the beginning.
+[16:34] All of the basic types like strings, integers, and dates, are value types.
+[16:40] Collections of value types,
+[16:41] such as dictionaries and arrays, are also value types.
+[16:46] And so are structs and enums that store value types in them,
+[16:49] like this Post struct.
+[16:52] We refer to types that are always safe to share concurrently as Sendable types.
+
+### Code Sample: Sendable value types - [16:56]
+
+```swift
+import Foundation
+
+// Value types are Sendable
+extension URL: Sendable {}
+
+// Collections of Sendable elements
+extension Array: Sendable where Element: Sendable {}
+
+// Structs and enums with Sendable storage
+struct ImageRequest: Sendable {
+  var url: URL
+}
+
+// Main-actor types are implicitly Sendable
+@MainActor class ImageModel {}
+```
+
+[16:57] Sendable is a protocol, and any type that conforms to Sendable is safe to share.
+[17:03] Collections like Array define conditional conformances to Sendable,
+[17:07] so they are Sendable when their elements are.
+[17:10] Structs and enums are allowed to be marked Sendable
+[17:13] when all of their instance data is Sendable.
+[17:16] And main actor types are implicitly Sendable,
+[17:19] so you don’t have to say so explicitly.
+[17:22] Actors like the main actor protect non-Sendable state
+
+### Code Sample: Fetch over network asynchronously and decode concurrently - [17:25]
+
+```swift
+import Foundation
+
+class Image {
+}
+
+final class View {
+  func displayImage(_ image: Image) {
+  }
+}
+
+final class ImageModel {
+  var imageCache: [URL: Image] = [:]
+  let view = View()
+
+  func fetchAndDisplayImage(url: URL) async throws {
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let image = await self.decodeImage(data, at: url)
+    view.displayImage(image)
+  }
+
+  @concurrent
+  func decodeImage(_ data: Data, at url: URL) async -> Image {
+    Image()
+  }
+}
+```
+
+[17:26] by making sure it’s only ever accessed by one task at a time.
+[17:31] Actors might store values passed into its methods,
+[17:34] and the actor might return a reference to its protected state from its methods.
+[17:39] Whenever a value is sent into or out of an actor,
+[17:43] the Swift compiler checks that the value is safe to send to concurrent code.
+[17:48] Let's focus on the async call to decodeImage.
+[17:53] Decode image is an instance method, so we're passing an implicit self argument.
+[17:59] Here, we see two values being sent outside the main actor,
+[18:03] and a result value being sent back into the main actor.
+[18:07] 'self' is my image model class, which is main actor isolated.
+[18:11] The main actor protects the mutable state,
+[18:14] so it's safe to pass a reference to the class
+[18:16] to the background thread.
+[18:19] And Data is a value type, so it's Sendable.
+[18:22] That leaves the image type.
+[18:25] It could be a value type, like Data, in which case it would be Sendable.
+[18:29] Instead let’s talk about types that are not Sendable, such as classes.
+
+### Code Sample: MyImage class with reference semantics - [18:34]
+
+```swift
+import Foundation
+
+struct Color { }
+
+nonisolated class MyImage {
+  var width: Int
+  var height: Int
+  var pixels: [Color]
+  var url: URL
+
+  init() {
+    width = 100
+    height = 100
+    pixels = []
+    url = URL("https://swift.org")!
+  }
+
+  func scale(by factor: Double) {
+  }
+}
+
+let image = MyImage()
+let otherImage = image // refers to the same object as 'image'
+image.scale(by: 0.5)   // also changes otherImage!
+```
+
+[18:35] Classes are reference types, meaning that when you assign one variable to another,
+[18:40] they point at the same object in memory.
+[18:43] If you change something about the object through one variable,
+[18:45] such as scaling the image, then those changes are
+[18:48] immediately visible through the other variables that point at the same object.
+[18:54] fetchAndDisplayImage does not use the image value concurrently.
+[18:58] decodeImage runs in the background,
+[19:00] so it can't access any state protected by an actor.
+[19:04] It creates a new instance of an image from the given data.
+[19:07] This image can't be referenced by any concurrent code,
+[19:11] so it's safe to send over to the main actor and display it in the UI.
+[19:16] Let’s see what happens when we introduce some concurrency.
+
+### Code Sample: Concurrently scaling while displaying an image is a data race - [19:19]
+
+```swift
+import Foundation
+
+struct Color { }
+
+nonisolated class MyImage {
+  var width: Int
+  var height: Int
+  var pixels: [Color]
+  var url: URL
+
+  init() {
+    width = 100
+    height = 100
+    pixels = []
+    url = URL("https://swift.org")!
+  }
+
+  func scaleImage(by factor: Double) {
+  }
+}
+
+final class View {
+  func displayImage(_ image: MyImage) {
+  }
+}
+
+final class ImageModel {
+  var cachedImage: [URL: MyImage] = [:]
+  let view = View()
+
+  // Slide content start
+  func scaleAndDisplay(imageName: String) {
+    let image = loadImage(imageName)
+    Task { @concurrent in
+      image.scaleImage(by: 0.5)
+    }
+
+    view.displayImage(image)
+  }
+  // Slide content end
+
+  func loadImage(_ imageName: String) -> MyImage {
+    // decode image
+    return MyImage()
+  }
+}
+```
+
+[19:19] First, this scaleAndDisplay method loads a new image on the main thread.
+[19:24] The image variable points to this image object, which contains the cat picture.
+[19:29] Then, the function creates a task running on the concurrent pool,
+[19:33] and that gets a copy of the image.
+[19:36] Finally, the main thread moves on to display the image.
+[19:41] Now, we have a problem.
+[19:42] The background thread is changing the image: making the width and height different,
+[19:47] and replacing the pixels with those of a scaled version.
+[19:50] At the same time, the main thread is iterating
+[19:54] over the pixels based on the old width and height.
+[19:58] That’s a data race.
+[19:59] You might end up with a UI glitch, or more likely you’ll end up with a crash
+[20:03] when your program tries to access outside of the pixel array’s bounds.
+[20:08] Swift concurrency prevents data races
+[20:10] with compiler errors if your code tries to share a non-Sendable type.
+[20:15] Here, the compiler is indicating that the concurrent task is capturing the image,
+[20:20] which is also used by the main actor to display the image.
+[20:24] To correct this, we need to make sure that we avoid sharing
+[20:27] the same object concurrently.
+[20:29] If we want the image effect to be shown in the UI,
+[20:32] the right solution is to wait for the scaling
+[20:34] to complete before displaying the image.
+[20:37] We can move all three of these operations into the task
+
+### Code Sample: Scaling and then displaying an image eliminates the data race - [20:38]
+
+```swift
+import Foundation
+
+struct Color { }
+
+nonisolated class MyImage {
+  var width: Int
+  var height: Int
+  var pixels: [Color]
+  var url: URL
+
+  init() {
+    width = 100
+    height = 100
+    pixels = []
+    url = URL("https://swift.org")!
+  }
+
+  func scaleImage(by factor: Double) {
+  }
+}
+
+final class View {
+  func displayImage(_ image: MyImage) {
+  }
+}
+
+final class ImageModel {
+  var cachedImage: [URL: MyImage] = [:]
+  let view = View()
+
+  func scaleAndDisplay(imageName: String) {
+    Task { @concurrent in
+      let image = loadImage(imageName)
+      image.scaleImage(by: 0.5)
+      await view.displayImage(image)
+    }
+  }
+
+  nonisolated
+  func loadImage(_ imageName: String) -> MyImage {
+    // decode image
+    return MyImage()
+  }
+}
+```
+
+[20:40] to make sure they happen in order.
+[20:43] displayImage has to run on the main actor,
+[20:46] so we use await to call it from a concurrent task.
+[20:51] If we can make scaleAndDisplay async directly,
+
+### Code Sample: Scaling and then displaying an image within a concurrent asynchronous function - [20:54]
+
+```swift
+import Foundation
+
+struct Color { }
+
+nonisolated class MyImage {
+  var width: Int
+  var height: Int
+  var pixels: [Color]
+  var url: URL
+
+  init() {
+    width = 100
+    height = 100
+    pixels = []
+    url = URL("https://swift.org")!
+  }
+
+  func scaleImage(by factor: Double) {
+  }
+}
+
+final class View {
+  func displayImage(_ image: MyImage) {
+  }
+}
+
+final class ImageModel {
+  var cachedImage: [URL: MyImage] = [:]
+  let view = View()
+
+  @concurrent
+  func scaleAndDisplay(imageName: String) async {
+    let image = loadImage(imageName)
+    image.scaleImage(by: 0.5)
+    await view.displayImage(image)
+  }
+
+  nonisolated
+  func loadImage(_ imageName: String) -> MyImage {
+    // decode image
+    return MyImage()
+  }
+}
+```
+
+[20:54] we can simplify the code to not create a new task,
+[20:57] and perform the three operations in order in the task that calls scaleAndDisplay.
+[21:02] Once we send the image to the main actor to display in the UI,
+[21:06] the main actor is free to store a reference to the image,
+[21:09] for example by caching the image object.
+
+### Code Sample: Scaling, then displaying and concurrently modifying an image is a data race - [21:11]
+
+```swift
+import Foundation
+
+struct Color { }
+
+nonisolated class MyImage {
+  var width: Int
+  var height: Int
+  var pixels: [Color]
+  var url: URL
+
+  init() {
+    width = 100
+    height = 100
+    pixels = []
+    url = URL("https://swift.org")!
+  }
+
+  func scaleImage(by factor: Double) {
+  }
+
+  func applyAnotherEffect() {
+  }
+}
+
+final class View {
+  func displayImage(_ image: MyImage) {
+  }
+}
+
+final class ImageModel {
+  var cachedImage: [URL: MyImage] = [:]
+  let view = View()
+
+  // Slide content start
+  @concurrent
+  func scaleAndDisplay(imageName: String) async {
+    let image = loadImage(imageName)
+    image.scaleImage(by: 0.5)
+    await view.displayImage(image)
+    image.applyAnotherEffect()
+  }
+  // Slide content end
+
+  nonisolated
+  func loadImage(_ imageName: String) -> MyImage {
+    // decode image
+    return MyImage()
+  }
+}
+```
+
+[21:12] If we try to change the image after it's displayed in the UI,
+[21:16] we'll get a compiler error about unsafe concurrent access.
+
+### Code Sample: Applying image transforms before sending to the main actor - [21:20]
+
+```swift
+import Foundation
+
+struct Color { }
+
+nonisolated class MyImage {
+  var width: Int
+  var height: Int
+  var pixels: [Color]
+  var url: URL
+
+  init() {
+    width = 100
+    height = 100
+    pixels = []
+    url = URL("https://swift.org")!
+  }
+
+  func scaleImage(by factor: Double) {
+  }
+
+  func applyAnotherEffect() {
+  }
+}
+
+final class View {
+  func displayImage(_ image: MyImage) {
+  }
+}
+
+final class ImageModel {
+  var cachedImage: [URL: MyImage] = [:]
+  let view = View()
+
+  // Slide content start
+  @concurrent
+  func scaleAndDisplay(imageName: String) async {
+    let image = loadImage(imageName)
+    image.scaleImage(by: 0.5)
+    image.applyAnotherEffect()
+    await view.displayImage(image)
+  }
+  // Slide content end
+
+  nonisolated
+  func loadImage(_ imageName: String) -> MyImage {
+    // decode image
+    return MyImage()
+  }
+}
+```
+
+[21:20] We can address the issue by making any changes to the image
+[21:23] before we send it over to the main actor.
+[21:27] If you are using classes for your data model,
+[21:29] your model classes will likely start on the main actor,
+[21:32] so you can present parts of them in the UI.
+[21:35] If you eventually decide that you need to work with them on a background thread,
+[21:39] make them nonisolated.
+[21:42] But they should probably not be Sendable.
+[21:44] You don’t want to be in a position where some of the model
+[21:46] is being updated on the main thread
+[21:49] and other parts of the model are being updated on the background thread.
+[21:53] Keeping model classes non-Sendable
+[21:55] prevents this kind of concurrent modification from occurring.
+[21:59] It's also easier, because making a class Sendable
+[22:01] usually requires using a low-level synchronization mechanism like a lock.
+
+### Code Sample: Closures create shared state - [22:06]
+
+```swift
+import Foundation
+
+struct Color { }
+
+nonisolated class MyImage {
+  var width: Int
+  var height: Int
+  var pixels: [Color]
+  var url: URL
+
+  init() {
+    width = 100
+    height = 100
+    pixels = []
+    url = URL("https://swift.org")!
+  }
+
+  func scale(by factor: Double) {
+  }
+
+  func applyAnotherEffect() {
+  }
+}
+
+final class View {
+  func displayImage(_ image: MyImage) {
+  }
+}
+
+final class ImageModel {
+  var cachedImage: [URL: MyImage] = [:]
+  let view = View()
+
+  // Slide content start
+  @concurrent
+  func scaleAndDisplay(imageName: String) async throws {
+    let image = loadImage(imageName)
+    try await perform(afterDelay: 0.1) {
+      image.scale(by: 0.5)
+    }
+    await view.displayImage(image)
+  }
+
+  nonisolated
+  func perform(afterDelay delay: Double, body: () -> Void) async throws {
+    try await Task.sleep(for: .seconds(delay))
+    body()
+  }
+  // Slide content end
+  
+  nonisolated
+  func loadImage(_ imageName: String) -> MyImage {
+    // decode image
+    return MyImage()
+  }
+}pet.
+```
+
+[22:06] Like classes, closures can create shared state.
+[22:10] Here is a function similar to one we had earlier that scales and displays an image.
+[22:16] It creates an image object.
+[22:18] Then, it calls perform(afterDelay:),
+[22:20] providing it with a closure that scales the image object.
+[22:24] This closure contains another reference to the same image.
+[22:28] We call this a capture of the image variable.
+[22:31] Just like non-Sendable classes,
+[22:33] a closure with shared state is still safe as long as it isn't called concurrently.
+[22:39] Only make a function type Sendable if you need to share it concurrently.
+[22:44] Sendable checking occurs whenever some data passes between actors and tasks.
+[22:49] It’s there to ensure that there are no data races
+[22:52] that could cause bugs in your app.
+[22:55] Many common types are Sendable,
+[22:57] and these can be freely shared across concurrent tasks.
+[23:01] Classes and closures can involve mutable state
+[23:04] that is not safe to share concurrently,
+[23:06] so use them from one task at a time.
+[23:10] You can still send an object from one task to another,
+[23:13] but be sure to make all modifications to the object before sending it.
+[23:18] Moving asynchronous tasks to background threads
+[23:21] can free up the main thread to keep your app responsive.
+[23:24] If you find that you have a lot of data on the main actor
+[23:27] that is causing those asynchronous tasks to “check in” with the main thread too often,
+[23:32] you might want to introduce actors.
+[23:35] As your app grows over time,
+[23:37] you may find that the amount of state on the main actor also grows.
+[23:42] You’ll introduce new subsystems to handle things like managing access to the network.
+
+### Code Sample: Network manager class - [23:47]
+
+```swift
+import Foundation
+
+nonisolated class MyImage { }
+
+struct Connection {
+  func data(from url: URL) async throws -> Data { Data() }
+}
+
+final class NetworkManager {
+  var openConnections: [URL: Connection] = [:]
+
+  func openConnection(for url: URL) async -> Connection {
+    if let connection = openConnections[url] {
+      return connection
+    }
+
+    let connection = Connection()
+    openConnections[url] = connection
+    return connection
+  }
+
+  func closeConnection(_ connection: Connection, for url: URL) async {
+    openConnections.removeValue(forKey: url)
+  }
+
+}
+
+final class View {
+  func displayImage(_ image: MyImage) {
+  }
+}
+
+final class ImageModel {
+  var cachedImage: [URL: MyImage] = [:]
+  let view = View()
+  let networkManager: NetworkManager = NetworkManager()
+
+  func fetchAndDisplayImage(url: URL) async throws {
+    if let image = cachedImage[url] {
+      view.displayImage(image)
+      return
+    }
+
+    let connection = await networkManager.openConnection(for: url)
+    let data = try await connection.data(from: url)
+    await networkManager.closeConnection(connection, for: url)
+
+    let image = await decodeImage(data)
+    view.displayImage(image)
+  }
+
+  @concurrent
+  func decodeImage(_ data: Data) async -> MyImage {
+    // decode image
+    return MyImage()
+  }
+}
+```
+
+[23:47] This can lead to a lot of state living on the main actor,
+[23:51] for example the set of open connections handled by the network manager,
+[23:55] which we would access whenever we need to fetch data over the network.
+[24:00] When we start using these extra subsystems,
+[24:03] the fetch-and-display image task from earlier has gotten more complicated:
+[24:07] it’s trying to run on the background thread,
+[24:10] but it has to hop over to the main thread because
+[24:12] that’s where the network manager’s data is.
+[24:15] This can lead to contention,
+[24:16] where many tasks are trying to run code on the main actor at the same time.
+[24:21] The individual operations might be quick, but if you have a lot of tasks doing this,
+[24:26] it can add up to UI glitches.
+[24:29] Earlier, we moved code off the main thread
+[24:31] by putting it into an @concurrent function.
+[24:35] Here, all of the work is in accessing the network manager’s data.
+[24:39] To move that out, we can introduce our own network manager actor.
+[24:44] Like the main actor, actors isolate their data,
+[24:47] so you can only access that data when running on that actor.
+[24:51] Along with the main actor, you can define your own actor types.
+[24:55] An actor type is similar to a main-actor class.
+[24:59] Like a main actor-class, it will isolate its data
+[25:02] so that only one thread can touch the data at a time.
+[25:05] An actor type is also Sendable, so you can freely share actor objects.
+
+### Code Sample: Network manager as an actor - [25:10]
+
+```swift
+import Foundation
+
+nonisolated class MyImage { }
+
+struct Connection {
+  func data(from url: URL) async throws -> Data { Data() }
+}
+
+actor NetworkManager {
+  var openConnections: [URL: Connection] = [:]
+
+  func openConnection(for url: URL) async -> Connection {
+    if let connection = openConnections[url] {
+      return connection
+    }
+
+    let connection = Connection()
+    openConnections[url] = connection
+    return connection
+  }
+
+  func closeConnection(_ connection: Connection, for url: URL) async {
+    openConnections.removeValue(forKey: url)
+  }
+
+}
+
+final class View {
+  func displayImage(_ image: MyImage) {
+  }
+}
+
+final class ImageModel {
+  var cachedImage: [URL: MyImage] = [:]
+  let view = View()
+  let networkManager: NetworkManager = NetworkManager()
+
+  func fetchAndDisplayImage(url: URL) async throws {
+    if let image = cachedImage[url] {
+      view.displayImage(image)
+      return
+    }
+
+    let connection = await networkManager.openConnection(for: url)
+    let data = try await connection.data(from: url)
+    await networkManager.closeConnection(connection, for: url)
+
+    let image = await decodeImage(data)
+    view.displayImage(image)
+  }
+
+  @concurrent
+  func decodeImage(_ data: Data) async -> MyImage {
+    // decode image
+    return MyImage()
+  }
+}
+```
+
+[25:10] Unlike the main actor, there can be many actor objects in a program,
+[25:14] each of which is independent.
+[25:17] In addition, actor objects aren’t tied to a single thread like the main actor is.
+[25:23] So moving some state from the main actor over to an actor object
+[25:27] will allow more code to execute on a background thread,
+[25:30] leaving the main thread open to keep the UI responsive.
+[25:34] Use actors when you find that storing data on the main actor
+[25:38] is causing too much code to run on the main thread.
+[25:41] At that point, separate out the data for one non-UI part of your code,
+[25:46] such as the network management code, into a new actor.
+[25:50] Be aware that most of the classes in your app probably are not meant to be actors:
+[25:55] UI-facing classes should stay on the main actor
+[25:58] so they can interact directly with UI state.
+[26:01] Model classes should generally be on the main actor with the UI,
+[26:05] or kept non-Sendable,
+[26:07] so that you don’t encourage lots of concurrent accesses to your model.
+[26:12] In this talk, we started with single-threaded code.
+[26:16] As our needs grew, we introduced asynchronous tasks to hide latency,
+[26:21] concurrent code to run on a background thread,
+[26:24] and actors to move data access off the main thread.
+[26:28] Over time, many apps will follow this same course.
+[26:33] Use profiling tools to identify when and what code to move off the main thread.
+[26:39] Swift concurrency will help you separate that code from the main thread correctly,
+[26:43] improving the performance and responsiveness of your app.
+[26:48] We have some recommended build settings for your app
+[26:50] to help with the introduction of concurrency.
+[26:53] The Approachable Concurrency setting enables a suite of upcoming features
+[26:57] that make easier to work with concurrency.
+[27:00] We recommend that all projects adopt this setting.
+[27:04] For Swift modules that are primarily interacting with the UI,
+[27:07] such as your main app module,
+[27:09] we also recommend setting the default actor isolation to 'main actor'.
+[27:14] This puts code on the main actor unless you’ve said otherwise.
+[27:18] These settings work together to make single-threaded apps easier to write,
+[27:22] and provide a more approachable path to introducing concurrency when you need it.
+[27:28] Swift concurrency is a tool designed to help improve your app.
+[27:31] Use it to introduce asynchronous or concurrent code
+[27:34] when you find performance problems with your app.
+[27:37] The Swift 6 migration guide can help answer more questions about concurrency
+[27:41] and the road to data-race safety.
+[27:44] And to see how the concepts in this talk apply in an example app,
+[27:48] please watch our code-along companion talk.
+[27:51] Thank you.
+</document_content>
+</document>
+<document index="3">
+<source>/Users/williamwagner/.wwdc/2025/developer-tools/270-code-along-elevate-an-app-with-swift-concurrency/content.md</source>
+<document_content>
+# Code-along: Elevate an app with Swift concurrency
+
+**Session 270** - WWDC 2025
+
+## Description
+Learn how to optimize your app's user experience with Swift concurrency as we update an existing sample app. We'll start with a...
+
+## Chapters
+- 0:00 - Introduction
+- 2:11 - Approachable concurrency configuration
+- 2:51 - Sample app architecture
+- 3:42 - Asynchronously loading photos from the photo library
+- 9:03 - Extracting the sticker and the colors from the photo
+- 12:30 - Running tasks on a background thread
+- 15:58 - Parallelizing tasks
+- 18:44 - Preventing data races with Swift 6
+- 27:56 - Controlling asynchronous code with structured concurrency
+- 31:36 - Wrap-up
+
+## Resources
+- [Code-along: Elevating an app with Swift concurrency](https://developer.apple.com/documentation/Swift/code-along-elevating-an-app-with-swift-concurrency)
+- [Swift Migration Guide](https://www.swift.org/migration/documentation/migrationguide/)
+- [Accessing a reference type from a concurrent task](https://developer.apple.com/videos/play/wwdc2025/270/?time=1575)
+- [Documentation](https://developer.apple.com/documentation/)
+- [Agreements and Guidelines](https://developer.apple.com/support/terms/)
+
+## Transcript
+
+[00:06] Hi!
+[00:07] I’m Sima, and I work on Swift and SwiftUI.
+[00:12] In this video, you will learn how to elevate your app with Swift concurrency.
+[00:18] As app developers, most of the code we write is on the main thread.
+[00:24] Single-threaded code is easy to understand and maintain.
+[00:29] But at the same time, a modern app often needs to perform time-consuming tasks,
+[00:35] like a network request, or an expensive computation.
+[00:39] In such cases, it is a great practice to move work off the main thread
+[00:44] to keep the app responsive.
+[00:48] Swift gives you all the tools you need to write concurrent code with confidence.
+[00:53] In this session, I will show you how by building an app with you.
+[00:58] We will start with a single-threaded app,
+[01:01] and gradually introduce asynchronous code as we need to.
+[01:06] Then, we will improve the performance of the app by offloading
+[01:10] some of the expensive tasks and running them in parallel.
+[01:14] Next, we’ll discuss some common data-race safety scenarios you might encounter
+[01:19] and explore ways to approach them.
+[01:22] And finally, I will touch on structured concurrency and show you how to use tools
+[01:28] such as a TaskGroup for more control over your concurrent code.
+[01:34] I can’t wait to get started!
+[01:37] I love journaling, and decorating my entries with stickers,
+[01:41] so I will walk you
+[01:42] through building an app for composing sticker packs out of any set of photos.
+[01:49] Our app will have two main views.
+[01:51] The first view will feature a carousel with all stickers with a gradient
+[01:56] reflecting the colors from the original photo,
+[01:59] and the second one will show a grid preview
+[02:02] of the entire sticker pack, ready to be exported.
+[02:06] Feel free to download the sample app below to follow along!
+[02:11] When I created the project, Xcode enabled a few features that provide
+[02:16] a more approachable path to introducing concurrency,
+[02:20] including main actor by default mode and a few upcoming features.
+[02:25] These features are enabled by default in new app projects in Xcode 26.
+[02:32] In the approachable concurrency configuration,
+[02:35] the Swift 6 language mode will provide data-race safety
+[02:38] without introducing concurrency until you are ready.
+[02:43] If you want to enable these features in existing projects, you can learn how
+[02:49] in the Swift migration guide.
+[02:52] In code, the app will have two main views—StickerCarousel and StickerGrid.
+[02:59] These views will use the stickers that the PhotoProcessor struct
+[03:03] is responsible for extracting.
+[03:06] The PhotoProcessor gets the raw image from the photo library
+[03:10] before it returns the sticker.
+[03:14] The StickerGrid view has a ShareLink which it can use for sharing the stickers.
+[03:20] The PhotoProcessor type performs two expensive operations:
+[03:25] the sticker extraction and the dominant colors computation.
+[03:30] Let’s see how Swift concurrency features
+[03:32] can help us optimize for smooth user experience,
+[03:36] while still letting the device perform these expensive tasks!
+[03:42] I’m going to start with the StickerCarousel view.
+[03:46] This view displays the stickers in a horizontal scroll view.
+[03:51] Inside of the scroll view,
+[03:53] it has a ForEach which iterates over the array of selected photos
+[03:57] from the photo library stored in the view model.
+[04:01] It checks the processedPhotos dictionary in the viewModel to get the processed
+[04:06] photo corresponding to the selection in the photo library.
+[04:10] Currently, we don’t have any processed photos, since I haven’t actually written
+[04:15] any code to get an image from the photo picker.
+[04:19] If I run the app now, all we will see in the scroll view,
+[04:23] is the StickerPlaceholder view.
+[04:26] I’ll navigate to StickerViewModel using command-click.
+[04:31] The StickerViewModel stores an array of currently selected photos
+[04:35] from the photo library,
+[04:37] represented as a SelectedPhoto type.
+[04:40] I’ll open Quick Help with Option-click to learn more about this type.
+[04:46] SelectedPhoto is an Identifiable type that stores a PhotosPickerItem
+[04:51] from the PhotosUI framework and its associated ID.
+[04:56] The model also has the dictionary called processedPhotos
+[05:01] that maps the ID of the selected photo to the SwiftUI Image it represents.
+[05:07] I have already started working on the loadPhoto function
+[05:11] that takes the selected photo.
+[05:13] But currently it does not load any data from the photo picker item that it stores.
+[05:20] The PhotosPickerItem conforms to the Transferable protocol from the SDK,
+[05:25] which allows me to load the representation I request
+[05:29] with the asynchronous loadTransferable function.
+[05:32] I will request the Data representation.
+[05:41] Now, we have a compiler error.
+[05:46] It’s because the call to `loadTransferable` is asynchronous,
+[05:49] and my `loadPhoto` function where I call it
+[05:52] is not set up to handle asynchronous calls,
+[05:55] so Swift helps me by suggesting to mark `loadPhoto` with the async keyword.
+[06:01] I’m going to apply this suggestion.
+[06:07] Our function is capable of handling asynchronous code.
+[06:10] But, there’s still one more error.
+[06:13] While `loadPhoto` can handle asynchronous calls, we need to tell it what to wait for.
+[06:19] To do this, I need to mark the call to `loadTransferable`
+[06:23] with the `await` keyword.
+[06:25] I’ll apply the suggested fix.
+
+### Code Sample: Asynchronously loading the selected photo from the photo library - [6:29]
+
+```swift
+func loadPhoto(_ item: SelectedPhoto) async {
+    var data: Data? = try? await item.loadTransferable(type: Data.self)
+
+    if let cachedData = getCachedData(for: item.id) { data = cachedData }
+
+    guard let data else { return }
+    processedPhotos[item.id] = Image(data: data)
+
+    cacheData(item.id, data)
+}
+```
+
+[06:30] I’ll call this function in the StickerCarousel view.
+[06:33] With command-shift-O, I can use Xcode’s Open Quickly
+[06:37] to navigate back to the StickerCarousel.
+[06:43] I would like to call the loadPhoto function when the StickerPlaceholder view appears.
+[06:49] Because this function is asynchronous, I will use the SwiftUI task modifier
+[06:54] to kick off photo processing when this view appears.
+
+### Code Sample: Calling an asynchronous function when the SwiftUI View appears - [6:59]
+
+```swift
+StickerPlaceholder()
+    .task {
+        await viewModel.loadPhoto(selectedPhoto)
+    }
+```
+
+[07:03] Let’s check this out on my device!
+[07:09] Great, it’s up and running.
+[07:11] Let’s try selecting a few photos to test it out.
+[07:18] Great! Looks like the images are getting loaded from my photo library.
+[07:24] The task allows me to keep the app’s UI responsive
+[07:28] while the image is being loaded from the data.
+[07:32] And because I'm using LazyHStack for displaying the images,
+[07:36] I'm only kicking off photo loading tasks for views that need to be rendered on screen,
+[07:41] so the app is not performing more work than necessary.
+[07:46] Let’s talk about why async/await improves responsiveness of our app.
+[07:52] We added the `await` keyword when calling the `loadTransferable` method,
+[07:57] and annotated the `loadPhoto` function with `async`.
+[08:01] The `await` keyword marks a possible suspension point.
+[08:05] It means that initially, the loadPhoto function starts on the main thread,
+[08:10] and when it calls loadTransferable at the await,
+[08:13] it suspends while it’s waiting for loadTransferable to complete.
+[08:18] While loadPhoto is suspended, the Transferable framework will run
+[08:23] loadTransferable on the background thread.
+[08:26] When loadTransferable is done, loadPhoto will resume its execution
+[08:31] on the main thread and update the image.
+[08:35] The main thread is free to respond to UI events and run other tasks
+[08:39] while the loadPhoto is suspended.
+[08:43] The await keyword indicates a point in your code where other work can happen
+[08:48] while your function is suspended.
+[08:52] And just like that, we are done with loading the images from the photo library!
+[08:57] Along the way, we learned what asynchronous code means,
+[09:00] how to write and think about it.
+[09:04] Now, let’s add some code to our app that would extract the sticker
+[09:08] from the photo, and its primary colors that we can use for the background gradient
+[09:13] when displayed in a carousel view.
+[09:16] I’m going to use command-click to navigate back to loadPhoto
+[09:20] where I can apply these effects.
+[09:26] The project already includes a PhotoProcessor, which takes the Data,
+[09:31] extracts the colors and the sticker, and returns the processed photo.
+[09:36] Rather than providing the basic image from the data,
+[09:41] I’m going to use the PhotoProcessor instead.
+
+### Code Sample: Synchronously extracting the sticker and the colors from a photo - [9:45]
+
+```swift
+func loadPhoto(_ item: SelectedPhoto) async {
+    var data: Data? = try? await item.loadTransferable(type: Data.self)
+
+    if let cachedData = getCachedData(for: item.id) { data = cachedData }
+
+    guard let data else { return }
+    processedPhotos[item.id] = PhotoProcessor().process(data: data)
+
+    cacheData(item.id, data)
+}
+```
+
+[09:50] The PhotoProcessor returns a processed photo,
+[09:53] so I’ll update the dictionary’s type.
+
+### Code Sample: Storing the processed photo in the dictionary - [9:56]
+
+```swift
+var processedPhotos = [SelectedPhoto.ID: ProcessedPhoto]()
+```
+
+[10:04] This ProcessedPhoto will provide us the sticker extracted from the photo
+[10:09] and the array of colors to compose the gradient from.
+[10:16] I’ve already included a GradientSticker view in the project that takes a processedPhoto.
+[10:23] I’m going to use Open Quickly to navigate to it.
+[10:31] This view shows a sticker stored in a processed photo
+[10:34] on top of a linear gradient in a ZStack.
+[10:39] I’m going to add this GradientSticker in the carousel.
+[10:44] Currently, in the StickerCarousel we are just resizing the photo,
+
+### Code Sample: Displaying the sticker with a gradient background in the carousel - [10:45]
+
+```swift
+import SwiftUI
+import PhotosUI
+
+struct StickerCarousel: View {
+    @State var viewModel: StickerViewModel
+    @State private var sheetPresented: Bool = false
+
+    var body: some View {
+        ScrollView(.horizontal) {
+            LazyHStack(spacing: 16) {
+                ForEach(viewModel.selection) { selectedPhoto in
+                    VStack {
+                        if let processedPhoto = viewModel.processedPhotos[selectedPhoto.id] {
+                            GradientSticker(processedPhoto: processedPhoto)
+                        } else if viewModel.invalidPhotos.contains(selectedPhoto.id) {
+                            InvalidStickerPlaceholder()
+                        } else {
+                            StickerPlaceholder()
+                                .task {
+                                    await viewModel.loadPhoto(selectedPhoto)
+                                }
+                        }
+                    }
+                    .containerRelativeFrame(.horizontal)
+                }
+            }
+        }
+        .configureCarousel(
+            viewModel,
+            sheetPresented: $sheetPresented
+        )
+        .sheet(isPresented: $sheetPresented) {
+            StickerGrid(viewModel: viewModel)
+        }
+    }
+}
+```
+
+[10:49] but now that we have a processed photo, we can use the GradientSticker here instead.
+[10:59] Let’s build and run the app to see our stickers!
+[11:08] It’s working!
+[11:11] Oh no!
+[11:12] While the stickers are being extracted,
+[11:15] scrolling through the carousel isn’t that smooth.
+[11:19] I suspect the image processing is very expensive.
+[11:23] I have profiled the app using Instruments to confirm that.
+[11:27] The trace shows that our app has Severe Hangs.
+[11:32] If I zoom in on it and look at the heaviest stack trace,
+[11:35] I can see the photo processor blocking the main thread
+[11:39] with the expensive processing tasks for more than 10 seconds!
+[11:44] If you want to learn more about analyzing hangs in your app, check out our session
+[11:50] “Analyze hangs with Instruments”.
+[11:52] Now, let’s talk more about the work our app is doing on the main thread.
+[11:59] The implementation of `loadTransferable` handled offloading the work
+[12:03] to the background to avoid causing
+[12:05] the loading work to happen on the main thread.
+[12:09] Now, that we’ve added the image processing code, which is running on the main thread,
+[12:14] and takes a long time to complete, the main thread is unable to receive
+[12:20] any UI updates, like responding to scrolling gestures,
+[12:24] leading to poor user experience in my app.
+[12:29] Previously, we adopted an asynchronous API from the SDK,
+[12:33] which offloaded the work on our behalf.
+[12:36] Now, we need to run our own code in parallel to fix the hang.
+[12:42] We can move some of the image transformations into the background.
+[12:46] Transforming the image is composed of these three operations.
+[12:51] Getting the raw image and updating the image have to interact with the UI,
+[12:56] so we can't move this work to the background,
+[13:00] but we can offload the image processing.
+[13:04] This will ensure the main thread is free to respond to other events
+[13:08] while the expensive image processing work is happening.
+[13:12] Let’s look at the PhotoProcessor struct to understand how we can do this!
+[13:18] Because my app is in the main actor by default mode,
+[13:22] the PhotoProcessor is tied to the @MainActor,
+[13:25] meaning all of its methods must run on the main actor.
+[13:30] The `process` method calls extract sticker and extract colors methods,
+[13:35] so I need to mark all methods of this type as capable of running off the main actor.
+[13:42] To do this, I can mark the whole PhotoProcessor type with nonisolated.
+[13:49] This is a new feature introduced in Swift 6.1.
+[13:53] When the type is marked with nonisolated, all of its properties and methods
+[13:58] are automatically nonisolated.
+[14:02] Now that the PhotoProcessor is not tied to the MainActor, we can apply
+[14:07] the new `@concurrent` attribute to the process function
+[14:11] and mark it with `async`.
+
+### Code Sample: Allowing photo processing to run on the background thread - [14:13]
+
+```swift
+nonisolated struct PhotoProcessor {
+ 
+    let colorExtractor = ColorExtractor()
+
+    @concurrent
+    func process(data: Data) async -> ProcessedPhoto? {
+        let sticker = extractSticker(from: data)
+        let colors = extractColors(from: data)
+
+        guard let sticker = sticker, let colors = colors else { return nil }
+
+        return ProcessedPhoto(sticker: sticker, colorScheme: colors)
+    }
+
+    private func extractColors(from data: Data) -> PhotoColorScheme? {
+        // ...
+    }
+
+    private func extractSticker(from data: Data) -> Image? {
+        // ...
+    }
+}
+```
+
+[14:14] This will tell Swift to always switch to a background thread when running this method.
+[14:21] I’ll use Open Quickly to navigate back to the PhotoProcessor.
+[14:29] First, I’m going to apply nonisolated on the type to decouple the PhotoProcessor
+[14:35] from the main actor and allow its methods to be called from concurrent code.
+[14:46] Now that PhotoProcessor is nonisolated,
+[14:49] to make sure that the process method
+[14:51] will get called from the background thread, I will apply @concurrent and async.
+[15:09] Now, I’ll navigate back to the StickerViewModel with Open Quickly.
+[15:17] Here, in the loadPhoto method I need to get off the main thread by calling
+[15:22] the process method with the `await` keyword, which Swift already suggests.
+[15:28] I’m going to apply this suggestion.
+
+### Code Sample: Running the photo processing operations off the main thread - [15:31]
+
+```swift
+func loadPhoto(_ item: SelectedPhoto) async {
+    var data: Data? = try? await item.loadTransferable(type: Data.self)
+
+    if let cachedData = getCachedData(for: item.id) { data = cachedData }
+
+    guard let data else { return }
+    processedPhotos[item.id] = await PhotoProcessor().process(data: data)
+
+    cacheData(item.id, data)
+}
+```
+
+[15:32] Let’s build and run our app to see if moving this work off the main actor
+[15:37] helped with the hangs!
+[15:46] Looks like there are no more hangs on scroll!
+[15:50] But even though I can interact with the UI, the image is taking a while to appear
+[15:56] in the UI while I'm scrolling.
+[15:59] Keeping an app responsive isn't the only factor for improving user experience.
+[16:04] If we move work off the main thread but it takes a long time to get results
+[16:09] to the user, that can still lead to a frustrating experience using the app.
+[16:16] We moved the image processing operation to a background thread,
+[16:20] but it still takes a lot of time to complete.
+[16:23] Let’s see how we can optimize this operation with concurrency
+[16:27] to have it complete faster.
+[16:30] Processing the image requires extraction of stickers and the dominant colors,
+[16:36] but these operations are independent of each other.
+[16:39] So we can run these tasks in parallel with each other using async let.
+[16:45] Now, the concurrent thread pool, which manages all of the background threads,
+[16:49] will schedule these two tasks to start on two different background threads at once.
+[16:55] This allows me to take advantage of multiple cores on my phone.
+[17:02] I’ll command-click on the process method to adopt async let.
+[17:09] By holding down control + shift and down arrow key, I can use multiline cursor
+[17:15] to add async in front of sticker and colors variables.
+[17:22] Now that we’ve made these two calls run in parallel, we need to await
+[17:27] on their results to resume our process function.
+[17:30] Let’s fix all of these issues using the Editor menu.
+[17:41] But, there’s still one more error.
+[17:45] This time it’s about a data race!
+[17:48] Let’s take some time to understand this error.
+[17:53] This error means that my PhotoProcessor type
+[17:56] is not safe to share between concurrent tasks.
+[17:59] To understand why, let’s look at its stored properties.
+[18:03] The only property the PhotoProcessor stores is an instance of ColorExtractor,
+[18:09] needed to extract the colors from the photo.
+[18:13] The ColorExtractor class computes the dominant colors that appear in the image.
+[18:18] This computation operates on low-level, mutable image data including pixel buffers,
+[18:24] so the color extractor type is not safe to access concurrently.
+[18:31] Right now, all color extraction operations share the same instance of the ColorExtractor.
+[18:38] This leads to concurrent access to the same memory.
+[18:43] This is called a “data race”,
+[18:45] which can lead to runtime bugs like crashes and unpredictable behavior.
+[18:51] The Swift 6 language mode will identify these at compile time,
+[18:56] which defines away this set of bugs when you’re writing code that runs in parallel.
+[19:02] This moves what would’ve been a tricky runtime bug into a compiler error
+[19:07] that you can address right away.
+[19:09] If you click the “help” button on the error message,
+[19:12] you can learn more about this error on the Swift website.
+[19:17] There are multiple options you can consider when trying to solve a data race.
+[19:22] Choosing one depends on how your code uses the shared data.
+[19:26] First, ask yourself:
+[19:28] Does this mutable state need to be shared between concurrent code?
+[19:34] In many cases, you can simply avoid sharing it.
+[19:38] However, there are cases where the state needs to be shared by such code.
+[19:42] If that is the case, consider extracting what you need to share to a value type
+[19:47] that’s safe to send.
+[19:50] Only if any of these solutions aren’t applicable to your situation,
+[19:54] consider isolating this state to an actor such as the MainActor.
+[20:00] Let’s see if the first solution would work for our case!
+[20:04] While we could refactor this type to work differently
+[20:07] to handle multiple concurrent operations,
+[20:10] instead we can move the color extractor
+[20:13] to a local variable in the extractColors function,
+[20:17] so that each photo being processed has its own instance of the color extractor.
+[20:23] This is the correct code change, because the color extractor is intended to work on
+[20:28] one photo at a time.
+[20:31] So we want a separate instance of it for each color extraction task.
+[20:36] With this change, nothing outside of the extractColors function
+[20:40] can access the color extractor, which prevents the data race!
+[20:45] To make this change, let’s move the color extractor property
+[20:49] to the extractColors function.
+
+### Code Sample: Running sticker and color extraction in parallel. - [20:55]
+
+```swift
+nonisolated struct PhotoProcessor {
+
+    @concurrent
+    func process(data: Data) async -> ProcessedPhoto? {
+        async let sticker = extractSticker(from: data)
+        async let colors = extractColors(from: data)
+
+        guard let sticker = await sticker, let colors = await colors else { return nil }
+
+        return ProcessedPhoto(sticker: sticker, colorScheme: colors)
+    }
+
+    private func extractColors(from data: Data) -> PhotoColorScheme? {
+        let colorExtractor = ColorExtractor()
+        return colorExtractor.extractColors(from: data)
+    }
+
+    private func extractSticker(from data: Data) -> Image? {
+        // ...
+    }
+}
+```
+
+[20:59] Great!
+[21:00] With the compiler’s help, we’ve been able to detect and eliminate
+[21:03] a data race in our app.
+[21:05] Now, let’s run it!
+[21:15] I can feel the app running faster!
+[21:19] If I collect a profiler trace in Instruments and open it,
+[21:22] I no longer see the hangs.
+[21:26] Let’s quickly recap the optimizations we made with Swift concurrency!
+[21:31] By adopting the `@concurrent` attribute, we have successfully moved
+[21:35] our image processing code off the main thread.
+[21:38] We have also parallelized its operations, sticker and color extraction
+[21:43] with each other using `async let`, making our app much more performant!
+[21:50] The optimizations you make with Swift concurrency should always be based on data
+[21:54] from analysis tools, such as the time profiler instrument.
+[21:59] If you can make your code more efficient without introducing concurrency,
+[22:03] you should always do that first.
+[22:06] The app feels snappy now!
+[22:08] Let’s take a break from image processing and add something fun!
+[22:13] Let’s add a visual effect for our processed stickers that will make
+[22:17] the sticker scrolled past fade away and blur.
+[22:21] Let’s switch to Xcode to write that!
+[22:25] I’ll go back to the StickerCarousel using the Xcode project navigator.
+[22:33] Now, I’m going to apply the visual effect on each image in the scroll view
+[22:38] using the visualEffect modifier.
+[22:47] Here, I’m applying some effects to the view.
+[22:50] I want to change the offset, the blur, and opacity only for the last sticker
+[22:56] in the scroll view,
+[22:59] so I need to access the viewModel’s selection property
+[23:02] to check if the visual effect is applied to the last sticker.
+[23:09] Looks like there’s a compiler error because I’m trying to access
+[23:12] main-actor protected view state from the visualEffect closure.
+[23:18] Because computing a visual effect is an expensive computation,
+[23:22] SwiftUI offloads it off the main thread for maximizing performance of my app.
+[23:29] If you feel adventurous and want to learn more,
+[23:32] check out our session Explore concurrency in SwiftUI.
+[23:37] That’s what this error is telling me:
+[23:39] this closure will be evaluated later on the background.
+[23:44] Let’s confirm this by looking at the definition of the `visualEffect`,
+[23:48] which I’ll command-click on.
+[23:53] In the definition, this closure is @Sendable,
+[23:56] which is an indication from SwiftUI
+[23:59] that this closure will be evaluated on the background.
+[24:06] In this case, SwiftUI calls visual effect again whenever selection changes,
+[24:12] so I can make a copy of it using the closure's capture list.
+
+### Code Sample: Applying the visual effect on each sticker in the carousel - [24:20]
+
+```swift
+import SwiftUI
+import PhotosUI
+
+struct StickerCarousel: View {
+    @State var viewModel: StickerViewModel
+    @State private var sheetPresented: Bool = false
+
+    var body: some View {
+        ScrollView(.horizontal) {
+            LazyHStack(spacing: 16) {
+                ForEach(viewModel.selection) { selectedPhoto in
+                    VStack {
+                        if let processedPhoto = viewModel.processedPhotos[selectedPhoto.id] {
+                            GradientSticker(processedPhoto: processedPhoto)
+                        } else if viewModel.invalidPhotos.contains(selectedPhoto.id) {
+                            InvalidStickerPlaceholder()
+                        } else {
+                            StickerPlaceholder()
+                                .task {
+                                    await viewModel.loadPhoto(selectedPhoto)
+                                }
+                        }
+                    }
+                    .containerRelativeFrame(.horizontal)
+                    .visualEffect { [selection = viewModel.selection] content, proxy in
+                        let frame = proxy.frame(in: .scrollView(axis: .horizontal))
+                        let distance = min(0, frame.minX)
+                        let isLast = selectedPhoto.id == selection.last?.id
+                        
+                        return content
+                            .hueRotation(.degrees(frame.origin.x / 10))
+                            .scaleEffect(1 + distance / 700)
+                            .offset(x: isLast ? 0 : -distance / 1.25)
+                            .brightness(-distance / 400)
+                            .blur(radius: isLast ? 0 : -distance / 50)
+                            .opacity(isLast ? 1.0 : min(1.0, 1.0 - (-distance / 400)))
+                    }
+                }
+            }
+        }
+        .configureCarousel(
+            viewModel,
+            sheetPresented: $sheetPresented
+        )
+        .sheet(isPresented: $sheetPresented) {
+            StickerGrid(viewModel: viewModel)
+        }
+    }
+}
+```
+
+[24:31] Now, when SwiftUI calls this closure, it will operate on a copy of selection value,
+[24:37] making this operation data-race free.
+[24:41] Let’s check out our visual effect!
+[24:49] It’s looking great,
+[24:50] and I can see how the previous image blurs and fades out as I’m scrolling.
+[24:58] In both of these data-race scenarios we’ve encountered,
+[25:02] the solution was to not share data that can be mutated from concurrent code.
+[25:08] The key difference was that in the first example, I introduced a data-race myself
+[25:13] by running some of the code in parallel.
+[25:16] In the second example though, I used a SwiftUI API that offloads work
+[25:21] to the background thread on my behalf.
+[25:25] If you must share mutable state, there are other ways to protect it.
+[25:30] Sendable value types prevent the type from being able to be shared by concurrent code.
+[25:37] For example, extractSticker and extractColors methods are running in parallel
+[25:42] and both take the same image’s data.
+[25:45] But there’s no data-race condition in this case because Data is a Sendable value type.
+[25:51] Data also implements copy-on-write, so it’s only copied if it’s mutated.
+[25:58] If you can’t use a value type, you can consider isolating your state to the main actor.
+[26:04] Luckily, the main actor by default mode already does that for you.
+[26:09] For example, our model is a class, and we can access it from a concurrent task.
+
+### Code Sample: Accessing a reference type from a concurrent task - [26:15]
+
+```swift
+Task { @concurrent in
+    await viewModel.loadPhoto(selectedPhoto)      
+}
+```
+
+[26:15] Because the model is implicitly marked with the MainActor,
+[26:18] it is safe to reference from concurrent code.
+[26:21] The code will have to switch to the main actor to access the state.
+[26:26] In this case, the class is protected by the main actor
+[26:30] but the same applies to other actors that you might have in your code.
+[26:36] Our app is looking great so far!
+[26:38] But it still doesn’t feel complete.
+[26:42] To be able to export the stickers, let’s add a sticker grid view
+[26:46] that kicks off a photo processing task for each photo that hasn't been processed yet,
+[26:52] and displays all of the stickers at once.
+[26:55] It will also have a share button that would allow for export of these stickers.
+[27:00] Let’s jump back to the code!
+[27:03] First, I’ll use command-click to navigate to the StickerViewModel.
+[27:11] I’m going to add another method to our model, `processAllPhotos()`.
+[27:22] Here, I want to iterate over all processed photos saved so far in my model,
+[27:27] and if there are still unprocessed photos, I want to start multiple parallel tasks
+[27:33] to kick off processing for them at once.
+[27:37] We’ve used async let before, but that only worked because we knew
+[27:41] that there’s only two tasks to kick off —the sticker and color extraction.
+[27:46] Now, we need to create a new task for all raw photos in the array, and there can be
+[27:52] any amount of these processing tasks.
+[27:56] APIs like TaskGroup allow you to take more control over the asynchronous work
+[28:01] your app needs to perform.
+[28:05] Task groups provide fine grained control over child tasks and their results.
+[28:10] The task group allows to kick off any number of child tasks which can be run in parallel.
+[28:18] Each child task can take arbitrary amounts of time to finish,
+[28:22] so they might be done in a different order.
+[28:25] In our case, the processed photos will be saved into a dictionary,
+[28:29] so the order doesn't matter.
+[28:33] TaskGroup conforms to AsyncSequence, so we can iterate over the results
+[28:38] as they’re done to store them into the dictionary.
+[28:42] And finally, we can await on the whole group to finish the child tasks.
+[28:47] Let's go back to the code to adopt a task group!
+[28:51] To adopt the task group, I’ll start by declaring it.
+[28:58] Here, inside the closure I have a reference to the group
+
+### Code Sample: Processing all photos at once with a task group - [29:00]
+
+```swift
+func processAllPhotos() async {
+    await withTaskGroup { group in
+        for item in selection {
+            guard processedPhotos[item.id] == nil else { continue }
+            group.addTask {
+                let data = await self.getData(for: item)
+                let photo = await PhotoProcessor().process(data: data)
+                return photo.map { ProcessedPhotoResult(id: item.id, processedPhoto: $0) }
+            }
+        }
+
+        for await result in group {
+            if let result {
+                processedPhotos[result.id] = result.processedPhoto
+            }
+        }
+    }
+}
+```
+
+[29:03] which I can add image processing tasks to.
+[29:07] I’m going to iterate over the selection saved in the model.
+[29:14] If this photo has been processed, then I don’t need to create a task for it.
+[29:22] I’ll start a new task of loading the data and processing the photo.
+[29:31] Because the group is an async sequence I can iterate over it
+[29:35] to save the processed photo
+[29:36] into the processedPhotos dictionary once it’s ready.
+[29:45] That’s it!
+[29:47] Now we are ready to display our stickers in the StickerGrid.
+[29:52] I’ll use Open Quickly to navigate to the StickerGrid.
+
+### Code Sample: Kicking off photo processing and configuring the share link in a sticker grid view. - [30:00]
+
+```swift
+import SwiftUI
+
+struct StickerGrid: View {
+    let viewModel: StickerViewModel
+    @State private var finishedLoading: Bool = false
+
+    var body: some View {
+        NavigationStack {
+            VStack {
+                if finishedLoading {
+                    GridContent(viewModel: viewModel)
+                } else {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding()
+                }
+            }
+            .task {
+                await viewModel.processAllPhotos()
+                finishedLoading = true
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    if finishedLoading {
+                        ShareLink("Share", items: viewModel.selection.compactMap {
+                            viewModel.processedPhotos[$0.id]?.sticker
+                        }) { sticker in
+                            SharePreview(
+                                "Sticker Preview",
+                                image: sticker,
+                                icon: Image(systemName: "photo")
+                            )
+                        }
+                    }
+                }
+            }
+            .configureStickerGrid()
+        }
+    }
+}
+```
+
+[30:03] Here, I have a state property finishedLoading which indicates
+[30:08] if all photos have finished processing.
+[30:12] If the photos haven’t been processed yet, a progress view will be displayed.
+[30:18] I’m going to call the processAllPhotos() method we just implemented.
+[30:28] After all photos are processed, we can set the state variable.
+[30:33] And finally, I will add the share link in the toolbar to share the stickers!
+[30:45] I’m populating the share link items with a sticker for each selected photo.
+[30:52] Let’s run the app!
+[30:56] I will tap on the StickerGrid button.
+[30:59] Thanks to the TaskGroup, the preview grid starts processing all photos at once.
+[31:04] And when they are ready, I can instantly see all of the stickers!
+[31:08] Finally, using the Share button in the toolbar,
+[31:11] I can export all of the stickers as files that I can save.
+[31:18] In our app, the stickers will be collected in the order they’re done processing.
+[31:23] But you can also keep track of the order, and the task group has many more capabilities.
+[31:30] To learn more, check out the session “Beyond the basics of structured concurrency”.
+[31:36] Congrats!
+[31:37] The app is done and now I can save my stickers!
+[31:42] We’ve added new features to an app, discovered when they had an impact on the UI,
+[31:47] and used concurrency as much as we needed to improve responsiveness and performance.
+[31:53] We also learned about structured concurrency and how to prevent data races.
+[31:59] If you didn’t follow along, you can still download the final version of the app
+[32:04] and make some stickers out of your own photos!
+[32:08] To familiarize yourself with new Swift concurrency features and techniques
+[32:12] mentioned in this talk,
+[32:14] try to optimize or tweak the app further.
+[32:18] Finally, see if you could bring these techniques to your app
+[32:22] —remember to profile it first!
+[32:24] To dive deeper into understanding the concepts in Swift's concurrency model,
+[32:29] check out our session “Embracing Swift concurrency”.
+[32:33] For migrating your existing project to adopt new approachable concurrency features,
+[32:38] check out the "Swift Migration Guide"!
+[32:41] And my favorite part, I got some stickers for my notebook!
+[32:46] Thanks for watching!
+</document_content>
+</document>
+</documents>

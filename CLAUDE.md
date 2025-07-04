@@ -410,6 +410,50 @@ uv run wwdc export-llm -t all --consolidated -o wwdc-2025-complete.txt
 - **Do NOT use `-v` flag - it's not implemented. The tool accepts `--verbose` in some places but not consistently**
 - **Sessions are organized by topic directories, never in an "all" directory**
 
+### Creating Python Scripts and Tools
+
+When creating standalone Python scripts or tools, use uv's inline dependency management instead of system Python:
+
+```python
+#!/usr/bin/env -S uv run
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "requests",
+#     "beautifulsoup4",
+#     "click",
+# ]
+# ///
+
+import click
+import requests
+from bs4 import BeautifulSoup
+
+# Your script code here
+```
+
+**Key points:**
+- Use `#!/usr/bin/env -S uv run` shebang for executable scripts
+- Declare dependencies in the `# /// script` block
+- Run scripts with `uv run script.py` or make executable with `chmod +x`
+- No need for manual pip installs or virtual environments
+- Dependencies are cached and reused across runs
+
+**Examples:**
+```bash
+# Run a local script
+uv run docs/apple_url_converter.py
+
+# Make script executable and run directly
+chmod +x script.py
+./script.py
+
+# Run a script from URL
+uv run https://example.com/script.py
+```
+
+This approach ensures consistent environments and avoids system Python pollution.
+
 ### Cost Management
 
 The summarizer includes built-in cost protection:
