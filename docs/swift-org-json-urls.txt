@@ -1,0 +1,6 @@
+https://www.swift.org/migration/data/documentation/swift-6-concurrency-migration-guide/completechecking.json
+https://www.swift.org/migration/data/documentation/swift-6-concurrency-migration-guide/swift6mode.json
+https://www.swift.org/migration/data/documentation/swift-6-concurrency-migration-guide/commonproblems.json
+https://www.swift.org/migration/data/documentation/swift-6-concurrency-migration-guide/incrementaladoption.json
+https://www.swift.org/migration/data/documentation/swift-6-concurrency-migration-guide/sourcecompatibility.json
+https://www.swift.org/migration/data/documentation/swift-6-concurrency-migration-guide/libraryevolution.json
